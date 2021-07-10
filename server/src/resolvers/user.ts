@@ -1,16 +1,12 @@
-import { Field, InputType, Mutation, Query, Resolver, Arg, Ctx, ObjectType } from "type-graphql";
+import { Field, Mutation, Query, Resolver, Arg, Ctx, ObjectType } from "type-graphql";
 import { CustomSessionData, MyContext } from '../types';
 import { User } from '../entities/User';
 import argon2 from 'argon2';
 import {EntityManager} from '@mikro-orm/postgresql';
-
-@InputType()
-class UserNamePasswordInput {
-    @Field()
-    username!: string;
-    @Field()
-    password!: string;
-}
+import { COOKIE_NAME } from "../constants";
+import { sendEmail } from "src/utils/sendEmail";
+import { UserNamePasswordInput } from "./UserNamePasswordInput";
+import { validateRegister } from "../utils/validateRegister";
 
 @ObjectType()
 class FieldError {
@@ -33,13 +29,23 @@ class UserResponse {
 
 @Resolver(User)
 export class UserResolver {
+    @Mutation(() => Boolean)
+    async forgotPassword(
+        @Arg('email') email: string,
+        @Ctx() {em}: MyContext
+    ) {
+        // const user = await em.findOne(User, {email})
+        return true
+    }
     @Query(() => User, { nullable: true})
     async me(@Ctx() { req, em }: MyContext) {
-        console.log('RES.SESSION::::: ', req.session)
+
         // you are not logged in
         if (!req.session.userId) {
+
             return null;
         }
+
         const user = await em.findOne(User, { id: req.session.userId })
         return user
     }
@@ -50,44 +56,29 @@ export class UserResolver {
         @Ctx() { em, req }: MyContext
         
     ): Promise<UserResponse> {
-        if (options.username.length <= 2) {
-            return {
-                errors: [{
-                    field: 'username',
-                    message: 'length must be greater than 2'
-                }]
-            }
-        }
-        console.log(req.session)
-        if (options.password.length <= 3) {
-            return {
-                errors: [{
-                    field: 'password',
-                    message: 'length must be greater than 2'
-                }]
-            }
+        const errors = validateRegister(options);
+        if (errors) {
+            return {errors};
         }
         const hashedPassword = await argon2.hash(options.password)
-        let user = em.create(User, {
-            username: options.username,
-            password: hashedPassword
-        });
+        let user;
         try {
             const result = await (em as EntityManager)
             .createQueryBuilder(User)
             .getKnexQuery()
             .insert(
                 {
-                    username: options.username, 
+                    username: options.username,
+                    email: options.email,
                     password: hashedPassword,
                     created_at: new Date(),
                     updated_at: new Date()
                 }
             ).returning("*");
         user = result[0]
-        console.log(user)
+
         } catch(err) {
-            console.log(err)
+            console.log('REGISTER ERROR: ', err)
             if (err.code === '23505') {
                 // duplicate username error
                 return {
@@ -100,8 +91,6 @@ export class UserResolver {
             
         }
 
-        // let sess = req.session as CustomSessionData;
-        // sess.userId = user.id;
         req.session.userId = user.id;
 
         return {
@@ -111,10 +100,15 @@ export class UserResolver {
 
     @Mutation(() => UserResponse)
     async login(
-        @Arg('options') options: UserNamePasswordInput,
-        @Ctx() { em }: MyContext
+        @Arg('usernameOrEmail') usernameOrEmail: string,
+        @Arg('password') password: string,
+        @Ctx() { req, em }: MyContext
     ): Promise<UserResponse> {
-        const user = await em.findOne(User, { username: options.username });
+        const user = await em.findOne(User, 
+            usernameOrEmail.includes('@') ? 
+            { email: usernameOrEmail } : 
+            { username: usernameOrEmail } 
+        );
         if (!user) {
             return {
                 errors: [{
@@ -123,7 +117,7 @@ export class UserResolver {
                 }]
             }
         }
-        const valid = await argon2.verify(user.password, options.password)
+        const valid = await argon2.verify(user.password, password)
         if (!valid) {
             return {
                 errors: [{
@@ -132,8 +126,12 @@ export class UserResolver {
                 }]
             }
         }
-        
-        return {user};
+
+        req.session.userId = user.id;
+
+        return {
+            user
+        };
     }
 
     @Mutation(() => Boolean)
@@ -141,7 +139,7 @@ export class UserResolver {
         @Ctx() { req, res }: MyContext
     ) {
         return new Promise(resolve => req.session.destroy((err) => {
-            res.clearCookie('qid')
+            res.clearCookie(COOKIE_NAME)
             if (err) {
                 console.log(err);
                 resolve(false);

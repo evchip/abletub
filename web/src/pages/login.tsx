@@ -7,6 +7,8 @@ import { useMutation } from "urql";
 import { useLoginMutation } from '../generated/graphql';
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/dist/client/router";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 interface loginProps {
 
@@ -15,22 +17,27 @@ interface loginProps {
 
 const Login: React.FC<{}> = ({}) => {
     const router = useRouter()
-    const [, login] = useLoginMutation()
+    const [, login] = useLoginMutation();
     return (
         <Wrapper>
-        <Formik initialValues={{ username: "", password: "" }} onSubmit={ async (values, { setErrors }) => {
-            const response = await login({ options: values });
-            console.log(response)
-            if (response.data?.login.errors) {
-                setErrors(toErrorMap(response.data.login.errors))
-            } else if (response.data?.login.user) {
-                // worked
-                router.push('/');
-            }
+        <Formik 
+            initialValues={{ usernameOrEmail: "", password: "" }} 
+            onSubmit={ async (values, { setErrors }) => {
+                const response = await login(values);
+                console.log('response from login::::', response)
+                if (response.data?.login.errors) {
+                    setErrors(toErrorMap(response.data.login.errors))
+                } else if (response.data?.login.user) {
+                    // worked
+                    router.push('/');
+                }
         }}>
             {({ isSubmitting }) => (
                 <Form>
-                    <InputField name='username' placeholder='username' label='Username' />
+                    <InputField 
+                    name='usernameOrEmail' 
+                    placeholder='username or email' 
+                    label='Username or Email' />
                     <Box mt={4}>
                     <InputField name='password' placeholder='password' label='Password' type='password' />
                     </Box>
@@ -43,4 +50,4 @@ const Login: React.FC<{}> = ({}) => {
     );
 }
 
-export default Login;
+export default withUrqlClient(createUrqlClient)(Login);

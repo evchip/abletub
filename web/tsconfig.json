@@ -22,7 +22,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "../server/src/utils/sleep.ts"  ],
   "exclude": [
     "node_modules"
   ]
