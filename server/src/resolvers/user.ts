@@ -1,8 +1,8 @@
 import { Field, Mutation, Query, Resolver, Arg, Ctx, ObjectType } from "type-graphql";
-import { CustomSessionData, MyContext } from '../types';
+import { MyContext } from '../types';
 import { User } from '../entities/User';
 import argon2 from 'argon2';
-import {EntityManager} from '@mikro-orm/postgresql';
+import { EntityManager } from '@mikro-orm/postgresql';
 import { COOKIE_NAME } from "../constants";
 import { sendEmail } from "src/utils/sendEmail";
 import { UserNamePasswordInput } from "./UserNamePasswordInput";
@@ -69,7 +69,7 @@ export class UserResolver {
             .insert(
                 {
                     username: options.username,
-                    email: options.email,
+                    // email: options.email,
                     password: hashedPassword,
                     created_at: new Date(),
                     updated_at: new Date()
