@@ -13,6 +13,7 @@ import cors from 'cors';
 import { createConnection } from 'typeorm';
 import { User } from "./entities/User";
 import { _Post as Post } from "./entities/Post";
+import { MyContext } from "./types";
 
 
 const main = async () => {
@@ -25,6 +26,8 @@ const main = async () => {
         synchronize: true,
         entities: [Post, User]
     });
+    // await Post.delete({});
+    // await User.delete({});
 
     const app = express();
 
@@ -50,7 +53,7 @@ const main = async () => {
                 sameSite: "lax", //csrf
                 secure: __prod__, // cookie only works in https
             },
-            saveUninitialized: true,
+            saveUninitialized: false,
             secret: "ghsggjjjjjffgggfkkkkkkker",
             resave: false,
         })

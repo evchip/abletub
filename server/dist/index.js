@@ -56,7 +56,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             sameSite: "lax",
             secure: constants_1.__prod__,
         },
-        saveUninitialized: true,
+        saveUninitialized: false,
         secret: "ghsggjjjjjffgggfkkkkkkker",
         resave: false,
     }));

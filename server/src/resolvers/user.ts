@@ -105,7 +105,7 @@ export class UserResolver {
 
         // you are not logged in
         if (!req.session.userId) {
-
+            console.log('you are not logged in')
             return null;
         }
 
@@ -133,7 +133,9 @@ export class UserResolver {
                 username: options.username,
                 email: options.email,
                 password: hashedPassword,
-            }).returning("*").execute();
+            })
+            .returning("*")
+            .execute();
             console.log('result:::: ', result);
             user = result.raw[0];
         } catch(err) {
@@ -168,6 +170,7 @@ export class UserResolver {
             { where: {email: usernameOrEmail} } : 
             { where: {username: usernameOrEmail} } 
         );
+
         if (!user) {
             return {
                 errors: [{
@@ -186,8 +189,12 @@ export class UserResolver {
             }
         }
 
-        req.session.userId = user.id;
+        // let sess = req.session as CustomSessionData;
+        // sess.userId = user.id;
+        // req.session.userId = sess.userId
 
+        req.session.userId = user.id;
+        console.log('req.session.userid::::', req.session.id)
         return {
             user
         };

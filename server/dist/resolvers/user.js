@@ -117,6 +117,7 @@ let UserResolver = class UserResolver {
     }
     me({ req }) {
         if (!req.session.userId) {
+            console.log('you are not logged in');
             return null;
         }
         return User_1.User.findOne(req.session.userId);
@@ -138,7 +139,9 @@ let UserResolver = class UserResolver {
                     username: options.username,
                     email: options.email,
                     password: hashedPassword,
-                }).returning("*").execute();
+                })
+                    .returning("*")
+                    .execute();
                 console.log('result:::: ', result);
                 user = result.raw[0];
             }
@@ -182,6 +185,7 @@ let UserResolver = class UserResolver {
                 };
             }
             req.session.userId = user.id;
+            console.log('req.session.userid::::', req.session.id);
             return {
                 user
             };

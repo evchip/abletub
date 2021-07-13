@@ -1,6 +1,17 @@
-import { Arg, Ctx, Query, Resolver, Mutation } from "type-graphql";
+import { User } from "../entities/User";
+import { MyContext } from "src/types";
+import { Arg, Ctx, Query, Resolver, Mutation, InputType, Field, UseMiddleware } from "type-graphql";
 import { _Post as Post } from '../entities/Post';
-import { MyContext } from '../types';
+import { isAuth } from "../middleware/isAuth";
+
+@InputType()
+class PostInput {
+    @Field()
+    title!: string
+    @Field()
+    text!: string
+}
+
 
 @Resolver()
 export class PostResolver {
@@ -17,11 +28,23 @@ export class PostResolver {
         return Post.findOne(id)
     }
 
+
     @Mutation(() => Post)
     async createPost(
-        @Arg('title') title: string
+        @Arg('input') input: PostInput,
+        @Ctx() { req }: MyContext
     ): Promise<Post> {
-        return Post.create({title}).save();
+        const user = await User.findOne(req.session.userId)
+        console.log('fuckin user', user)
+        if (!user.id) {
+            throw new Error('not authenticated')
+        }
+        // req.session.userId = user.id
+
+        return Post.create({
+            ...input, 
+            creatorId: user.id})
+            .save();
     }
 
     @Mutation(() => Post, { nullable: true })
