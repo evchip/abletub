@@ -1,18 +1,11 @@
-import { User } from "../entities/User";
-import { MyContext } from "src/types";
 import { MiddlewareFn } from "type-graphql";
+import { MyContext } from "../types";
 
-export const isAuth: MiddlewareFn<MyContext> = ({context}, next) => {
-    console.log(context.req.session)
-    async function checkUserId (ctx) {
-        const user = await User.findOne(ctx.req.session.userId)
+export const isAuth: MiddlewareFn<MyContext> = ({ context }, next) => {
+    console.log('fuckin user', context.req.session)
+  if (!context.req.session.userId) {
+    throw new Error("not authenticated");
+  }
 
-        if (!user.id) {
-            throw new Error('not authenticated')
-        }
-        context.req.session.userId = user.id
-    }
-    
-    checkUserId(context)
-    return next();
-}
+  return next();
+};

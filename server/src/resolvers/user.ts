@@ -100,9 +100,10 @@ export class UserResolver {
 
         return true;
     }
+
     @Query(() => User, { nullable: true})
     me(@Ctx() { req }: MyContext) {
-
+        console.log('user.ts req.session.userId', req.session)
         // you are not logged in
         if (!req.session.userId) {
             console.log('you are not logged in')
@@ -194,7 +195,7 @@ export class UserResolver {
         // req.session.userId = sess.userId
 
         req.session.userId = user.id;
-        console.log('req.session.userid::::', req.session.id)
+        console.log('req.session.userid::::', req.session.userId)
         return {
             user
         };

@@ -22,9 +22,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostResolver = void 0;
-const User_1 = require("../entities/User");
 const type_graphql_1 = require("type-graphql");
 const Post_1 = require("../entities/Post");
+const isAuth_1 = require("../middleware/isAuth");
+const typeorm_1 = require("typeorm");
 let PostInput = class PostInput {
 };
 __decorate([
@@ -39,9 +40,23 @@ PostInput = __decorate([
     type_graphql_1.InputType()
 ], PostInput);
 let PostResolver = class PostResolver {
-    posts() {
+    textSnippet(root) {
+        return root.text.slice(0, 50);
+    }
+    posts(limit, cursor) {
         return __awaiter(this, void 0, void 0, function* () {
-            return Post_1._Post.find();
+            const realLimit = Math.min(50, limit);
+            const qb = typeorm_1.getConnection()
+                .getRepository(Post_1._Post)
+                .createQueryBuilder("p")
+                .orderBy('"createdAt"', "DESC")
+                .take(realLimit);
+            if (cursor) {
+                qb.where('"createdAt" < :cursor', {
+                    cursor: new Date(parseInt(cursor))
+                });
+            }
+            return qb.getMany();
         });
     }
     post(id) {
@@ -49,12 +64,8 @@ let PostResolver = class PostResolver {
     }
     createPost(input, { req }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield User_1.User.findOne(req.session.userId);
-            console.log('fuckin user', user);
-            if (!user.id) {
-                throw new Error('not authenticated');
-            }
-            return Post_1._Post.create(Object.assign(Object.assign({}, input), { creatorId: user.id }))
+            console.log('fuckin user!!!!', req.session.userId);
+            return Post_1._Post.create(Object.assign(Object.assign({}, input), { creatorId: req.session.userId }))
                 .save();
         });
     }
@@ -78,9 +89,18 @@ let PostResolver = class PostResolver {
     }
 };
 __decorate([
-    type_graphql_1.Query(() => [Post_1._Post]),
+    type_graphql_1.FieldResolver(() => String),
+    __param(0, type_graphql_1.Root()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Post_1._Post]),
+    __metadata("design:returntype", void 0)
+], PostResolver.prototype, "textSnippet", null);
+__decorate([
+    type_graphql_1.Query(() => [Post_1._Post]),
+    __param(0, type_graphql_1.Arg("limit", () => type_graphql_1.Int)),
+    __param(1, type_graphql_1.Arg("cursor", () => String, { nullable: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], PostResolver.prototype, "posts", null);
 __decorate([
@@ -92,7 +112,8 @@ __decorate([
 ], PostResolver.prototype, "post", null);
 __decorate([
     type_graphql_1.Mutation(() => Post_1._Post),
-    __param(0, type_graphql_1.Arg('input')),
+    type_graphql_1.UseMiddleware(isAuth_1.isAuth),
+    __param(0, type_graphql_1.Arg("input")),
     __param(1, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [PostInput, Object]),
@@ -114,7 +135,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PostResolver.prototype, "deletePost", null);
 PostResolver = __decorate([
-    type_graphql_1.Resolver()
+    type_graphql_1.Resolver(Post_1._Post)
 ], PostResolver);
 exports.PostResolver = PostResolver;
 //# sourceMappingURL=post.js.map

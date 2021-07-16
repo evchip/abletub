@@ -116,6 +116,7 @@ let UserResolver = class UserResolver {
         });
     }
     me({ req }) {
+        console.log('user.ts req.session.userId', req.session);
         if (!req.session.userId) {
             console.log('you are not logged in');
             return null;
@@ -185,7 +186,7 @@ let UserResolver = class UserResolver {
                 };
             }
             req.session.userId = user.id;
-            console.log('req.session.userid::::', req.session.id);
+            console.log('req.session.userid::::', req.session.userId);
             return {
                 user
             };

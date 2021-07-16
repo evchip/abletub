@@ -36,7 +36,7 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
     } else {
         body = (
             <Flex>
-            <Box mr={2}>{data.me.username}</Box>
+            <Box color='white' mr={2}>{data.me.username}</Box>
             <Button onClick={() => {
                 logout();
             }} 
@@ -47,8 +47,8 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
     }
 
     return (
-        <Flex zIndex={50} position="sticky" top={0} bg='tomato' p={4} ml={'auto'}>
-            <Box bg='tomato' p={4} ml={'auto'}>
+        <Flex zIndex={50} position="sticky" top={0} bg="teal.600" p={4} ml={'auto'}>
+            <Box bg='teal.600' p={4} ml={'auto'}>
                 {body}
             </Box>
         </Flex>

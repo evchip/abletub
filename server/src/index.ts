@@ -14,21 +14,23 @@ import { createConnection } from 'typeorm';
 import { User } from "./entities/User";
 import { _Post as Post } from "./entities/Post";
 import { MyContext } from "./types";
+import path from "path";
 
 
 const main = async () => {
     const conn = await createConnection({
-        type: 'postgres',
+        type: "postgres",
         database: 'lireddit4',
         username: 'postgres',
         password: 'postgres',
         logging: true,
         synchronize: true,
+        migrations: [path.join(__dirname, "./migrations/*")],
         entities: [Post, User]
     });
     // await Post.delete({});
     // await User.delete({});
-
+    await conn.runMigrations();
     const app = express();
 
     const RedisStore = connectRedis(session)
@@ -54,7 +56,7 @@ const main = async () => {
                 secure: __prod__, // cookie only works in https
             },
             saveUninitialized: false,
-            secret: "ghsggjjjjjffgggfkkkkkkker",
+            secret: "foo",
             resave: false,
         })
     );
