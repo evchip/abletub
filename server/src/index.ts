@@ -28,11 +28,12 @@ const main = async () => {
         migrations: [path.join(__dirname, "./migrations/*")],
         entities: [Post, User]
     });
-    // await Post.delete({});
+    
     // await User.delete({});
     await conn.runMigrations();
     const app = express();
 
+    // await Post.delete({});
     const RedisStore = connectRedis(session)
     const redis = new Redis();
     
@@ -41,7 +42,7 @@ const main = async () => {
         origin: 'http://localhost:3000',
         credentials: true
     }))
-
+    // 
     app.use(
         session({
             name: COOKIE_NAME,
