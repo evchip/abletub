@@ -34,5 +34,5 @@
   ],
   "include": [
     "./src/**/*.tsx",
-    "./src/**/*.ts", ]
+    "./src/**/*.ts", "1626475671095-MockPosts.ts", ]
 }

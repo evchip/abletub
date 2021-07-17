@@ -13,7 +13,6 @@ import cors from 'cors';
 import { createConnection } from 'typeorm';
 import { User } from "./entities/User";
 import { _Post as Post } from "./entities/Post";
-import { MyContext } from "./types";
 import path from "path";
 
 
@@ -32,7 +31,7 @@ const main = async () => {
     // await User.delete({});
     await conn.runMigrations();
     const app = express();
-
+    
     // await Post.delete({});
     const RedisStore = connectRedis(session)
     const redis = new Redis();
