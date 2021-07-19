@@ -1,11 +1,12 @@
 import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from "../utils/createUrqlClient";
-import { usePostsQuery } from "../generated/graphql";
+import { useDeletePostMutation, usePostsQuery } from "../generated/graphql";
 import React, { useState } from "react";
 import { Layout } from "../components/Layout";
-import { Box, Button, Flex, Heading, Link, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, IconButton, Link, Stack, Text } from "@chakra-ui/react";
 import NextLink from 'next/link';
 import {UpvoteSection} from '../components/UpvoteSection';
+import { DeleteIcon } from '@chakra-ui/icons';
 
 const Index = () => { 
   const [variables, setVariables] = useState({
@@ -15,31 +16,39 @@ const Index = () => {
     variables
   });
 
+  const [, deletePost] = useDeletePostMutation()
+
   if (!fetching && !data) {
     return <div>no more posts to show... or something went wrong</div>
   }
   return (
     <Layout>
-      <Flex align="center">
-        <Heading>Boiler</Heading>
-        <NextLink href='/create-post'>
-          <Link ml="auto">create post</Link>
-        </NextLink>
-      </Flex>
-      <br/>
-      
       {!data && fetching ? (
         <div>Loading...</div>
       ) : (
         <Stack spacing="8px"> 
-        {data!.posts.posts.map((p) => 
+        {data!.posts.posts.map((p) => !p ? null :
           (
           <Flex key={p.id} p={5} shadow="md" borderWidth="1px">
             <UpvoteSection post={p} />
-            <Box>
-              <Heading fontSize="xl">{p.title}</Heading>
+            <Box flex={1}>
+              <NextLink href="/post/[id]" as={`/post/${p.id}`}>
+              <Link>
+               <Heading fontSize="xl">{p.title}</Heading>
+              </Link>
+              </NextLink>
               <Text>Posted by {p.creator.username}</Text>
-              <Text mt={4}>{p.textSnippet}</Text>
+              <Flex align="center">
+                <Text flex={1} mt={4}>{p.textSnippet}</Text>
+                <IconButton
+                  aria-label="delete post"
+                  icon={<DeleteIcon/>}
+                  onClick={async () => {
+                    deletePost({ id: p.id })
+                  }}
+                  ml="auto"
+              />
+            </Flex>
             </Box>
           </Flex>
             )

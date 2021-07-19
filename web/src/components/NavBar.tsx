@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Link } from '@chakra-ui/react'
+import { Box, Button, Flex, Heading, Link } from '@chakra-ui/react'
 import React from 'react';
 import NextLink from 'next/link';
 import { useLogoutMutation, useMeQuery } from '../generated/graphql';
@@ -35,22 +35,32 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
         // user is logged in
     } else {
         body = (
-            <Flex>
-            <Box color='white' mr={2}>{data.me.username}</Box>
-            <Button onClick={() => {
-                logout();
-            }} 
-            isLoading={logoutFetching}
-            variant="link">Logout</Button>
+            <Flex align="center">
+                <NextLink href='/create-post'>
+                    <Button colorScheme="blackAlpha" as={Link} mr={4}>create tub</Button>
+                </NextLink>
+                <Box color='white' mr={2}>{data.me.username}</Box>
+                <Button onClick={() => {
+                    logout();
+                }} 
+                isLoading={logoutFetching}
+                variant="link">Logout</Button>
             </Flex>
         )
     }
 
     return (
-        <Flex zIndex={50} position="sticky" top={0} bg="teal.600" p={4} ml={'auto'}>
-            <Box bg='teal.600' p={4} ml={'auto'}>
-                {body}
-            </Box>
+        <Flex zIndex={50} position="sticky" top={0} bg="teal.600" p={4}>
+            <Flex flex={1} m='auto' maxWidth={800} align="center">
+                <NextLink href="/">
+                    <Link>
+                    <Heading>AbleTub</Heading>
+                    </Link>
+                </NextLink>
+                <Box bg='teal.600' p={4} ml={'auto'}>
+                    {body}
+                </Box>
+            </Flex>
         </Flex>
     )
 }
