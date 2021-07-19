@@ -37,6 +37,10 @@ __decorate([
     __metadata("design:type", Number)
 ], _Post.prototype, "points", void 0);
 __decorate([
+    type_graphql_1.Field(() => type_graphql_1.Int, { nullable: true }),
+    __metadata("design:type", Object)
+], _Post.prototype, "voteStatus", void 0);
+__decorate([
     type_graphql_1.Field(),
     typeorm_1.Column(),
     __metadata("design:type", Number)

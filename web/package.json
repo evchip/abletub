@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@chakra-ui/core": "^0.8.0",
-    "@chakra-ui/icons": "^1.0.0",
+    "@chakra-ui/icons": "^1.0.14",
     "@chakra-ui/react": "^1.6.4",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
@@ -17,6 +17,7 @@
     "formik": "^2.2.9",
     "framer-motion": "^4.0.3",
     "graphql": "^15.5.1",
+    "graphql-tag": "^2.12.5",
     "isomorphic-unfetch": "^3.1.0",
     "next": "^11.0.1",
     "next-urql": "^3.1.1",

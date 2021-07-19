@@ -193,9 +193,6 @@ let UserResolver = class UserResolver {
                 };
             }
             req.session.userId = user.id;
-            req.session.save(function (err) {
-                console.log("err session save", err);
-            });
             console.log('req.session.userid::::', req.session.userId);
             return {
                 user

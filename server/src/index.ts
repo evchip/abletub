@@ -60,16 +60,16 @@ const main = async () => {
             },
             saveUninitialized: false,
             secret: "foo",
-            resave: true,
+            resave: false,
         })
     );
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
             resolvers: [HelloResolver, PostResolver, UserResolver],
-            validate: false
+            validate: false,
         }),
-        context: ({ req, res }) => ({ req, res, redis })
+        context: ({ req, res }) => ({ req, res, redis }),
     });
 
     apolloServer.applyMiddleware({ 
@@ -80,12 +80,8 @@ const main = async () => {
     app.listen(process.env.PORT || 4000, () => {
     console.log("Node server started");
 
-})
-    //const post2 = orm.em.create(Post, {title: 'first post'});
-    // await orm.em.persistAndFlush(post2);
-    // const posts = await orm.em.find(Post, {});
-    // console.log(posts);
-}
+    });
+};
 
 main().catch((err) => {
     console.log('err::::',err)

@@ -4,6 +4,7 @@ import { _Post as Post } from '../entities/Post';
 import { isAuth } from "../middleware/isAuth";
 import { getConnection } from "typeorm";
 import { Updoot } from "../entities/Updoot";
+import { tmpdir } from "os";
 
 @InputType()
 class PostInput {
@@ -39,51 +40,77 @@ export class PostResolver {
     ) {
         const isUpdoot = value !== -1;
         const realValue = isUpdoot ? 1 : -1
-        // const { userId } = req.session;
         const {userId}  = req.session;
-        // await Updoot.insert({
-        //     userId,
-        //     postId,
-        //     value: realValue
-        // });
+        const upDoot = await Updoot.findOne({where: {postId, userId}})
+
+        // user has voted on the post before
+
+        if (upDoot && upDoot.value !== realValue) {
+            await getConnection().transaction(async (tm) => {
+                await tm.query(`
+                    update updoot
+                    set value = $1
+                    where "postId" = $2 and "userId" = $3
+                `, [realValue, postId, userId]);
+
+                await tm.query(`
+                    update __post
+                    set points = points + $1
+                    where id = $2;
+            `, [realValue, postId]);
+            })
+        } else if (!upDoot) {
+            // has not voted on this post before
+            await getConnection().transaction(async tm => {
+                await tm.query(`
+                    insert into updoot ("userId", "postId", value)
+                    values ($1, $2, $3)
+                `, [userId, postId, realValue]);
+
+                await tm.query(`
+                    update __post
+                    set points = points + $1
+                    where id = $2;
+                `, [realValue, postId])
+            })
+            
+        }
+
         await getConnection().query(
             `
             START TRANSACTION;
-            insert into updoot ("userId", "postId", value)
-            values (${userId}, ${postId}, ${realValue});
-            update __post
-            set points = points + ${realValue}
-            where id = ${postId};
+            
+            
             COMMIT;
             `
         );
         return true
     }
 
-
-    // START TRANSACTION;
-    // insert into updoot ("userId", "postId", value)
-    // values (${userId}, ${postId}, ${realValue});
-    // update __post
-    // set points = points + ${realValue}
-    // where id = ${postId};
-    // COMMIT;
-
     @Query(() => PaginatedPosts)
     async posts(
         @Arg("limit", () => Int) limit: number,
-        @Arg("cursor", () => String, {nullable: true}) cursor: string | null
+        @Arg("cursor", () => String, {nullable: true}) cursor: string | null,
+        @Ctx() {req}: MyContext,
     ): Promise<PaginatedPosts> {
         const realLimit = Math.min(50, limit);
         const realLimitPlusOne = realLimit + 1;
+        // req.session.userId = 7
         const replacements: any[] = [realLimitPlusOne];
+        console.log('req.session.userId for post vote', req.session)
 
-        if (cursor) {
-            replacements.push(new Date(parseInt(cursor)))
+        if (req.session.userId) {
+            console.log('has user ID')
+            replacements.push(req.session.userId)
         }
 
+        let cursorIdx = 3;
+        if (cursor) {
+            replacements.push(new Date(parseInt(cursor)))
+            cursorIdx = replacements.length
+        }
 
-        const posts = await  getConnection().query(`
+        const posts = await getConnection().query(`
         select p.*,
         json_build_object(
             'id', u.id,
@@ -91,10 +118,15 @@ export class PostResolver {
             'email', u.email,
             'createdAt', u."createdAt",
             'updatedAt', u."updatedAt"
-            ) creator
+            ) creator,
+        ${
+            req.session.userId
+                ? '(select value from updoot where "userId" = $2 and "postId" = p.id) "voteStatus"' 
+                : 'null as "voteStatus"'
+        }
         from __post p
         inner join public.user u on u.id = p."creatorId"
-        ${cursor ? `where p."createdAt" < $2`: ''}
+        ${cursor ? `where p."createdAt" < $${cursorIdx}`: ''}
         order by p."createdAt" DESC
         limit $1
         `, replacements)

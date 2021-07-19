@@ -205,15 +205,11 @@ export class UserResolver {
             }
         }
 
-        // let sess = req.session as CustomSessionData;
-        // sess.userId = user.id;
-        // req.session.userId = sess.userId
-
         req.session.userId = user.id;
 
-        req.session.save(function(err) {
-            console.log("err session save", err)
-        })
+        // req.session.save(function(err) {
+        //     console.log("err session save", err)
+        // })
         console.log('req.session.userid::::', req.session.userId)
         return {
             user
