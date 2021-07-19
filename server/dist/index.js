@@ -21,13 +21,14 @@ const post_1 = require("./resolvers/post");
 const user_1 = require("./resolvers/user");
 const constants_1 = require("./constants");
 const ioredis_1 = __importDefault(require("ioredis"));
-const express_session_1 = __importDefault(require("express-session"));
 const connect_redis_1 = __importDefault(require("connect-redis"));
+const express_session_1 = __importDefault(require("express-session"));
 const cors_1 = __importDefault(require("cors"));
 const typeorm_1 = require("typeorm");
 const User_1 = require("./entities/User");
 const Post_1 = require("./entities/Post");
 const path_1 = __importDefault(require("path"));
+const Updoot_1 = require("./entities/Updoot");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const conn = yield typeorm_1.createConnection({
         type: "postgres",
@@ -37,7 +38,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         logging: true,
         synchronize: true,
         migrations: [path_1.default.join(__dirname, "./migrations/*")],
-        entities: [Post_1._Post, User_1.User]
+        entities: [Post_1._Post, User_1.User, Updoot_1.Updoot]
     });
     yield conn.runMigrations();
     const app = express_1.default();
@@ -61,7 +62,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         },
         saveUninitialized: false,
         secret: "foo",
-        resave: false,
+        resave: true,
     }));
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: yield type_graphql_1.buildSchema({
@@ -79,6 +80,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 main().catch((err) => {
-    console.log(err);
+    console.log('err::::', err);
 });
 //# sourceMappingURL=index.js.map

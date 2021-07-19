@@ -3,6 +3,7 @@ import { Arg, Ctx, Query, Resolver, Mutation, InputType, Field, UseMiddleware, I
 import { _Post as Post } from '../entities/Post';
 import { isAuth } from "../middleware/isAuth";
 import { getConnection } from "typeorm";
+import { Updoot } from "../entities/Updoot";
 
 @InputType()
 class PostInput {
@@ -28,6 +29,45 @@ export class PostResolver {
     textSnippet(@Root() root: Post) {
         return root.text.slice(0, 50)
     }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth)
+    async vote(
+        @Arg('postId', () => Int) postId: number,
+        @Arg('value', () => Int) value: number,
+        @Ctx() {req}: MyContext
+    ) {
+        const isUpdoot = value !== -1;
+        const realValue = isUpdoot ? 1 : -1
+        // const { userId } = req.session;
+        const {userId}  = req.session;
+        // await Updoot.insert({
+        //     userId,
+        //     postId,
+        //     value: realValue
+        // });
+        await getConnection().query(
+            `
+            START TRANSACTION;
+            insert into updoot ("userId", "postId", value)
+            values (${userId}, ${postId}, ${realValue});
+            update __post
+            set points = points + ${realValue}
+            where id = ${postId};
+            COMMIT;
+            `
+        );
+        return true
+    }
+
+
+    // START TRANSACTION;
+    // insert into updoot ("userId", "postId", value)
+    // values (${userId}, ${postId}, ${realValue});
+    // update __post
+    // set points = points + ${realValue}
+    // where id = ${postId};
+    // COMMIT;
 
     @Query(() => PaginatedPosts)
     async posts(
@@ -72,7 +112,8 @@ export class PostResolver {
             //     })
             // }
             // const posts = await qb.getMany()
-        console.log('posts ', posts)
+        
+        //    console.log('posts ', posts)
         return { 
             posts: posts.slice(0, realLimit),
             hasMore: posts.length === realLimitPlusOne
