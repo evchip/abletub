@@ -10,10 +10,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Updoot = void 0;
-const typeorm_1 = require("typeorm");
 const type_graphql_1 = require("type-graphql");
-const User_1 = require("./User");
+const typeorm_1 = require("typeorm");
 const Post_1 = require("./Post");
+const User_1 = require("./User");
 let Updoot = class Updoot extends typeorm_1.BaseEntity {
 };
 __decorate([
