@@ -16,6 +16,8 @@ import { _Post as Post } from "./entities/Post";
 import path from "path";
 import { Updoot } from "./entities/Updoot";
 import { MyContext } from "./types";
+import { createUserLoader } from "./utils/createUserLoader";
+import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 
 
 const main = async () => {
@@ -69,7 +71,13 @@ const main = async () => {
             resolvers: [HelloResolver, PostResolver, UserResolver],
             validate: false,
         }),
-        context: ({ req, res }) => ({ req, res, redis }),
+        context: ({ req, res }) => ({ 
+            req,
+            res,
+            redis,
+            userLoader: createUserLoader(),
+            updootLoader: createUpvoteLoader()
+        }),
     });
 
     apolloServer.applyMiddleware({ 
