@@ -18,7 +18,8 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({post}) => {
         <Flex direction="column" alignItems="center" justifyContent="center" mr={4}>
             <IconButton
             aria-label="upvote post"
-            icon={<ChevronUpIcon />}
+            
+            icon={<ChevronUpIcon boxSize="2em"/>}
             
             onClick={async () => {
                 if (post.voteStatus === 1) {
@@ -37,7 +38,7 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({post}) => {
             {post.points}
             <IconButton
             aria-label="downvote post"
-            icon={<ChevronDownIcon />}
+            icon={<ChevronDownIcon boxSize="2em" />}
             onClick={async () => {
                 if (post.voteStatus === -1) {
                     return;

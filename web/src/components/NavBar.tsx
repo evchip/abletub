@@ -3,6 +3,7 @@ import React from 'react';
 import NextLink from 'next/link';
 import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import { isServer } from '../utils/isServer';
+import {useRouter} from 'next/router'; 
 
 
 interface NavBarProps {
@@ -10,6 +11,7 @@ interface NavBarProps {
 }
 
 const NavBar: React.FC<NavBarProps> = ({}) => {
+    const router = useRouter()
     const [{fetching: logoutFetching}, logout] = useLogoutMutation()
     const [{data, fetching}] = useMeQuery({
         pause: isServer()
@@ -36,11 +38,12 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
         body = (
             <Flex align="center">
                 <NextLink href='/create-post'>
-                    <Button colorScheme="blackAlpha" as={Link} mr={4}>create tub</Button>
+                    <Button colorScheme="whiteAlpha" as={Link} mr={4}>create tub</Button>
                 </NextLink>
-                <Box color='white' mr={2}>{data.me.username}</Box>
-                <Button onClick={() => {
-                    logout();
+                <Box mr={2}>{data.me.username}</Box>
+                <Button onClick={async () => {
+                    await logout();
+                    router.reload();
                 }} 
                 isLoading={logoutFetching}
                 variant="link">Logout</Button>
@@ -53,7 +56,7 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
             <Flex flex={1} m='auto' maxWidth={800} align="center">
                 <NextLink href="/">
                     <Link>
-                    <Heading>AbleTub</Heading>
+                    <Heading as="h1" color="whiteAlpha.800" size="2xl">AbleTub</Heading>
                     </Link>
                 </NextLink>
                 <Box bg='teal.600' p={4} ml={'auto'}>

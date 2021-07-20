@@ -12,12 +12,18 @@ const Index = () => {
   const [variables, setVariables] = useState({
     limit: 10,
     cursor: null as null | string});
-  const [{data, fetching}] = usePostsQuery({
+  const [{data, error, fetching}] = usePostsQuery({
     variables
   });
 
   if (!fetching && !data) {
-    return <div>no more posts to show... or something went wrong</div>
+    return (
+      <div>
+        <div>no more posts to show... or something went wrong</div>
+        <div>{error?.message}</div>
+      </div>
+    )
+
   }
   return (
     <Layout>

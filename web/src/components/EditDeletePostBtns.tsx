@@ -15,7 +15,7 @@ export const EditDeletePostBtns: React.FC<EditDeletePostBtnsProps> = ({
 }) => {
     const [, deletePost] = useDeletePostMutation()
     const [{data: userData}] = useMeQuery()
-    if (userData?.me.id !== creatorId) {
+    if (userData?.me?.id !== creatorId) {
         return null;
     }
     return (
