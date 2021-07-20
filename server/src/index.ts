@@ -6,6 +6,7 @@ import session from 'express-session';
 import Redis from 'ioredis';
 import path from "path";
 import "reflect-metadata";
+import "dotenv-safe/config";
 import { buildSchema } from 'type-graphql';
 import { createConnection } from 'typeorm';
 import { COOKIE_NAME, __prod__ } from './constants';
@@ -22,9 +23,7 @@ import { createUserLoader } from "./utils/createUserLoader";
 const main = async () => {
     const conn = await createConnection({
         type: "postgres",
-        database: 'lireddit4',
-        username: 'postgres',
-        password: 'postgres',
+        url: process.env.DATABASE_URL,
         logging: true,
         synchronize: true,
         migrations: [path.join(__dirname, "./migrations/*")],
