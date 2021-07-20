@@ -175,18 +175,23 @@ export class PostResolver {
     }
 
     @Mutation(() => Post, { nullable: true })
+    @UseMiddleware(isAuth)
     async updatePost(
-        @Arg("id") id: number,
-        @Arg("title", () => String, { nullable: true }) title: string
+        @Arg("id", () => Int) id: number,
+        @Arg("title") title: string,
+        @Arg("text") text: string,
+        @Ctx() { req }: MyContext
     ): Promise<Post | null> {
-        const post = await Post.findOne(id);
-        if (!post) {
-            return null
-        }
-        if (typeof title !== 'undefined') {
-            await Post.update({id}, {title})
-        }
-        return post;
+        console.log('id', id, 'creatorId', req.session.userId)
+        const result = await getConnection()
+        .createQueryBuilder()
+        .update(Post)
+        .set({ title, text })
+        .where('id = :id and "creatorId" = :creatorId', { id, creatorId: req.session.userId })
+        .returning("*")
+        .execute();
+
+        return result.raw[0];
     }
 
     @Mutation(() => Boolean)
@@ -195,15 +200,22 @@ export class PostResolver {
         @Arg("id", () => Int) id: number,
         @Ctx() { req }: MyContext
     ): Promise<boolean> {
-        const post = await Post.findOne(id)
-        if (!post) {
-            return false
-        }
-        if (post?.creatorId !== req.session.userId) {
-            throw new Error('not authorized')
-        }
-        await Updoot.delete({ postId: id })
-        await Post.delete({ id })
+        // console.log('this delete resolver is running')
+        // const post = await Post.findOne(id)
+        // if (!post) {
+        //     console.log('no post to delete')
+        //     return false
+        // }
+        // if (post?.creatorId !== req.session.userId) {
+        //     console.log('cookies think you are not authorized')
+        //     throw new Error('not authorized')
+        // }
+        // console.log('there is a post')
+        // await Updoot.delete({ postId: id })
+        // await Post.delete({ id })
+
+        // cascades delete on postgres
+        await Post.delete({id, creatorId: req.session.userId})
         return true;
     }
 }

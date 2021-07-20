@@ -1,12 +1,12 @@
+import { Box, Button, Flex, Heading, Link, Stack, Text } from "@chakra-ui/react";
 import { withUrqlClient } from 'next-urql';
-import { createUrqlClient } from "../utils/createUrqlClient";
-import { useDeletePostMutation, usePostsQuery } from "../generated/graphql";
-import React, { useState } from "react";
-import { Layout } from "../components/Layout";
-import { Box, Button, Flex, Heading, IconButton, Link, Stack, Text } from "@chakra-ui/react";
 import NextLink from 'next/link';
-import {UpvoteSection} from '../components/UpvoteSection';
-import { DeleteIcon } from '@chakra-ui/icons';
+import React, { useState } from "react";
+import { EditDeletePostBtns } from '../components/EditDeletePostBtns';
+import { Layout } from "../components/Layout";
+import { UpvoteSection } from '../components/UpvoteSection';
+import { usePostsQuery } from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const Index = () => { 
   const [variables, setVariables] = useState({
@@ -15,8 +15,6 @@ const Index = () => {
   const [{data, fetching}] = usePostsQuery({
     variables
   });
-
-  const [, deletePost] = useDeletePostMutation()
 
   if (!fetching && !data) {
     return <div>no more posts to show... or something went wrong</div>
@@ -27,7 +25,8 @@ const Index = () => {
         <div>Loading...</div>
       ) : (
         <Stack spacing="8px"> 
-        {data!.posts.posts.map((p) => !p ? null :
+        {data!.posts.posts.map((p) => 
+          !p ? null :
           (
           <Flex key={p.id} p={5} shadow="md" borderWidth="1px">
             <UpvoteSection post={p} />
@@ -39,15 +38,10 @@ const Index = () => {
               </NextLink>
               <Text>Posted by {p.creator.username}</Text>
               <Flex align="center">
-                <Text flex={1} mt={4}>{p.textSnippet}</Text>
-                <IconButton
-                  aria-label="delete post"
-                  icon={<DeleteIcon/>}
-                  onClick={async () => {
-                    deletePost({ id: p.id })
-                  }}
-                  ml="auto"
-              />
+                <Text flex={1} mt={4}>{p.textSnippet}</Text>  
+                  <Box ml="auto">
+                    <EditDeletePostBtns id={p.id} creatorId={p.creator.id} />
+                  </Box>
             </Flex>
             </Box>
           </Flex>
@@ -56,15 +50,16 @@ const Index = () => {
         </Stack>
       )}
       { data && data.posts.hasMore ? 
-      <Flex>
-        <Button isLoading={fetching} onClick={() => {
-          console.log('data posts',data.posts.posts)
-          setVariables({
-          limit: variables.limit,
-          cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
-          })
-        }} colorScheme="teal" variant="solid" m="auto" my={8}>Load More</Button>
-      </Flex> : null }
+        <Flex>
+          <Button isLoading={fetching} onClick={() => {
+            console.log('data posts',data.posts.posts)
+            setVariables({
+            limit: variables.limit,
+            cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
+            })
+          }} colorScheme="teal" variant="solid" m="auto" my={8}>Load More</Button>
+        </Flex> 
+        : null }
     </Layout>
   )
 }

@@ -2,21 +2,17 @@ import { Box, Heading } from '@chakra-ui/react'
 import { withUrqlClient } from 'next-urql'
 import { useRouter } from 'next/router'
 import React from 'react'
+import { EditDeletePostBtns } from '../../components/EditDeletePostBtns'
 import { Layout } from '../../components/Layout'
 import { usePostQuery } from '../../generated/graphql'
 import { createUrqlClient } from '../../utils/createUrqlClient'
+import { useGetPostFromUrl } from '../../utils/useGetPostfromUrl'
 
 
 const Post = ({}) => {
-    const router = useRouter();
-    const intId = typeof router.query.id === 'string' ? parseInt(router.query.id) : -1
-    const pause = intId === -1
-    const [{data, error, fetching}] = usePostQuery({
-        pause: pause,
-        variables: {
-            id: intId
-        }
-    })
+
+    const [{data, error, fetching}] = useGetPostFromUrl()
+
     if (fetching) {
         return (
             <Layout>
@@ -30,14 +26,24 @@ const Post = ({}) => {
     }
 
     if (!data?.post) {
-        return <Layout>
+        return (
+        <Layout>
             <Box>We couldn't find that post...</Box>
         </Layout>
+        )
     }
     return (
         <Layout>
             <Heading mb={4}>{data.post.title}</Heading>
-            {data.post.text}
+            <Box>
+                {data.post.text}
+            </Box>
+            <Box ml="auto">
+                <EditDeletePostBtns 
+                    id={data.post.id} 
+                    creatorId={data.post.creator.id} 
+                />
+            </Box>
         </Layout>
     )
 }

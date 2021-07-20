@@ -1,4 +1,5 @@
 import { Box, Button, FormLabel, Textarea } from "@chakra-ui/react";
+// import { LargeInputField } from "../components/LargeInputField";
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from 'next/router';
@@ -35,12 +36,7 @@ const CreatePost: React.FC<{}> = ({}) => {
                         label='Title' 
                     />
                     <Box mt={4}>
-                    <FormLabel htmlFor='text'>Body</FormLabel>
-                    <Textarea
-                        name='text' 
-                        placeholder='text...' 
-                        label='Text'
-                    />
+                    <InputField textarea name="text" placeholder="text" label="Body" />
                     </Box>
                     <Button 
                         mt={4} 
