@@ -143,7 +143,6 @@ let PostResolver = class PostResolver {
     }
     updatePost(id, title, text, { req }) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('id', id, 'creatorId', req.session.userId);
             const result = yield typeorm_1.getConnection()
                 .createQueryBuilder()
                 .update(Post_1._Post)

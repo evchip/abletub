@@ -42,7 +42,6 @@ export const cursorPagination = (): Resolver => {
         hasMore = _hasMore as boolean;
       }
       results.push(...data)
-      // console.log('issa data', data, hasMore)
     })
 
     

@@ -161,7 +161,7 @@ export class PostResolver {
         @Arg("text") text: string,
         @Ctx() { req }: MyContext
     ): Promise<Post | null> {
-        console.log('id', id, 'creatorId', req.session.userId)
+
         const result = await getConnection()
         .createQueryBuilder()
         .update(Post)

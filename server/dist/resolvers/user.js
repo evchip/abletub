@@ -122,7 +122,6 @@ let UserResolver = class UserResolver {
         });
     }
     me({ req }) {
-        console.log('user.ts req.session.userId', req.session.userId);
         if (!req.session.userId) {
             console.log('you are not logged in');
             return null;
@@ -149,7 +148,6 @@ let UserResolver = class UserResolver {
                 })
                     .returning("*")
                     .execute();
-                console.log('result:::: ', result);
                 user = result.raw[0];
             }
             catch (err) {
@@ -182,7 +180,6 @@ let UserResolver = class UserResolver {
                         }]
                 };
             }
-            console.log('session.id', req.sessionID);
             const valid = yield argon2_1.default.verify(user.password, password);
             if (!valid) {
                 return {
@@ -193,14 +190,12 @@ let UserResolver = class UserResolver {
                 };
             }
             req.session.userId = user.id;
-            console.log('req.session.userid::::', req.session.userId);
             return {
                 user
             };
         });
     }
     logout({ req, res }) {
-        console.log('trigger logout', req.session);
         return new Promise(resolve => req.session.destroy((err) => {
             res.clearCookie(constants_1.COOKIE_NAME);
             if (err) {

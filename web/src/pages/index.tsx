@@ -58,7 +58,6 @@ const Index = () => {
       { data && data.posts.hasMore ? 
         <Flex>
           <Button isLoading={fetching} onClick={() => {
-            console.log('data posts',data.posts.posts)
             setVariables({
             limit: variables.limit,
             cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,

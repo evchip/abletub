@@ -1,5 +1,4 @@
-import { Box, Button, FormLabel, Textarea } from "@chakra-ui/react";
-// import { LargeInputField } from "../components/LargeInputField";
+import { Box, Button } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from 'next/router';
@@ -25,7 +24,6 @@ const CreatePost: React.FC<{}> = ({}) => {
                 if (!error) {
                     router.push('/');
                 }
-                console.log('values', values)
                 
             }}>
             {({ isSubmitting }) => (

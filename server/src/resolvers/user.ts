@@ -115,7 +115,6 @@ export class UserResolver {
     @Query(() => User, { nullable: true})
     me(@Ctx() { req }: MyContext) {
        
-        console.log('user.ts req.session.userId', req.session.userId)
         // you are not logged in
         if (!req.session.userId) {
             console.log('you are not logged in')
@@ -149,7 +148,7 @@ export class UserResolver {
             })
             .returning("*")
             .execute();
-            console.log('result:::: ', result);
+
             user = result.raw[0];
         } catch(err) {
             console.log('REGISTER ERROR: ', err)
@@ -183,7 +182,6 @@ export class UserResolver {
             { where: {email: usernameOrEmail} } : 
             { where: {username: usernameOrEmail} } 
         );
-        // req.session.destroy((err: any) => console.log('session.id isAuth', req.sessionID, err))
 
         if (!user) {
             return {
@@ -193,7 +191,7 @@ export class UserResolver {
                 }]
             }
         }
-        console.log('session.id', req.sessionID)
+
         const valid = await argon2.verify(user.password, password)
         
         if (!valid) {
@@ -207,10 +205,6 @@ export class UserResolver {
 
         req.session.userId = user.id;
 
-        // req.session.save(function(err) {
-        //     console.log("err session save", err)
-        // })
-        console.log('req.session.userid::::', req.session.userId)
         return {
             user
         };
@@ -220,7 +214,6 @@ export class UserResolver {
     logout(
         @Ctx() { req, res }: MyContext
     ) {
-        console.log('trigger logout', req.session)
         return new Promise(resolve => req.session.destroy((err) => {
             res.clearCookie(COOKIE_NAME)
             if (err) {
