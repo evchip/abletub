@@ -25,7 +25,7 @@ const main = async () => {
         type: "postgres",
         url: process.env.DATABASE_URL,
         logging: true,
-        synchronize: true,
+        // synchronize: true,
         migrations: [path.join(__dirname, "./migrations/*")],
         entities: [Post, User, Updoot]
     });
@@ -36,11 +36,12 @@ const main = async () => {
     const app = express();
     
     // await Post.delete({});
-    const RedisStore = connectRedis(session)
-    const redis = new Redis();
+    const RedisStore = connectRedis(session);
+    const redis = new Redis(process.env.REDIS_URL);
+    app.set("proxy", 1);
     app.use(
         cors({
-        origin: 'http://localhost:3000',
+        origin: process.env.CORS_ORIGIN,
         credentials: true
     }));
 
@@ -56,9 +57,10 @@ const main = async () => {
                 httpOnly: true,
                 sameSite: "lax", //csrf
                 secure: __prod__, // cookie only works in https
+                domain: __prod__ ? ".abletub.com" : undefined
             },
             saveUninitialized: false,
-            secret: "foo",
+            secret: process.env.SESSION_SECRET,
             resave: false,
         })
     );
@@ -82,7 +84,7 @@ const main = async () => {
         cors: false
     });
 
-    app.listen(process.env.PORT || 4000, () => {
+    app.listen(parseInt(process.env.PORT) || 4000, () => {
     console.log("Node server started");
 
     });

@@ -12,6 +12,7 @@ COPY package.json ./
 RUN yarn
 
 COPY . .
+COPY .env.production .env
 
 RUN yarn build
 
