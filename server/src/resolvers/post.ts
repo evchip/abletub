@@ -1,5 +1,5 @@
 import { MyContext } from "src/types";
-import { Arg, Ctx, Query, Resolver, Mutation, InputType, Field, UseMiddleware, Int, FieldResolver, Root, ObjectType, Info } from "type-graphql";
+import { Arg, Ctx, Query, Resolver, Mutation, InputType, Field, UseMiddleware, Int, FieldResolver, Root, ObjectType } from "type-graphql";
 import { _Post as Post } from '../entities/Post';
 import { isAuth } from "../middleware/isAuth";
 import { getConnection } from "typeorm";
@@ -98,7 +98,6 @@ export class PostResolver {
             `
             START TRANSACTION;
             
-            
             COMMIT;
             `
         );
@@ -109,7 +108,6 @@ export class PostResolver {
     async posts(
         @Arg("limit", () => Int) limit: number,
         @Arg("cursor", () => String, {nullable: true}) cursor: string | null,
-        @Ctx() {req}: MyContext,
     ): Promise<PaginatedPosts> {
         const realLimit = Math.min(50, limit);
         const realLimitPlusOne = realLimit + 1;
@@ -127,21 +125,6 @@ export class PostResolver {
         limit $1
         `, replacements)
 
-        // const qb = getConnection()
-        //     .getRepository(Post)
-        //     .createQueryBuilder("p")
-        //     .innerJoinAndSelect("p.creator", "u", 'u.id = p."creatorId"')
-        //     .orderBy('p."createdAt"', "DESC")
-        //     .take(realLimitPlusOne)
-            
-            // if (cursor) {
-            //     qb.where('p."createdAt" < :cursor', { 
-            //         cursor: new Date(parseInt(cursor)) 
-            //     })
-            // }
-            // const posts = await qb.getMany()
-        
-        //    console.log('posts ', posts)
         return { 
             posts: posts.slice(0, realLimit),
             hasMore: posts.length === realLimitPlusOne
@@ -196,19 +179,6 @@ export class PostResolver {
         @Arg("id", () => Int) id: number,
         @Ctx() { req }: MyContext
     ): Promise<boolean> {
-        // console.log('this delete resolver is running')
-        // const post = await Post.findOne(id)
-        // if (!post) {
-        //     console.log('no post to delete')
-        //     return false
-        // }
-        // if (post?.creatorId !== req.session.userId) {
-        //     console.log('cookies think you are not authorized')
-        //     throw new Error('not authorized')
-        // }
-        // console.log('there is a post')
-        // await Updoot.delete({ postId: id })
-        // await Post.delete({ id })
 
         // cascades delete on postgres
         await Post.delete({id, creatorId: req.session.userId})

@@ -1,13 +1,27 @@
-import { Box, Button, Flex, Heading, Link } from '@chakra-ui/react'
+import { Box, Button, Flex, Heading, Link, extendTheme } from '@chakra-ui/react';
+import {
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    MenuItemOption,
+    MenuGroup,
+    MenuOptionGroup,
+    MenuIcon,
+    MenuCommand,
+    MenuDivider,
+  } from "@chakra-ui/react"
 import React from 'react';
 import NextLink from 'next/link';
 import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import { isServer } from '../utils/isServer';
 import {useRouter} from 'next/router'; 
+import { ChevronDownIcon } from '@chakra-ui/icons';
+
 
 
 interface NavBarProps {
-
+    
 }
 
 const NavBar: React.FC<NavBarProps> = ({}) => {
@@ -37,16 +51,46 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
     } else {
         body = (
             <Flex align="center">
-                <NextLink href='/create-post'>
-                    <Button colorScheme="whiteAlpha" as={Link} mr={4}>create tub</Button>
-                </NextLink>
-                <Box mr={2}>{data.me.username}</Box>
-                <Button onClick={async () => {
-                    await logout();
-                    router.reload();
-                }} 
-                isLoading={logoutFetching}
-                variant="link">Logout</Button>
+                <Menu >
+                <MenuButton
+                    fontSize={{ base: "12px", md: "14px", lg: "16px" }}
+                    as={Button} 
+                    rightIcon={<ChevronDownIcon />}
+                    bgColor="whiteAlpha.600"
+                    px={4}
+                    py={2}
+                    transition="all 0.2s"
+                    borderRadius="md"
+                    borderWidth="1px"
+                    _hover={{ bg: "gray.400" }}
+                    _expanded={{ bg: "blue.400" }}
+                    _focus={{ boxShadow: "outline" }}
+                >
+                    {data.me.username}
+                </MenuButton>
+                <MenuList bgColor="white">
+                    <NextLink href='/create-post'>
+                        <MenuItem
+                            as={Link}
+                            style={{ textDecoration: 'none' }}
+                            _hover={{ bg: "gray.400" }}
+                        >
+                            Create Tub
+                        </MenuItem>
+                    </NextLink>
+                    <MenuItem 
+                        onClick={async () => {
+                            await logout();
+                            router.reload();
+                        }} 
+                        isLoading={logoutFetching}
+                        variant="link"
+                        _hover={{ bg: "gray.400" }}
+                    >
+                        Logout
+                    </MenuItem>
+                </MenuList>
+                </Menu>
             </Flex>
         )
     }
