@@ -1,4 +1,4 @@
-FROM node:14 AS development
+FROM node:14
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -8,10 +8,10 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package.json ./
 COPY yarn.lock ./
-COPY . .
 
 RUN yarn
 
+COPY . .
 COPY .env.production .env
 
 RUN yarn build

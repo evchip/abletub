@@ -38,7 +38,7 @@ const main = async () => {
     // await Post.delete({});
     const RedisStore = connectRedis(session);
     const redis = new Redis(process.env.REDIS_URL);
-    app.set("proxy", 1);
+    app.set("trust proxy", 1);
     app.use(
         cors({
         origin: process.env.CORS_ORIGIN,
@@ -57,7 +57,7 @@ const main = async () => {
                 httpOnly: true,
                 sameSite: "lax", //csrf
                 secure: __prod__, // cookie only works in https
-                domain: __prod__ ? ".abletubb.com" : undefined
+                domain: __prod__ ? ".abletub.live" : undefined
             },
             saveUninitialized: false,
             secret: process.env.SESSION_SECRET,
@@ -84,7 +84,7 @@ const main = async () => {
         cors: false
     });
 
-    app.listen(parseInt(process.env.PORT) || 4000, () => {
+    app.listen(parseInt(process.env.PORT), () => {
     console.log("Node server started");
 
     });
