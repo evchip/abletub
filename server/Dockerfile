@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:14 AS development
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -6,12 +6,12 @@ WORKDIR /usr/src/app
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY yarn.lock ./
 COPY package.json ./
+COPY yarn.lock ./
+COPY . .
 
 RUN yarn
 
-COPY . .
 COPY .env.production .env
 
 RUN yarn build

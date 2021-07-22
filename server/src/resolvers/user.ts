@@ -1,13 +1,14 @@
 import { Field, Mutation, Query, Resolver, Arg, Ctx, ObjectType, Root, FieldResolver } from "type-graphql";
 import { MyContext } from '../types';
 import { User } from '../entities/User';
-import argon2 from 'argon2';
+// import argon2 from 'argon2';
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
 import { sendEmail } from "../utils/sendEmail";
 import { UserNamePasswordInput } from "./UserNamePasswordInput";
 import { validateRegister } from "../utils/validateRegister";
 import {v4} from 'uuid';
 import { getConnection } from "typeorm";
+import passwordHash from 'password-hash';
 
 @ObjectType()
 class FieldError {
@@ -82,7 +83,8 @@ export class UserResolver {
         }
 
         await User.update({id: userIdNum}, {
-            password: await argon2.hash(newPassword)
+            // password: await argon2.hash(newPassword)
+            password: await passwordHash.generate(newPassword)
         })
 
         await redis.del(key)
@@ -134,7 +136,8 @@ export class UserResolver {
         if (errors) {
             return {errors};
         }
-        const hashedPassword = await argon2.hash(options.password)
+        // const hashedPassword = await argon2.hash(options.password)
+        const hashedPassword = await passwordHash.generate(options.password)
         let user;
         try {
             const result = await getConnection()
@@ -192,7 +195,8 @@ export class UserResolver {
             }
         }
 
-        const valid = await argon2.verify(user.password, password)
+        // const valid = await argon2.verify(user.password, password)
+        const valid = await passwordHash.verify(password, user.password)
         
         if (!valid) {
             return {
