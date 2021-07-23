@@ -1,24 +1,15 @@
-import { Box, Button, Flex, Heading, Link, extendTheme } from '@chakra-ui/react';
+import { useApolloClient } from '@apollo/client';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import {
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
-    MenuItemOption,
-    MenuGroup,
-    MenuOptionGroup,
-    MenuIcon,
-    MenuCommand,
-    MenuDivider,
-  } from "@chakra-ui/react"
-import React from 'react';
+    Box, Button, Flex, Heading, Link, Menu,
+    MenuButton, MenuItem, MenuList
+} from '@chakra-ui/react';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
 import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import { isServer } from '../utils/isServer';
-import {useRouter} from 'next/router'; 
-import { ChevronDownIcon } from '@chakra-ui/icons';
-
-
+import  {withApollo}  from '../utils/withApollo';
 
 interface NavBarProps {
     
@@ -26,15 +17,16 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({}) => {
     const router = useRouter()
-    const [{fetching: logoutFetching}, logout] = useLogoutMutation()
-    const [{data, fetching}] = useMeQuery({
-        pause: isServer()
+    const [logout, {loading: logoutFetching}] = useLogoutMutation();
+    const apolloClient = useApolloClient()
+    const {data, loading} = useMeQuery({
+        skip: isServer()
     })
     let body = null
-
+    console.log('data?.me', data)
     // data is loading
-    if (fetching) {
-
+    if (loading) {
+        
         // user not logged in
     } else if (!data?.me) { body = ( 
         <>
@@ -81,7 +73,7 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
                     <MenuItem 
                         onClick={async () => {
                             await logout();
-                            router.reload();
+                            await apolloClient.resetStore();
                         }} 
                         isLoading={logoutFetching}
                         variant="link"
@@ -111,4 +103,4 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
     )
 }
 
-export default NavBar
+export default withApollo({ ssr: false })(NavBar);

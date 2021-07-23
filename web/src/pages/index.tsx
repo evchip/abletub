@@ -1,22 +1,22 @@
 import { Box, Button, Flex, Heading, Link, Stack, Text } from "@chakra-ui/react";
-import { withUrqlClient } from 'next-urql';
+import { withApollo } from "../utils/withApollo";
 import NextLink from 'next/link';
-import React, { useState } from "react";
+import React from "react";
 import { EditDeletePostBtns } from '../components/EditDeletePostBtns';
 import { Layout } from "../components/Layout";
 import { UpvoteSection } from '../components/UpvoteSection';
 import { usePostsQuery } from "../generated/graphql";
-import { createUrqlClient } from "../utils/createUrqlClient";
 
 const Index = () => { 
-  const [variables, setVariables] = useState({
-    limit: 10,
-    cursor: null as null | string});
-  const [{data, error, fetching}] = usePostsQuery({
-    variables
+  const {data, error, loading, fetchMore, variables} = usePostsQuery({
+    variables: {
+      limit: 10,
+      cursor: null
+    },
+    notifyOnNetworkStatusChange: true,
   });
 
-  if (!fetching && !data) {
+  if (!loading && !data) {
     return (
       <div>
         <div>no more posts to show... or something went wrong</div>
@@ -27,7 +27,7 @@ const Index = () => {
   }
   return (
     <Layout>
-      {!data && fetching ? (
+      {!data && loading ? (
         <div>Loading...</div>
       ) : (
         <Stack spacing="8px"> 
@@ -57,15 +57,33 @@ const Index = () => {
       )}
       { data && data.posts.hasMore ? 
         <Flex>
-          <Button isLoading={fetching} onClick={() => {
-            setVariables({
-            limit: variables.limit,
-            cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
+          <Button isLoading={loading} onClick={() => {
+            fetchMore({
+              variables: {
+                limit: variables?.limit,
+                cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
+              },
+              // updateQuery: (previousValue, {fetchMoreResult}): PostsQuery => {
+              //   if (!fetchMoreResult) {
+              //       return previousValue as PostsQuery
+              //   }
+              //   return {
+              //       __typename: 'Query',
+              //       posts: {
+              //         __typename: 'PaginatedPosts',
+              //         hasMore: (fetchMoreResult as PostsQuery).posts.hasMore,
+              //         posts: [
+              //           ...(previousValue as PostsQuery).posts.posts,
+              //           ...(fetchMoreResult as PostsQuery).posts.posts
+              //         ]
+              //       }
+              //   }
+              // }
             })
           }} colorScheme="teal" variant="solid" m="auto" my={8}>Load More</Button>
         </Flex> 
         : null }
     </Layout>
-  )
-}
-export default withUrqlClient(createUrqlClient, {ssr: true})(Index)
+  );
+};
+export default withApollo({ ssr: true })(Index);

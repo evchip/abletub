@@ -20,6 +20,7 @@ import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
 
 
+
 const main = async () => {
     const conn = await createConnection({
         type: "postgres",
@@ -31,7 +32,7 @@ const main = async () => {
     });
     
     // await User.delete({});
-    await conn.runMigrations();
+    // await conn.runMigrations();
 
     const app = express();
     

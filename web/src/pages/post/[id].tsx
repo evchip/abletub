@@ -7,13 +7,14 @@ import { Layout } from '../../components/Layout'
 import { usePostQuery } from '../../generated/graphql'
 import { createUrqlClient } from '../../utils/createUrqlClient'
 import { useGetPostFromUrl } from '../../utils/useGetPostfromUrl'
+import { withApollo } from '../../utils/withApollo'
 
 
 const Post = ({}) => {
 
-    const [{data, error, fetching}] = useGetPostFromUrl()
+    const {data, error, loading} = useGetPostFromUrl()
 
-    if (fetching) {
+    if (loading) {
         return (
             <Layout>
                 <div>loading....</div>
@@ -48,4 +49,4 @@ const Post = ({}) => {
     )
 }
 
-export default withUrqlClient(createUrqlClient, {ssr: true})(Post);
+export default withApollo({ ssr: true })(Post);

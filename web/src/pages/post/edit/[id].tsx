@@ -9,6 +9,7 @@ import { usePostQuery, usePostsQuery, useUpdatePostMutation } from '../../../gen
 import { createUrqlClient } from '../../../utils/createUrqlClient';
 import { useGetIntId } from '../../../utils/useGetIntId';
 import { useGetPostFromUrl } from '../../../utils/useGetPostfromUrl';
+import { withApollo } from '../../../utils/withApollo';
 import createPost from '../../create-post';
 
 
@@ -16,14 +17,14 @@ const EditPost = ({}) => {
     const router = useRouter()
     const intId = useGetIntId()
     const pause = intId === -1;
-    const [{data, fetching}] = usePostQuery({
-        pause: pause,
+    const {data, loading} = usePostQuery({
+        skip: pause,
         variables: {
             id: intId
         }
     });
-    const [, updatePost] = useUpdatePostMutation()
-    if (fetching) {
+    const [updatePost] = useUpdatePostMutation()
+    if (loading) {
         return (
             <Layout>
                 <div>loading...</div>
@@ -45,7 +46,7 @@ const EditPost = ({}) => {
         initialValues={{ title: data.post.title, text: data.post.text }} 
         onSubmit={ async (values) => {
 
-            await updatePost({id: intId, ...values})
+            await updatePost({variables: {id: intId, ...values}})
             router.back();
             
         }}>
@@ -80,4 +81,4 @@ const EditPost = ({}) => {
     )
 };
 
-export default withUrqlClient(createUrqlClient)(EditPost);
+export default withApollo({ ssr: false })(EditPost);
