@@ -31,6 +31,7 @@ export type Mutation = {
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  signS3: Scalars['Boolean'];
 };
 
 
@@ -76,6 +77,12 @@ export type MutationRegisterArgs = {
 export type MutationLoginArgs = {
   password: Scalars['String'];
   usernameOrEmail: Scalars['String'];
+};
+
+
+export type MutationSignS3Args = {
+  filetype: Scalars['Float'];
+  filename: Scalars['String'];
 };
 
 export type PaginatedPosts = {
@@ -140,6 +147,7 @@ export type _Post = {
   creator: User;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+  songId: Scalars['Float'];
   textSnippet: Scalars['String'];
 };
 

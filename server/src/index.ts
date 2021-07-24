@@ -18,6 +18,7 @@ import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
 import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
+import { FileResolver } from './resolvers/file';
 
 
 const main = async () => {
@@ -67,7 +68,7 @@ const main = async () => {
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [HelloResolver, PostResolver, UserResolver],
+            resolvers: [HelloResolver, PostResolver, UserResolver, FileResolver],
             validate: false,
         }),
         context: ({ req, res }) => ({ 

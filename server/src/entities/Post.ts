@@ -43,4 +43,8 @@ export class _Post extends BaseEntity {
     @Field(() => String)
     @UpdateDateColumn()
     updatedAt!: Date;
+
+    @Field()
+    @Column()
+    songId?: number;
 }
