@@ -1,38 +1,40 @@
-import React from 'react'
-import Dropzone from "react-dropzone";
+import React, {useState} from 'react'
 import axios from "axios";
 import moment from "moment";
 // import { compose, gql, graphql } from "react-apollo";
 import { gql, compose, graphql } from 'urql'
 import {useS3SignMutation} from "../generated/graphql"
+const AmazonS3URI = require('amazon-s3-uri')
 
 
-class Upload extends React.Component {
-    state = {
-      name: "test",
-      file: null
-    };
+const UploadFile = () => {
+    const [state, setState] = useState({
+        name: ''
+    });
+    const [picture, setPicture] = useState('')
+
+    const [, s3Sign] = useS3SignMutation()
   
     // onDrop = async files => {
     //   console.log('files', files[0])
     //   this.setState({ file: files[0] });
     // };
   
-    onChange = e => {
+    const onChange = e => {
       console.log(e.target.files)
-      this.setState({file: e.target.files[0]});
+      setState({file: e.target.files[0]});
     };
   
-    uploadToS3 = async (file, signedRequest) => {
+    const uploadToS3 = async (file, signedRequest) => {
       const options = {
         headers: {
-          "Content-Type": file.type
+            "Content-Type": file.type
         }
       };
       await axios.put(signedRequest, file, options);
     };
   
-    formatFilename = filename => {
+    const formatFilename = filename => {
       const date = moment().format("YYYYMMDD");
       const randomString = Math.random()
         .toString(36)
@@ -42,20 +44,21 @@ class Upload extends React.Component {
       return newFilename.substring(0, 60);
     };
   
-    submit = async () => {
-      console.log('state', this.state)
-      const { file } = this.state;
-      const response = await useS3SignMutation({
-        variables: {
-          filename: this.formatFilename(file.name),
-          filetype: file.type
-        }
+    const submit = async () => {
+      console.log('state', state)
+      const { file } = state;
+      const response = await s3Sign({
+            filename: formatFilename(file.name),
+            filetype: file.type
       });
-      console.log('response from s3 sign', response)
+
       const { signedRequest, url } = response.data.signS3;
-      console.log('signedrequest:::', signedRequest)
-      await this.uploadToS3(file, signedRequest);
-      console.log(url)
+
+      setPicture(url)
+
+      console.log('signedrequest:::', response)
+      const result = await uploadToS3(file, signedRequest);
+      console.log('issa result', result)
       // const graphqlResponse = await this.props.createChampion({
       //   variables: {
       //     name,
@@ -68,15 +71,15 @@ class Upload extends React.Component {
       // );
     };
   
-    render() {
+
       return (
         <div>
-          <input name="name" onChange={this.onChange} value={this.state.name} />
-          <input onChange={(e) => this.onChange(e)} type="file" accept="image/*"></input>
-          <button onClick={this.submit}>Submit</button>
+          <input name="name" onChange={onChange} value={state.name} />
+          <input onChange={(e) => onChange(e)} type="file" accept="image/*"></input>
+          <button onClick={submit}>Submit</button>
+          {picture !== '' ? <img src={picture}></img> : null}
         </div>
       );
-    }
   }
   
   // const CreateChampionMutation = gql`
@@ -87,17 +90,4 @@ class Upload extends React.Component {
   //   }
   // `;
   
-  // const s3SignMutation = gql`
-  //   mutation($filename: String!, $filetype: String!) {
-  //     signS3(filename: $filename, filetype: $filetype) {
-  //       url
-  //       signedRequest
-  //     }
-  //   }
-  // `;
-  
-  // export default compose(
-  //   // graphql(CreateChampionMutation, { name: "createChampion" }),
-  //   // graphql(s3SignMutation, { name: "s3Sign" })
-  // )(Upload);
-  export default Upload
+  export default UploadFile

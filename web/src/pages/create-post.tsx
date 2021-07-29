@@ -8,6 +8,7 @@ import { Layout } from "../components/Layout";
 import { useCreatePostMutation } from '../generated/graphql';
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { useIsAuth } from "../utils/useIsAuth";
+import  UploadFile from "../components/UploadFileFC"
 
 const CreatePost: React.FC<{}> = ({}) => {
 
@@ -35,6 +36,9 @@ const CreatePost: React.FC<{}> = ({}) => {
                     />
                     <Box mt={4}>
                     <InputField textarea name="text" placeholder="text" label="Body" />
+                    </Box>
+                    <Box>
+                        <UploadFile/>
                     </Box>
                     <Button 
                         mt={4} 

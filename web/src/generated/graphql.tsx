@@ -31,7 +31,7 @@ export type Mutation = {
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
-  signS3: Scalars['Boolean'];
+  signS3: S3Payload;
 };
 
 
@@ -81,7 +81,7 @@ export type MutationLoginArgs = {
 
 
 export type MutationSignS3Args = {
-  filetype: Scalars['Float'];
+  filetype: Scalars['String'];
   filename: Scalars['String'];
 };
 
@@ -113,6 +113,12 @@ export type QueryPostsArgs = {
 
 export type QueryPostArgs = {
   id: Scalars['Int'];
+};
+
+export type S3Payload = {
+  __typename?: 'S3Payload';
+  signedRequest: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type User = {
@@ -147,7 +153,6 @@ export type _Post = {
   creator: User;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  songId: Scalars['Float'];
   textSnippet: Scalars['String'];
 };
 
@@ -260,6 +265,20 @@ export type RegisterMutation = (
   & { register: (
     { __typename?: 'UserResponse' }
     & RegularUserResponseFragment
+  ) }
+);
+
+export type S3SignMutationVariables = Exact<{
+  filename: Scalars['String'];
+  filetype: Scalars['String'];
+}>;
+
+
+export type S3SignMutation = (
+  { __typename?: 'Mutation' }
+  & { signS3: (
+    { __typename?: 'S3Payload' }
+    & Pick<S3Payload, 'signedRequest' | 'url'>
   ) }
 );
 
@@ -449,6 +468,18 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const S3SignDocument = gql`
+    mutation S3Sign($filename: String!, $filetype: String!) {
+  signS3(filename: $filename, filetype: $filetype) {
+    signedRequest
+    url
+  }
+}
+    `;
+
+export function useS3SignMutation() {
+  return Urql.useMutation<S3SignMutation, S3SignMutationVariables>(S3SignDocument);
 };
 export const UpdatePostDocument = gql`
     mutation UpdatePost($id: Int!, $title: String!, $text: String!) {

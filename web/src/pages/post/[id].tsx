@@ -1,18 +1,20 @@
 import { Box, Heading } from '@chakra-ui/react'
+import UploadFile from 'components/UploadFileFC'
 import { withUrqlClient } from 'next-urql'
-import { useRouter } from 'next/router'
 import React from 'react'
-import { AudioPlayer } from '../../components/audioPlayer'
 import { EditDeletePostBtns } from '../../components/EditDeletePostBtns'
 import { Layout } from '../../components/Layout'
-import { usePostQuery } from '../../generated/graphql'
+import PlayPauseAudio from "../../components/PlayPauseAudio"
 import { createUrqlClient } from '../../utils/createUrqlClient'
 import { useGetPostFromUrl } from '../../utils/useGetPostfromUrl'
-import PlayPauseAudio from "../../components/PlayPauseAudio"
+import axios from "axios";
+import { useState } from 'react'
+
 
 const Post = ({}) => {
 
     const [{data, error, fetching}] = useGetPostFromUrl()
+
 
     if (fetching) {
         return (
