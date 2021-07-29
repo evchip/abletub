@@ -1,22 +1,22 @@
-import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { GetBucketAclCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import "dotenv-safe";
+import { Arg, Mutation, Resolver, UseMiddleware } from "type-graphql";
 import { S3Payload } from "../entities/File";
 import { isAuth } from "../middleware/isAuth";
-import { Arg, Mutation, Resolver, UseMiddleware } from "type-graphql";
+const fs = require('fs')
 
 
-@Resolver(S3Payload)
+@Resolver()
 export class FileResolver {
     
-    @Mutation(() => Boolean)
+    @Mutation(() => S3Payload)
     @UseMiddleware(isAuth)
     async signS3(
         @Arg('filename') filename: string,
-        @Arg('filetype') filetype: number,
-    ) {
+        @Arg('filetype') filetype: string,
+    ): Promise<S3Payload> {
         
-        process.env.AWS_SECRET_ACCESS_KEY
-
         const objectParams = {
             Bucket: 'abletubtest',
             Key: filename,
@@ -25,17 +25,24 @@ export class FileResolver {
             ACL: 'public-read'
         }
 
+        const bucketAcl = new GetBucketAclCommand(objectParams);
+        console.log(bucketAcl)
+
+        console.log(filename)
         const client = new S3Client({
-            signingRegion: 'us-west-1',
+            region: 'us-west-1',
+            apiVersion: "2012-10-17",
             credentials: {
                 accessKeyId: process.env.AWS_ACCESS_KEY_ID,
                 secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
             }
         })
 
-        const command = new GetObjectCommand(objectParams);
+
+        const command = new PutObjectCommand(objectParams);
         const signedRequest = await getSignedUrl(client, command)
-        const url = `https://abletubtest.us-west-1.s3.amazonaws.com/${filename}`
+        console.log('signed req!!!!!!!', signedRequest)
+        const url = 'https://abletubtest.s3.amazonaws.com/' + filename;
 
         return {
             signedRequest,

@@ -26,10 +26,12 @@ export class File extends BaseEntity {
 @Entity()
 export class S3Payload extends BaseEntity {
 
-    @Column()
+    @Field()
+    @Column("text")
     signedRequest: string;
 
-    @Column()
+    @Field()
+    @Column("text")
     url: string;
 
 }
