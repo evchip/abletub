@@ -2,6 +2,8 @@
 
 A full stack web app forum with user-generated posts. Complete with CRUD functionality, user registration and login, post voting.
 
+![Sample Image](https://imgur.com/a/4GkPOOf)
+
 ## Front End Stack
 React, Chakra UI, NextJS, Vercel, URQL, GraphQL
 
