@@ -3,22 +3,13 @@
 A full stack web app forum with user-generated posts. Complete with CRUD functionality, user registration and login, post voting.
 
 # Front End Stack
-React
-Chakra UI
-NextJS
-Vercel
-GraphQL
+React, Chakra UI, NextJS, Vercel, URQL, GraphQL
 
 # Back End Stack
-PostgresQL
-Redis
-TypeORM
-Apollo Server
-Express
+PostgresQL, Redis, TypeORM, Apollo Server, Express
 
 # Deployment
-Docker
-Dokku
+Docker, Dokku
 
 # Get Started
 Install dependencies for server and web directories
