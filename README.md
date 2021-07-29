@@ -1,17 +1,17 @@
-## React/TypeScript Forum Starter Kit
+# React/TypeScript Forum Starter Kit
 
 A full stack web app forum with user-generated posts. Complete with CRUD functionality, user registration and login, post voting.
 
-# Front End Stack
+## Front End Stack
 React, Chakra UI, NextJS, Vercel, URQL, GraphQL
 
-# Back End Stack
+## Back End Stack
 PostgresQL, Redis, TypeORM, Apollo Server, Express
 
-# Deployment
+## Deployment
 Docker, Dokku
 
-# Get Started
+## Get Started
 Install dependencies for server and web directories
 ```
 $ yarn install
