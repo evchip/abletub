@@ -94,6 +94,7 @@ export type PaginatedPosts = {
 export type PostInput = {
   title: Scalars['String'];
   text: Scalars['String'];
+  fileName: Scalars['String'];
 };
 
 export type Query = {
