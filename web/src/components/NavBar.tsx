@@ -1,22 +1,13 @@
-import { Box, Button, Flex, Heading, Link, extendTheme } from '@chakra-ui/react';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import {
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
-    MenuItemOption,
-    MenuGroup,
-    MenuOptionGroup,
-    MenuIcon,
-    MenuCommand,
-    MenuDivider,
-  } from "@chakra-ui/react"
-import React from 'react';
+    Box, Button, Flex, Heading, Link, Menu,
+    MenuButton, MenuItem, MenuList
+} from '@chakra-ui/react';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
 import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import { isServer } from '../utils/isServer';
-import {useRouter} from 'next/router'; 
-import { ChevronDownIcon } from '@chakra-ui/icons';
 
 
 

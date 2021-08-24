@@ -12,26 +12,22 @@ const UploadFile = () => {
         name: ''
     });
     const [picture, setPicture] = useState('')
-
     const [, s3Sign] = useS3SignMutation()
-  
-    // onDrop = async files => {
-    //   console.log('files', files[0])
-    //   this.setState({ file: files[0] });
-    // };
   
     const onChange = e => {
       console.log(e.target.files)
-      setState({file: e.target.files[0]});
+      // setState({file: e.target.files[0]});
+      submit(e.target.files[0])
     };
   
     const uploadToS3 = async (file, signedRequest) => {
       const options = {
         headers: {
-            "Content-Type": file.type
+            "ContentType": file.type
         }
       };
-      await axios.put(signedRequest, file, options);
+      const result = await axios.put(signedRequest, file, options);
+      return result
     };
   
     const formatFilename = filename => {
@@ -44,9 +40,9 @@ const UploadFile = () => {
       return newFilename.substring(0, 60);
     };
   
-    const submit = async () => {
-      console.log('state', state)
-      const { file } = state;
+    const submit = async (file) => {
+      // console.log('state', state)
+      // const { file } = state;
       const response = await s3Sign({
             filename: formatFilename(file.name),
             filetype: file.type
@@ -56,7 +52,7 @@ const UploadFile = () => {
 
       setPicture(url)
 
-      console.log('signedrequest:::', response)
+      console.log('upload file: signedrequest:::', response)
       const result = await uploadToS3(file, signedRequest);
       console.log('issa result', result)
       // const graphqlResponse = await this.props.createChampion({
@@ -74,9 +70,9 @@ const UploadFile = () => {
 
       return (
         <div>
+          <input name="thang" onChange={e => setFieldValue("file", e.target.value)}></input>
           <input name="name" onChange={onChange} value={state.name} />
           <input onChange={(e) => onChange(e)} type="file" accept="image/*"></input>
-          <button onClick={submit}>Submit</button>
           {picture !== '' ? <img src={picture}></img> : null}
         </div>
       );

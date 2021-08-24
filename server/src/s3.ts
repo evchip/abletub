@@ -1,26 +1,29 @@
-import {S3} from 'aws-sdk/clients/s3'
-const fs = require('fs')
-import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import aws from "aws-sdk";
+import "dotenv-safe";
 
-const client = new S3Client({
-    region: 'us-west-1',
-    apiVersion: "2012-10-17",
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-    }
+const region = "us-west-1"
+const bucketName = "abletubtest"
+const accessKeyId = process.env.AWS_ACCESS_KEY_ID
+const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
+
+const s3 = new aws.S3({
+    region,
+    accessKeyId,
+    secretAccessKey,
+    signatureVersion: 'v4'
 })
 
+export async function generateUploadURL(filename) {
+    const params = ({
+        Bucket: bucketName,
+        Key: filename,
+        Expires: 60
+    })
+    
+    const signedRequest = await s3.getSignedUrlPromise('putOject', params)
+    const url = 'https://abletubtest.s3.amazonaws.com/' + filename;
 
-export const uploadFile = async (file) => {
-    const fileStream = fs.createReadStream(file.path)
+    return signedRequest;
 
-    const params = {
-        Bucket: 'abletubtest',
-        Body: fileStream,
-        Key: 'first-upload'
-    }
-    console.log('triggered')
-    const mys3 = new S3(client)
-    return await mys3.putObject(params)
 }
+

@@ -1,4 +1,4 @@
-import { GetBucketAclCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { GetBucketAclCommand, PutObjectCommand, S3Client, S3 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import "dotenv-safe";
 import { Arg, Mutation, Resolver, UseMiddleware } from "type-graphql";
@@ -20,15 +20,16 @@ export class FileResolver {
         const objectParams = {
             Bucket: 'abletubtest',
             Key: filename,
-            expires: 60,
+            expires: 6000,
             ContentType: filetype,
             ACL: 'public-read'
         }
 
-        const bucketAcl = new GetBucketAclCommand(objectParams);
-        console.log(bucketAcl)
+        const region = "us-west-1"
+        const bucketName = "abletubtest"
+        const accessKeyId = process.env.AWS_ACCESS_KEY_ID
+        const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
 
-        console.log(filename)
         const client = new S3Client({
             region: 'us-west-1',
             apiVersion: "2012-10-17",
@@ -37,7 +38,6 @@ export class FileResolver {
                 secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
             }
         })
-
 
         const command = new PutObjectCommand(objectParams);
         const signedRequest = await getSignedUrl(client, command)
