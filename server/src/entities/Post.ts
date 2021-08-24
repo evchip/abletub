@@ -19,6 +19,10 @@ export class _Post extends BaseEntity {
     text!: string;
 
     @Field()
+    @Column({ nullable: true })
+    fileName: string;
+
+    @Field()
     @Column({type: 'int', default: 0})
     points!: number;
 

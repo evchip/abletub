@@ -12,6 +12,8 @@ class PostInput {
     title!: string
     @Field()
     text!: string
+    @Field()
+    fileName: string
 }
 
 @ObjectType()
@@ -150,7 +152,6 @@ export class PostResolver {
             ...input, 
             creatorId: req.session.userId})
             .save();
-
     }
 
     @Mutation(() => Post, { nullable: true })

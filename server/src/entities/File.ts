@@ -26,6 +26,10 @@ export class File extends BaseEntity {
 @Entity()
 export class S3Payload extends BaseEntity {
 
+    @Field(() => Int)
+    @PrimaryGeneratedColumn()
+    id!: number;
+
     @Field()
     @Column("text")
     signedRequest: string;

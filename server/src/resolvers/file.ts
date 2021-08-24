@@ -1,10 +1,9 @@
-import { GetBucketAclCommand, PutObjectCommand, S3Client, S3 } from "@aws-sdk/client-s3";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import "dotenv-safe";
 import { Arg, Mutation, Resolver, UseMiddleware } from "type-graphql";
 import { S3Payload } from "../entities/File";
 import { isAuth } from "../middleware/isAuth";
-const fs = require('fs')
 
 
 @Resolver()
@@ -24,11 +23,6 @@ export class FileResolver {
             ContentType: filetype,
             ACL: 'public-read'
         }
-
-        const region = "us-west-1"
-        const bucketName = "abletubtest"
-        const accessKeyId = process.env.AWS_ACCESS_KEY_ID
-        const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
 
         const client = new S3Client({
             region: 'us-west-1',
