@@ -8,7 +8,6 @@
     "gen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
-    "@chakra-ui/core": "^0.8.0",
     "@chakra-ui/icons": "^1.0.14",
     "@chakra-ui/react": "^1.6.4",
     "@emotion/react": "^11.0.0",
