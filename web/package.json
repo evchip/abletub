@@ -12,7 +12,7 @@
     "@chakra-ui/icons": "^1.0.14",
     "@chakra-ui/react": "^1.6.4",
     "@emotion/react": "^11.0.0",
-    "@emotion/styled": "^11.0.0",
+    "@emotion/styled": "^11.3.0",
     "@urql/exchange-graphcache": "^4.2.1",
     "amazon-s3-uri": "^0.1.1",
     "apollo-client": "^2.6.10",
