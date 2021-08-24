@@ -64,7 +64,6 @@ const CreatePost: React.FC<{}> = ({}) => {
       console.log('upload file: signedrequest:::', response)
       const result = await uploadToS3(file, signedRequest);
 
-      console.log('issa result', result.config.url)
       const imageUrl = url.split('?')[0]
       setPicture(imageUrl)
     };
@@ -96,7 +95,9 @@ const CreatePost: React.FC<{}> = ({}) => {
                         <input name="name" onChange={onChange} value={state.name} />
                         <input onChange={(e) => {
                             onChange(e)
-                            setFieldValue("file", e.target.files[0])
+                            // console.log("e.target.file",e!.target!.files[0].name)
+                            const fileName = formatFilename(e!.target!.files[0].name)
+                            setFieldValue("fileName", fileName)
                             }} type="file" accept="image/*"></input>
                         {picture !== '' ? <img src={picture}></img> : null}
                     </Box>

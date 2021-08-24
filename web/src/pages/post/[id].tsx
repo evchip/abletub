@@ -42,6 +42,8 @@ const Post = ({}) => {
                 {data.post.text}
             </Box>
             <Box>
+                <p>{data.post.filename}</p>
+                {/* <img src={data.post.filename}/> */}
                 <PlayPauseAudio/>
             </Box>
             <Box ml="auto">
