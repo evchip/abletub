@@ -26,10 +26,11 @@ const CreatePost: React.FC<{}> = ({}) => {
     const [picture, setPicture] = useState('')
     const [, s3Sign] = useS3SignMutation()
   
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
       console.log(e.target.files)
       // setState({file: e.target.files[0]});
-      submit(e!.target!.files[0])
+      const result = await submit(e!.target!.files[0])
+      return result
     };
   
     const uploadToS3 = async (file: { type: any; }, signedRequest: string) => {
@@ -60,22 +61,20 @@ const CreatePost: React.FC<{}> = ({}) => {
       });
 
       const { signedRequest, url } = response!.data.signS3;
-
-      console.log('upload file: signedrequest:::', response)
       const result = await uploadToS3(file, signedRequest);
 
       const imageUrl = url.split('?')[0]
       setPicture(imageUrl)
+      return imageUrl
     };
 
     return (
         <Layout variant="small">
             <Formik 
-            initialValues={{ title: '', text: '' }} 
+            initialValues={{ title: '', text: '' , fileName: ''}} 
             onSubmit={ async (values) => {
-                console.log(values)
                 const { error } = await createPost({input: values })
-                console.log('submit post err!!!', error)
+                console.log('submit post err', error)
                 if (!error) {
                     router.push('/');
                 }
@@ -93,10 +92,10 @@ const CreatePost: React.FC<{}> = ({}) => {
                     </Box>
                     <Box>
                         <input name="name" onChange={onChange} value={state.name} />
-                        <input onChange={(e) => {
-                            onChange(e)
-                            // console.log("e.target.file",e!.target!.files[0].name)
-                            const fileName = formatFilename(e!.target!.files[0].name)
+                        <input onChange={ async (e) => {
+                            
+                            const fileName = await onChange(e)
+                            console.log("fileName",fileName)
                             setFieldValue("fileName", fileName)
                             }} type="file" accept="image/*"></input>
                         {picture !== '' ? <img src={picture}></img> : null}

@@ -5,8 +5,8 @@ query Post ($id: Int!) {
         updatedAt
         title
         points
-        text
         fileName
+        text
         voteStatus
         creator {
             id

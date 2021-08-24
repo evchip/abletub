@@ -118,6 +118,7 @@ export type QueryPostArgs = {
 
 export type S3Payload = {
   __typename?: 'S3Payload';
+  id: Scalars['Int'];
   signedRequest: Scalars['String'];
   url: Scalars['String'];
 };
@@ -148,6 +149,7 @@ export type _Post = {
   id: Scalars['Int'];
   title: Scalars['String'];
   text: Scalars['String'];
+  fileName: Scalars['String'];
   points: Scalars['Float'];
   voteStatus?: Maybe<Scalars['Int']>;
   creatorId: Scalars['Float'];
@@ -329,7 +331,7 @@ export type PostQuery = (
   { __typename?: 'Query' }
   & { post?: Maybe<(
     { __typename?: '_Post' }
-    & Pick<_Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'text' | 'voteStatus'>
+    & Pick<_Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'fileName' | 'text' | 'voteStatus'>
     & { creator: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
@@ -524,6 +526,7 @@ export const PostDocument = gql`
     updatedAt
     title
     points
+    fileName
     text
     voteStatus
     creator {

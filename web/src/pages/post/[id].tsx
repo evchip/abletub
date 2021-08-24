@@ -42,7 +42,7 @@ const Post = ({}) => {
                 {data.post.text}
             </Box>
             <Box>
-                <p>{data.post.filename}</p>
+                {data.post.fileName !== null ? <p>{data.post.fileName}</p> : null}
                 {/* <img src={data.post.filename}/> */}
                 <PlayPauseAudio/>
             </Box>
