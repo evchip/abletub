@@ -19,8 +19,6 @@ import { UserResolver } from "./resolvers/user";
 import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
 import { FileResolver } from './resolvers/file';
-import multer from "multer";
-import {uploadFile} from "./s3";
 
 
 const main = async () => {
@@ -28,13 +26,10 @@ const main = async () => {
         type: "postgres",
         url: process.env.DATABASE_URL,
         logging: true,
-        // synchronize: true,
+        synchronize: true,
         migrations: [path.join(__dirname, "./migrations/*")],
         entities: [Post, User, Updoot]
     });
-
-    const upload = multer({ dest: 'uploads/'})
-    console.log(upload)
 
     
     // await User.delete({});
@@ -90,15 +85,6 @@ const main = async () => {
         app, 
         cors: false
     });
-
-    app.post('/images', upload.single('image'), async (req, res) => {
-        console.log('req::::', req.file)
-        const file = req.file
-        const info = req.body.description
-        const result = await uploadFile(file)
-        console.log('file', file, 'result', result)
-        res.send({imagePath: `/${result.Key}`})
-    })
 
     app.listen(parseInt(process.env.PORT), () => {
     console.log("Node server started");
