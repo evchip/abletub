@@ -27,10 +27,13 @@ const CreatePost: React.FC<{}> = ({}) => {
     const [, s3Sign] = useS3SignMutation()
   
     const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-      console.log(e.target.files)
-      // setState({file: e.target.files[0]});
-      const result = await submit(e!.target!.files[0])
-      return result
+        console.log(e.target.files)
+        // setState({file: e.target.files[0]});
+        if (!e.target.files) {
+            return
+        }
+        const result = await submit(e.target!.files[0]!)
+        return result
     };
   
     const uploadToS3 = async (file: { type: any; }, signedRequest: string) => {
@@ -59,8 +62,10 @@ const CreatePost: React.FC<{}> = ({}) => {
             filename: formatFilename(file.name),
             filetype: file.type
       });
-
-      const { signedRequest, url } = response!.data.signS3;
+      if (!response!.data!.signS3) {
+          return
+      }
+      const { signedRequest, url } = response.data!.signS3;
       const result = await uploadToS3(file, signedRequest);
 
       const imageUrl = url.split('?')[0]
