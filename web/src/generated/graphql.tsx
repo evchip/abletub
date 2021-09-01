@@ -94,7 +94,8 @@ export type PaginatedPosts = {
 export type PostInput = {
   title: Scalars['String'];
   text: Scalars['String'];
-  fileName: Scalars['String'];
+  audioFileName: Scalars['String'];
+  imageFileName: Scalars['String'];
 };
 
 export type Query = {
@@ -149,7 +150,8 @@ export type _Post = {
   id: Scalars['Int'];
   title: Scalars['String'];
   text: Scalars['String'];
-  fileName: Scalars['String'];
+  audioFileName: Scalars['String'];
+  imageFileName: Scalars['String'];
   points: Scalars['Float'];
   voteStatus?: Maybe<Scalars['Int']>;
   creatorId: Scalars['Float'];
@@ -331,7 +333,7 @@ export type PostQuery = (
   { __typename?: 'Query' }
   & { post?: Maybe<(
     { __typename?: '_Post' }
-    & Pick<_Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'fileName' | 'text' | 'voteStatus'>
+    & Pick<_Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'audioFileName' | 'imageFileName' | 'text' | 'voteStatus'>
     & { creator: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
@@ -526,7 +528,8 @@ export const PostDocument = gql`
     updatedAt
     title
     points
-    fileName
+    audioFileName
+    imageFileName
     text
     voteStatus
     creator {

@@ -13,7 +13,9 @@ class PostInput {
     @Field()
     text!: string
     @Field()
-    fileName: string
+    audioFileName: string
+    @Field()
+    imageFileName: string
 }
 
 @ObjectType()

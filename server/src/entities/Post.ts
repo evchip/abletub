@@ -20,7 +20,11 @@ export class _Post extends BaseEntity {
 
     @Field()
     @Column({ nullable: true })
-    fileName: string;
+    audioFileName: string;
+
+    @Field()
+    @Column({ nullable: true })
+    imageFileName: string;
 
     @Field()
     @Column({type: 'int', default: 0})
