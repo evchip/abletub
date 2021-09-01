@@ -44,7 +44,7 @@ const Index = () => {
               </NextLink>
               <Text>Posted by {p.creator.username}</Text>
               <Flex align="center">
-                <Text flex={1} mt={4}>{p.textSnippet}</Text>  
+                <Text flex={1} mt={4}>{p.textSnippet}</Text>
                   <Box ml="auto">
                     <EditDeletePostBtns id={p.id} creatorId={p.creator.id} />
                   </Box>
