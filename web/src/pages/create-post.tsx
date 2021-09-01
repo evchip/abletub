@@ -16,18 +16,15 @@ const CreatePost: React.FC<{}> = ({}) => {
     const router = useRouter();
     useIsAuth()
     const [, createPost] = useCreatePostMutation()
-    const [signedReq, setSignedReq] = useState('')
+    const [imageSignedReq, setImageSignedReq] = useState('')
+    const [audioSignedReq, setAudioSignedReq] = useState('')
     const [audioFile, setAudioFile] = useState<File>()
     const [imageFile, setImageFile] = useState<File>()
-    const [fileName, setFilenName] = useState({
-        name: ''
-    });
     const [picture, setPicture] = useState('')
     const [, s3Sign] = useS3SignMutation()
     const [{data, fetching}] = useMeQuery()
   
     const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.files)
         if (!e.target.files) {
             return
         }
@@ -42,23 +39,24 @@ const CreatePost: React.FC<{}> = ({}) => {
         }
       };
       const result = await axios.put(signedRequest, file, options);
-      console.log("axios result", result)
       return result
     };
 
   
     const formatFilename = (filename: string, filetype: string) => {
-        console.log('filetype', filetype)
-        console.log('data.me.id', data?.me?.id)
+
       let current_datetime = new Date()
       let date = current_datetime.getDate() + "-" + current_datetime.getMonth() + "-" + current_datetime.getFullYear()
       const randomString = Math.random()
         .toString(36)
         .substring(2, 7);
       const cleanFileName = filename.toLowerCase().replace(/[^a-z0-9]/g, "-");
-      const fileExtension = cleanFileName.substr((cleanFileName.length - 3), cleanFileName.length)
-      const newFilename = `audio/${date}-${randomString}-${cleanFileName}.${fileExtension}`;
-
+      const fileExtension = cleanFileName.substr((cleanFileName.length - 3), cleanFileName.length);
+      let newFilename = `0000/${date}-${randomString}-${cleanFileName}.${fileExtension}`;
+      if (fetching === false) {
+        newFilename = `${data!.me?.username}/${date}-${randomString}-${cleanFileName}.${fileExtension}`;
+      } 
+        
       return newFilename;
     };
   
@@ -72,14 +70,15 @@ const CreatePost: React.FC<{}> = ({}) => {
           return
       }
       const { signedRequest, url } = response.data!.signS3;
-      setSignedReq(signedRequest)
+      
       const fileUrl = url.split('?')[0]
 
       if (file.type === "audio/mpeg") {
+        setAudioSignedReq(signedRequest)
         setAudioFile(file)
       } else {
+        setImageSignedReq(signedRequest)
         setImageFile(file)
-        setPicture(fileUrl)
       }
       return fileUrl
 
@@ -88,11 +87,15 @@ const CreatePost: React.FC<{}> = ({}) => {
     return (
         <Layout variant="small">
             <Formik 
-            initialValues={{ title: '', text: '' , fileName: ''}} 
+            initialValues={{ title: '', text: '' , audioFileName: '', imageFileName: ''}} 
             onSubmit={ async (values) => {
-                console.log('values', values)
-                const audioResult = await uploadToS3(audioFile!, signedReq);
-                const imageResult = await uploadToS3(imageFile!, signedReq);
+                if (audioFile) {
+                    await uploadToS3(audioFile!, audioSignedReq);
+                }
+                if (imageFile) {
+                    await uploadToS3(imageFile!, imageSignedReq);
+                }
+                
                 const { error } = await createPost({input: values })
                 if (error) {
                     console.log("error", error)
@@ -112,20 +115,18 @@ const CreatePost: React.FC<{}> = ({}) => {
                     </Box>
                     <Box mt="4">
                         <Box textStyle="h1">Upload Image</Box>
-                        <input name="name" onChange={onChange} value={fileName.name} />
                         <input onChange={ async (e) => {
                             
-                            const fileName = await onChange(e)
-                            setFieldValue("fileName", fileName)
+                            const imageFileName = await onChange(e)
+                            setFieldValue("imageFileName", imageFileName)
                             }} type="file" accept="image/*"></input>
                         {picture !== '' ? <img src={picture}></img> : null}
                     </Box>
                     <Box mt="4">
                         <Box textStyle="h1">Upload Audio</Box>
-                        <input name="name" onChange={onChange} value={fileName.name} />
                         <input onChange={ async (e) => {
-                            const fileName = await onChange(e)
-                            setFieldValue("fileName", fileName)
+                            const audioFileName = await onChange(e)
+                            setFieldValue("audioFileName", audioFileName)
                             }} type="file" accept=".mp3">
                         </input>
                     </Box>

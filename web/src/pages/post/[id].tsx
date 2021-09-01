@@ -12,7 +12,7 @@ import { useState } from "react";
 
 const Post = ({}) => {
   const [{ data, error, fetching }] = useGetPostFromUrl();
-
+    console.log('data in post query', data)
   if (fetching) {
     return (
       <Layout>
@@ -39,13 +39,13 @@ const Post = ({}) => {
           <Heading mb={4}>{data.post.title}</Heading>
           <Box>{data.post.text}</Box>
           <Box>
-            {data.post.fileName !== null ? (
-              <img src={data.post.fileName} />
+            {data.post.imageFileName !== null ? (
+              <img src={data.post.imageFileName} />
             ) : null}
           </Box>
         </Flex>
         <Flex p={5} shadow="md" borderWidth="1px" ml={5}>
-          <PlayPauseAudio audioURL={data.post.fileName} />
+          <PlayPauseAudio audioURL={data.post.audioFileName} />
         </Flex>
 
         <Box ml={5}>
