@@ -1,4 +1,4 @@
-import { Box, Heading } from '@chakra-ui/react'
+import { Box, Heading, Flex } from '@chakra-ui/react'
 import UploadFile from 'components/UploadFileFC'
 import { withUrqlClient } from 'next-urql'
 import React from 'react'
@@ -15,6 +15,14 @@ const Post = ({}) => {
 
     const [{data, error, fetching}] = useGetPostFromUrl()
 
+    // const audioFile = axios.get(data?.post?.fileName,  {
+    //     headers: {
+    //       'Content-Type': 'mp3',
+    //       'Accept': 'mp3'
+    //     }
+    // })
+
+    // console.log('audioFile!!', audioFile)
 
     if (fetching) {
         return (
@@ -37,21 +45,29 @@ const Post = ({}) => {
     }
     return (
         <Layout>
+            <Flex>
+            <Flex p={5} shadow="md" borderWidth="1px">
             <Heading mb={4}>{data.post.title}</Heading>
             <Box>
                 {data.post.text}
             </Box>
             <Box>
-                {data.post.fileName !== null ? <p>{data.post.fileName}</p> : null}
-                {/* <img src={data.post.filename}/> */}
-                <PlayPauseAudio/>
+                {data.post.fileName !== null ? <img src={data.post.fileName}/> : null}
+                
             </Box>
+            </Flex>
+            <Flex p={5} shadow="md" borderWidth="1px">
+            <PlayPauseAudio audioURL={data.post.fileName}/>
+            </Flex>
+            
             <Box ml="auto">
                 <EditDeletePostBtns 
                     id={data.post.id} 
                     creatorId={data.post.creator.id} 
                 />
             </Box>
+            
+            </Flex>
         </Layout>
     )
 }
