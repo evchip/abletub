@@ -12,9 +12,9 @@ class PostInput {
     title!: string
     @Field()
     text!: string
-    @Field()
+    @Field({ nullable: true })
     audioFileName: string
-    @Field()
+    @Field({ nullable: true })
     imageFileName: string
 }
 

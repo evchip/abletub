@@ -94,8 +94,8 @@ export type PaginatedPosts = {
 export type PostInput = {
   title: Scalars['String'];
   text: Scalars['String'];
-  audioFileName: Scalars['String'];
-  imageFileName: Scalars['String'];
+  audioFileName?: Maybe<Scalars['String']>;
+  imageFileName?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -150,8 +150,8 @@ export type _Post = {
   id: Scalars['Int'];
   title: Scalars['String'];
   text: Scalars['String'];
-  audioFileName: Scalars['String'];
-  imageFileName: Scalars['String'];
+  audioFileName: Maybe<Scalars['String']>;
+  imageFileName: Maybe<Scalars['String']>;
   points: Scalars['Float'];
   voteStatus?: Maybe<Scalars['Int']>;
   creatorId: Scalars['Float'];
@@ -163,7 +163,7 @@ export type _Post = {
 
 export type PostSnippetFragment = (
   { __typename?: '_Post' }
-  & Pick<_Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'textSnippet' | 'voteStatus'>
+  & Pick<_Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'audioFileName' | 'imageFileName' | 'textSnippet' | 'voteStatus'>
   & { creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
@@ -366,6 +366,8 @@ export const PostSnippetFragmentDoc = gql`
   updatedAt
   title
   points
+  audioFileName
+  imageFileName
   textSnippet
   voteStatus
   creator {
