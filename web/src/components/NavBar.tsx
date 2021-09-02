@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import {
     Box, Button, Flex, Heading, Link, Menu,
-    MenuButton, MenuItem, MenuList
+    MenuButton, MenuItem, MenuList, useColorMode
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
@@ -16,6 +16,7 @@ interface NavBarProps {
 }
 
 const NavBar: React.FC<NavBarProps> = ({}) => {
+    const { colorMode, toggleColorMode } = useColorMode()
     const router = useRouter()
     const [{fetching: logoutFetching}, logout] = useLogoutMutation()
     const [{data, fetching}] = useMeQuery({
@@ -89,10 +90,10 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
 
     return (
         <Flex zIndex={50} position="sticky" top={0} bg="messenger.200" p={4}>
-            <Flex flex={1} m='auto' maxWidth={800} align="center">
+            <Flex flex={1} m='auto' maxWidth={1200} align="center">
                 <NextLink href="/">
                     <Link>
-                    <Heading as="h1" color="darkslategray" size="2xl">abletub</Heading>
+                    <Heading as="h1" letterSpacing=".5rem" color="black" size="2xl">abletub</Heading>
                     </Link>
                 </NextLink>
                 <Box p={4} ml={'auto'}>

@@ -4,20 +4,18 @@ import {
   Flex,
   Heading,
   HStack,
-  Link,
-  Stack,
-  Text,
+  Link, Text
 } from "@chakra-ui/react";
 import S3Image from "components/Image";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import React, { useState } from "react";
-import { useGetPostFromUrl } from "utils/useGetPostfromUrl";
 import { EditDeletePostBtns } from "../components/EditDeletePostBtns";
 import { Layout } from "../components/Layout";
 import { UpvoteSection } from "../components/UpvoteSection";
 import { usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -42,10 +40,10 @@ const Index = () => {
       {!data && fetching ? (
         <div>Loading...</div>
       ) : (
-        <HStack spacing="10" flexWrap="wrap" width="100%">
+        <HStack align="center" flexWrap="wrap" width="100%">
           {data!.posts.posts.map((p, i) =>
             !p ? null : (
-              <Flex key={p.id} mx={5} shadow="md" borderWidth="1px" direction="column" bgColor="blue.50" borderRadius="40">
+              <Box key={p.id} p={5} display="flex" flexDirection="column" shadow="md" borderWidth="1px" direction="column" bgColor="blue.50" borderRadius="40">
                 <Box flex={1} >
                   <NextLink href="/post/[id]" as={`/post/${p.id}`}>
                     <Link>
@@ -53,20 +51,17 @@ const Index = () => {
                     </Link>
                   </NextLink>
                 </Box>
-                <Flex align="center" mt="5">
-                  <UpvoteSection post={p} />
+                <Flex align="center" justifyContent="space-between" mt="5">
                   <Flex direction="column">
                     <Heading fontSize="3xl">{p.title}</Heading>
                     <Text fontSize="xl">{p.creator.username}</Text>
                   </Flex>
+                  <UpvoteSection post={p} />
                   {/* <Text flex={1} mt={4}>
                     {p.textSnippet}
                   </Text> */}
-                  <Box ml="auto">
-                    <EditDeletePostBtns id={p.id} creatorId={p.creator.id} />
-                  </Box>
                 </Flex>
-              </Flex>
+              </Box>
             )
           )}
         </HStack>

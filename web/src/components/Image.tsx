@@ -16,7 +16,7 @@ function S3Image(post) {
             
             {post.post.imageFileName !== null ? (
               <Image 
-                boxSize="350px"
+                boxSize="250px"
                 borderRadius="2rem"
                 objectFit="cover"
                 src={post.post.imageFileName} />

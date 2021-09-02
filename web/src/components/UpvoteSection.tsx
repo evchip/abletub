@@ -15,7 +15,7 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({post}) => {
     const [, vote] = useVoteMutation();
 
     return (
-        <Flex direction="column" alignItems="center" justifyContent="center" mr={4}>
+        <Flex direction="column" alignItems="center" justifyContent="center">
             <IconButton
             aria-label="upvote post"
             

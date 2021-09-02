@@ -9,10 +9,12 @@ import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useGetPostFromUrl } from "../../utils/useGetPostfromUrl";
 import axios from "axios";
 import { useState } from "react";
+import WaveForm from "components/WaveForm";
+import S3Image from "components/Image";
 
 const Post = ({}) => {
   const [{ data, error, fetching }] = useGetPostFromUrl();
-    console.log('data in post query', data)
+  console.log("data in post query", data);
   if (fetching) {
     return (
       <Layout>
@@ -34,20 +36,28 @@ const Post = ({}) => {
   }
   return (
     <Layout>
-      <Flex >
-        <Flex p={5} shadow="md" borderWidth="1px" width="80%" flexDirection="column">
-          <Heading mb={4}>{data.post.title}</Heading>
-          <Box>{data.post.text}</Box>
+      <Flex>
+        <Flex
+          p={5}
+          shadow="md"
+          borderWidth="1px"
+          width="80%"
+          flexDirection="row"
+          justifyContent="space-between"
+        >
+          <Box width="70%">
+            <Heading mb={4}>{data.post.title}</Heading>
+            <Box>{data.post.text}</Box>
+            <Flex p={5} shadow="md" borderWidth="1px" ml={5} width="100%">
+              <WaveForm audioURL={data.post.audioFileName}/>
+            </Flex>
+          </Box>
           <Box>
             {data.post.imageFileName !== null ? (
-              <img src={data.post.imageFileName} />
+              <S3Image post={data.post} />
             ) : null}
           </Box>
         </Flex>
-        <Flex p={5} shadow="md" borderWidth="1px" ml={5}>
-          <PlayPauseAudio audioURL={data.post.audioFileName} />
-        </Flex>
-
         <Box ml={5}>
           <EditDeletePostBtns
             id={data.post.id}
