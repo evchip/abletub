@@ -19,8 +19,7 @@ export const EditDeletePostBtns: React.FC<EditDeletePostBtnsProps> = ({
         return null;
     }
     return (
-        <Flex>
-            
+        <Flex direction="column">
             <NextLink href="/post/edit/[id]" as={`/post/edit/${id}`}>
                 <IconButton
                 as={Link}
