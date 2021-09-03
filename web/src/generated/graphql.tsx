@@ -14,6 +14,20 @@ export type Scalars = {
   Float: number;
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  id: Scalars['Int'];
+  text: Scalars['String'];
+  creatorId: Scalars['Float'];
+  creator: User;
+  postId: Scalars['Int'];
+  createdAt: Scalars['String'];
+};
+
+export type CommentInput = {
+  text: Scalars['String'];
+};
+
 export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String'];
@@ -32,6 +46,7 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   signS3: S3Payload;
+  createComment: Comment;
 };
 
 
@@ -85,6 +100,18 @@ export type MutationSignS3Args = {
   filename: Scalars['String'];
 };
 
+
+export type MutationCreateCommentArgs = {
+  input: CommentInput;
+  postId: Scalars['Int'];
+};
+
+export type PaginatedComments = {
+  __typename?: 'PaginatedComments';
+  comments: Array<Comment>;
+  hasMore: Scalars['Boolean'];
+};
+
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
   posts: Array<_Post>;
@@ -104,6 +131,8 @@ export type Query = {
   posts: PaginatedPosts;
   post?: Maybe<_Post>;
   me?: Maybe<User>;
+  comment?: Maybe<Comment>;
+  comments: PaginatedComments;
 };
 
 
@@ -115,6 +144,18 @@ export type QueryPostsArgs = {
 
 export type QueryPostArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryCommentArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type QueryCommentsArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
+  postId: Scalars['Int'];
 };
 
 export type S3Payload = {
@@ -150,12 +191,13 @@ export type _Post = {
   id: Scalars['Int'];
   title: Scalars['String'];
   text: Scalars['String'];
-  audioFileName: Maybe<Scalars['String']>;
-  imageFileName: Maybe<Scalars['String']>;
+  audioFileName: Scalars['String'];
+  imageFileName: Scalars['String'];
   points: Scalars['Float'];
   voteStatus?: Maybe<Scalars['Int']>;
   creatorId: Scalars['Float'];
   creator: User;
+  comments: Comment;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   textSnippet: Scalars['String'];
@@ -202,6 +244,20 @@ export type ChangePasswordMutation = (
   & { changePassword: (
     { __typename?: 'UserResponse' }
     & RegularUserResponseFragment
+  ) }
+);
+
+export type CreateCommentMutationVariables = Exact<{
+  postId: Scalars['Int'];
+  input: CommentInput;
+}>;
+
+
+export type CreateCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { createComment: (
+    { __typename?: 'Comment' }
+    & Pick<Comment, 'postId' | 'id' | 'createdAt' | 'text' | 'creatorId'>
   ) }
 );
 
@@ -313,6 +369,25 @@ export type VoteMutation = (
   & Pick<Mutation, 'vote'>
 );
 
+export type CommentsQueryVariables = Exact<{
+  postId: Scalars['Int'];
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+}>;
+
+
+export type CommentsQuery = (
+  { __typename?: 'Query' }
+  & { comments: (
+    { __typename?: 'PaginatedComments' }
+    & Pick<PaginatedComments, 'hasMore'>
+    & { comments: Array<(
+      { __typename?: 'Comment' }
+      & Pick<Comment, 'postId' | 'text' | 'createdAt'>
+    )> }
+  ) }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -409,6 +484,21 @@ export const ChangePasswordDocument = gql`
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const CreateCommentDocument = gql`
+    mutation CreateComment($postId: Int!, $input: CommentInput!) {
+  createComment(postId: $postId, input: $input) {
+    postId
+    id
+    createdAt
+    text
+    creatorId
+  }
+}
+    `;
+
+export function useCreateCommentMutation() {
+  return Urql.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument);
 };
 export const CreatePostDocument = gql`
     mutation CreatePost($input: PostInput!) {
@@ -510,6 +600,22 @@ export const VoteDocument = gql`
 
 export function useVoteMutation() {
   return Urql.useMutation<VoteMutation, VoteMutationVariables>(VoteDocument);
+};
+export const CommentsDocument = gql`
+    query Comments($postId: Int!, $limit: Int!, $cursor: String) {
+  comments(postId: $postId, cursor: $cursor, limit: $limit) {
+    hasMore
+    comments {
+      postId
+      text
+      createdAt
+    }
+  }
+}
+    `;
+
+export function useCommentsQuery(options: Omit<Urql.UseQueryArgs<CommentsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<CommentsQuery>({ query: CommentsDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {
