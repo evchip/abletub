@@ -11,6 +11,7 @@ import axios from "axios";
 import { useState } from "react";
 import WaveForm from "components/WaveForm";
 import S3Image from "components/Image";
+import {Comments} from "components/Comments";
 
 const Post = ({}) => {
   const [{ data, error, fetching }] = useGetPostFromUrl();
@@ -65,6 +66,7 @@ const Post = ({}) => {
           />
         </Box>
       </Flex>
+      <Comments postId={data.post.id}/>
     </Layout>
   );
 };
