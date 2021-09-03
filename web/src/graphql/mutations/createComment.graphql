@@ -1,0 +1,10 @@
+mutation CreateComment ($postId: Int!, $input: CommentInput!){
+  createComment(postId: $postId, input: $input) 
+    {
+        postId
+        id
+        createdAt
+        text
+        creatorId
+    }
+}
