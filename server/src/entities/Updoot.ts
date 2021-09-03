@@ -24,5 +24,4 @@ export class Updoot extends BaseEntity {
     })
     post!: Post;
 
-
 }
