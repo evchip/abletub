@@ -40,7 +40,6 @@ class WaveForm extends React.Component {
   };
 
   render() {
-    const url = "https://www.mfiles.co.uk/mp3-downloads/gs-cd-track2.mp3";
 
     return (
       <Flex

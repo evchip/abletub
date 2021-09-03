@@ -26,7 +26,6 @@ class PaginatedPosts {
     hasMore?: boolean;
 }
 
-
 @Resolver(Post)
 export class PostResolver {
 
