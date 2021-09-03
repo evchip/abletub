@@ -1,17 +1,14 @@
-import { Box, Heading, Flex } from "@chakra-ui/react";
-import UploadFile from "components/UploadFileFC";
+import { Box, Flex, Heading } from "@chakra-ui/react";
+import { Comments } from "components/Comments";
+import CreateComment from "components/CreateComment";
+import S3Image from "components/Image";
+import WaveForm from "components/WaveForm";
 import { withUrqlClient } from "next-urql";
 import React from "react";
 import { EditDeletePostBtns } from "../../components/EditDeletePostBtns";
 import { Layout } from "../../components/Layout";
-import PlayPauseAudio from "../../components/PlayPauseAudio";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useGetPostFromUrl } from "../../utils/useGetPostfromUrl";
-import axios from "axios";
-import { useState } from "react";
-import WaveForm from "components/WaveForm";
-import S3Image from "components/Image";
-import {Comments} from "components/Comments";
 
 const Post = ({}) => {
   const [{ data, error, fetching }] = useGetPostFromUrl();
@@ -37,36 +34,36 @@ const Post = ({}) => {
   }
   return (
     <Layout>
-      <Flex>
         <Flex
           p={5}
+          mt="0"
           shadow="md"
           borderWidth="1px"
-          width="80%"
+          width="100%"
           flexDirection="row"
           justifyContent="space-between"
+          bgColor="twitter.50"
         >
           <Box width="70%">
             <Heading mb={4}>{data.post.title}</Heading>
-            <Box>{data.post.text}</Box>
-            <Flex p={5} shadow="md" borderWidth="1px" ml={5} width="100%">
-              <WaveForm audioURL={data.post.audioFileName}/>
-            </Flex>
-          </Box>
-          <Box>
-            {data.post.imageFileName !== null ? (
-              <S3Image post={data.post} />
-            ) : null}
-          </Box>
-        </Flex>
-        <Box ml={5}>
+              <Box ml="5px">{data.post.creator.username}</Box>
+              <WaveForm audioURL={data.post.audioFileName} />
+              <Box ml="5px">{data.post.text}</Box>
+            </Box>
+            <Box ml={5}>
           <EditDeletePostBtns
             id={data.post.id}
             creatorId={data.post.creator.id}
           />
         </Box>
-      </Flex>
-      <Comments postId={data.post.id}/>
+            <Box>
+              {data.post.imageFileName !== null ? (
+                <S3Image post={data.post} />
+              ) : null}
+            </Box>
+        </Flex>
+        <CreateComment postId={data.post.id}/>
+        <Comments postId={data.post.id} />
     </Layout>
   );
 };
