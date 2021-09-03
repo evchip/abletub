@@ -3,6 +3,7 @@ import { Box, Flex, IconButton, Link } from '@chakra-ui/react'
 import React from 'react'
 import NextLink from 'next/link';
 import { useDeletePostMutation, useMeQuery } from '../generated/graphql';
+import router from 'next/router';
 
 interface EditDeletePostBtnsProps {
     id: number;
@@ -35,6 +36,7 @@ export const EditDeletePostBtns: React.FC<EditDeletePostBtnsProps> = ({
                 icon={<DeleteIcon/>}
                 onClick={async () => {
                     deletePost({ id })
+                    router.push('/');
                 }}
                 ml="auto"
             />

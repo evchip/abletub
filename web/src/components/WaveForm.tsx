@@ -1,11 +1,11 @@
 import { Box, Flex, IconButton } from "@chakra-ui/react";
-import React, { PureComponent } from "react";
+import React from "react";
 import WaveSurfer from "wavesurfer.js";
 import { FaRegPauseCircle, FaRegPlayCircle } from "react-icons/fa";
 
 
 class WaveForm extends React.Component {
-    constructor(props) {
+    constructor(props: { audioURL: string }) {
         super(props);
      
       }
@@ -17,21 +17,22 @@ class WaveForm extends React.Component {
     const track = document.querySelector("#track");
     const waveform = document.querySelector("#waveform");
 
-    this.waveform = WaveSurfer.create({
-      barWidth: 3,
-      cursorWidth: 1,
-      container: "#waveform",
-      backend: "WebAudio",
-      height: 150,
-      progressColor: "#ED5BFF",
-      responsive: true,
-      waveColor: "#1F4FFF",
-      cursorColor: "transparent",
-    });
-
-    this.waveform.load(
-      this.props.audioURL
-    );
+      this.waveform = WaveSurfer.create({
+        barWidth: 3,
+        cursorWidth: 1,
+        container: "#waveform",
+        backend: "WebAudio",
+        height: 150,
+        progressColor: "#ED5BFF",
+        responsive: true,
+        waveColor: "#1F4FFF",
+        cursorColor: "transparent",
+      });
+  
+      this.waveform.load(
+        this.props.audioURL
+      );
+    
   }
 
   handlePlay = () => {
@@ -42,25 +43,22 @@ class WaveForm extends React.Component {
   render() {
 
     return (
-      <Flex
+      <Box
+        variant="small"
         className="waveform-cont"
         display="flex"
         direction="row"
         alignItems="center"
-        justifyContent="center"
+        justifyContent="flex-start"
         width="100%"
-        border="0px"
-        boxShadow="none"
-        borderWidth={0}
-        m={0}
-        p={0}
+
       >
         {this.state.playing === true ? (
           <IconButton
             as={FaRegPauseCircle}
             mb={4}
             aria-label="FaRegPauseCircle"
-            ml="auto"
+            ml="5px"
             onClick={this.handlePlay}
             variant="solid"
           />
@@ -69,13 +67,13 @@ class WaveForm extends React.Component {
             as={FaRegPlayCircle}
             mb={4}
             aria-label="FaRegPlayCircle"
-            ml="auto"
+            ml="5px"
             onClick={this.handlePlay}
             variant="solid"
           />
         )}
         <Box className="wave" id="waveform" width="90%" height="170px" />
-      </Flex>
+      </Box>
     );
   }
 }

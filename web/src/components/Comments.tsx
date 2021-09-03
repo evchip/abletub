@@ -1,8 +1,7 @@
-import { Box, Button, Flex, Heading, HStack, Text } from "@chakra-ui/react";
-import { withUrqlClient } from "next-urql";
+import { Box, Button, Flex, Heading, HStack, Text, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { format } from 'timeago.js';
 import { useCommentsQuery } from "../generated/graphql";
-import { createUrqlClient } from "../utils/createUrqlClient";
 
 interface CommentsProps {
   postId: number;
@@ -32,7 +31,7 @@ export const Comments: React.FC<CommentsProps> = ({ postId }) => {
       {!data && fetching ? (
         <div>Loading...</div>
       ) : (
-        <HStack align="center" flexWrap="wrap" width="100%">
+        <VStack align="center" flexWrap="wrap" width="100%">
           {data!.comments.comments.map((c, i) =>
             !c ? null : (
               <Box
@@ -44,18 +43,18 @@ export const Comments: React.FC<CommentsProps> = ({ postId }) => {
                 borderWidth="1px"
                 direction="column"
                 bgColor="blue.50"
-                borderRadius="40"
+                borderRadius="5"
               >
                 <Flex align="center" justifyContent="space-between" mt="5">
                   <Flex direction="column">
-                    <Heading fontSize="3xl">{c.text}</Heading>
-                    <Text fontSize="xl">{c.createdAt}</Text>
+                    <Heading fontSize="lg">{c.text}</Heading>
+                    <Text fontSize="md">{format(c.createdAt)}</Text>
                   </Flex>
                 </Flex>
               </Box>
             )
           )}
-        </HStack>
+        </VStack>
       )}
       {data && data.comments.hasMore ? (
         <Flex>
