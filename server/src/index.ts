@@ -13,12 +13,14 @@ import { COOKIE_NAME, __prod__ } from "./constants";
 import { _Post as Post } from "./entities/Post";
 import { Updoot } from "./entities/Updoot";
 import { User } from "./entities/User";
+import { Comment } from "./entities/Comment";
 import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
 import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
 import { FileResolver } from "./resolvers/file";
+import { CommentResolver } from "./resolvers/comment";
 
 const main = async () => {
   const conn = await createConnection({
@@ -27,7 +29,7 @@ const main = async () => {
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [Post, User, Updoot],
+    entities: [Post, User, Updoot, Comment],
   });
 
   // RESET DB FUNCTIONS
@@ -70,7 +72,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, PostResolver, UserResolver, FileResolver],
+      resolvers: [HelloResolver, PostResolver, UserResolver, FileResolver, CommentResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({
