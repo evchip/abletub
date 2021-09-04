@@ -203,6 +203,15 @@ export type _Post = {
   textSnippet: Scalars['String'];
 };
 
+export type CommentSnippetFragment = (
+  { __typename?: 'Comment' }
+  & Pick<Comment, 'createdAt' | 'text'>
+  & { creator: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username'>
+  ) }
+);
+
 export type PostSnippetFragment = (
   { __typename?: '_Post' }
   & Pick<_Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'audioFileName' | 'imageFileName' | 'textSnippet' | 'voteStatus'>
@@ -383,7 +392,7 @@ export type CommentsQuery = (
     & Pick<PaginatedComments, 'hasMore'>
     & { comments: Array<(
       { __typename?: 'Comment' }
-      & Pick<Comment, 'postId' | 'text' | 'createdAt'>
+      & CommentSnippetFragment
     )> }
   ) }
 );
@@ -434,6 +443,16 @@ export type PostsQuery = (
   ) }
 );
 
+export const CommentSnippetFragmentDoc = gql`
+    fragment CommentSnippet on Comment {
+  createdAt
+  text
+  creator {
+    id
+    username
+  }
+}
+    `;
 export const PostSnippetFragmentDoc = gql`
     fragment PostSnippet on _Post {
   id
@@ -606,13 +625,11 @@ export const CommentsDocument = gql`
   comments(postId: $postId, cursor: $cursor, limit: $limit) {
     hasMore
     comments {
-      postId
-      text
-      createdAt
+      ...CommentSnippet
     }
   }
 }
-    `;
+    ${CommentSnippetFragmentDoc}`;
 
 export function useCommentsQuery(options: Omit<Urql.UseQueryArgs<CommentsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<CommentsQuery>({ query: CommentsDocument, ...options });
