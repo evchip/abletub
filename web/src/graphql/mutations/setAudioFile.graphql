@@ -1,0 +1,4 @@
+mutation setAudioFile ($audioFileName: String!) {
+    setAudioFile (audioFileName: $audioFileName)
+
+}

@@ -94,7 +94,6 @@ export class PostResolver {
                     where id = $2;
                 `, [realValue, postId])
             })
-            
         }
 
         await getConnection().query(
@@ -186,4 +185,29 @@ export class PostResolver {
         await Post.delete({id, creatorId: req.session.userId})
         return true;
     }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth)
+    async setAudioFile(
+        @Arg("audioFileName") audioFileName: string,
+        @Ctx() { req }: MyContext
+    ): Promise<boolean> {
+
+        req.session.audioFile = audioFileName
+        return true
+    }
+
+    @Query(() => String, { nullable: true })
+    @UseMiddleware(isAuth)
+    async getAudioFile(
+        @Ctx() { req }: MyContext
+    ): Promise<string> {
+        if (!req.session) {
+            return "null"
+        }
+        const audioURL: string = req!.session!.audioFile as any;
+        return audioURL;
+    }
+
+
 }

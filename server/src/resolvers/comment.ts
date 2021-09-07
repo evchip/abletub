@@ -34,12 +34,6 @@ class PaginatedComments {
 
 @Resolver(Comment)
 export class CommentResolver {
-  //   @Query(() => [Comment])
-  //   async comments(
-  //     @Arg('postId', () => Int) postId: number
-  //   ): Promise<Comment[]> {
-  //     return Comment.find({ where: {postId: postId}});
-  //   }
 
   @FieldResolver(() => User)
   creator(@Root() comment: Comment, @Ctx() { userLoader }: MyContext) {
@@ -97,4 +91,27 @@ export class CommentResolver {
       hasMore: comments.length === realLimitPlusOne,
     };
   }
+
+  // @Mutation(() => Boolean)
+  //   @UseMiddleware(isAuth)
+  //   async setNewComment(
+  //       @Arg("comment") comment: CommentInput,
+  //       @Ctx() { req }: MyContext
+  //   ): Promise<boolean> {
+
+  //       req.session.newComment = comment
+  //       return true
+  //   }
+
+  //   @Query(() => Comment, { nullable: true })
+  //   @UseMiddleware(isAuth)
+  //   async getNewComment(
+  //       @Ctx() { req }: MyContext
+  //   ): Promise<Comment> {
+  //       if (!req.session) {
+  //           return "null"
+  //       }
+  //       const newComment: Comment = req!.session!.newComment as Comment;
+  //       return newComment;
+  //   }
 }
