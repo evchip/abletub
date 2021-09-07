@@ -48,9 +48,9 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
                     fontSize={{ base: "12px", md: "14px", lg: "16px" }}
                     as={Button} 
                     rightIcon={<ChevronDownIcon />}
-                    bgColor="whiteAlpha.600"
                     px={4}
                     py={2}
+                    color="black"
                     transition="all 0.2s"
                     borderRadius="md"
                     borderWidth="1px"
@@ -61,7 +61,7 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
                 >
                     {data.me.username}
                 </MenuButton>
-                <MenuList bgColor="white">
+                <MenuList bgColor="black">
                     <NextLink href='/create-post'>
                         <MenuItem
                             as={Link}

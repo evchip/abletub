@@ -4,8 +4,10 @@ import {
   Flex,
   Heading,
   HStack,
-  Link, Text
+  Link,
+  Text,
 } from "@chakra-ui/react";
+import AudioFooter from "components/AudioFooter";
 import S3Image from "components/Image";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
@@ -13,9 +15,9 @@ import React, { useState } from "react";
 import { EditDeletePostBtns } from "../components/EditDeletePostBtns";
 import { Layout } from "../components/Layout";
 import { UpvoteSection } from "../components/UpvoteSection";
-import { usePostsQuery } from "../generated/graphql";
+import { usePostsQuery, useSetAudioFileMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
-
+import axios from "axios";
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -25,6 +27,16 @@ const Index = () => {
   const [{ data, error, fetching }] = usePostsQuery({
     variables,
   });
+  const [, setAudioLink] = useSetAudioFileMutation();
+
+  const getData = async () => {
+    try {
+      const { data } = await axios.get("https://randomuser.me/api/?results=20");
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   if (!fetching && !data) {
     return (
@@ -35,6 +47,12 @@ const Index = () => {
     );
   }
 
+  const setAudio = async (audioFileName: string) => {
+    console.log(audioFileName, typeof audioFileName);
+    const result = await setAudioLink({ audioFileName });
+    console.log(result);
+  };
+
   return (
     <Layout>
       {!data && fetching ? (
@@ -43,8 +61,20 @@ const Index = () => {
         <HStack align="center" flexWrap="wrap" width="100%">
           {data!.posts.posts.map((p, i) =>
             !p ? null : (
-              <Box key={p.id} p={5} display="flex" flexDirection="column" shadow="md" borderWidth="1px" direction="column" bgColor="blue.50" borderRadius="40">
-                <Box flex={1} >
+              <Box
+                style={{ margin: "10px 20px" }}
+                key={p.id}
+                p={5}
+                display="flex"
+                flexDirection="column"
+                shadow="md"
+                borderColor="black"
+                borderWidth="1px"
+                direction="column"
+                bgColor="darksalmon"
+                borderRadius="40"
+              >
+                <Box flex={1}>
                   <NextLink href="/post/[id]" as={`/post/${p.id}`}>
                     <Link>
                       <S3Image post={p} />
@@ -53,8 +83,15 @@ const Index = () => {
                 </Box>
                 <Flex align="center" justifyContent="space-between" mt="5">
                   <Flex direction="column">
-                    <Heading fontSize="3xl">{p.title}</Heading>
-                    <Text fontSize="xl">{p.creator.username}</Text>
+                    <Heading
+                      fontSize="3xl"
+                      onClick={() => setAudio(p.audioFileName)}
+                    >
+                      {p.title}
+                    </Heading>
+                    <Text fontSize="xl" onClick={() => getData()}>
+                      {p.creator.username}
+                    </Text>
                   </Flex>
                   <UpvoteSection post={p} />
                   {/* <Text flex={1} mt={4}>
@@ -85,6 +122,7 @@ const Index = () => {
           </Button>
         </Flex>
       ) : null}
+      {/* <AudioFooter /> */}
     </Layout>
   );
 };

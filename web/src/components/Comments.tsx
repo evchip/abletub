@@ -28,7 +28,7 @@ export const Comments: React.FC<CommentsProps> = ({ postId }) => {
   if ((!fetching && !data) || (!fetching && !data!.comments.comments[0])) {
     return (
       <div>
-        <div>no comments to show... or something went wrong</div>
+        <Text>There are no comments yet. Would you do the honors?</Text>
         <div>{error?.message}</div>
       </div>
     );
@@ -50,21 +50,31 @@ export const Comments: React.FC<CommentsProps> = ({ postId }) => {
                 shadow="md"
                 borderWidth="1px"
                 direction="column"
-                bgColor="blue.50"
+                bgColor="gray.400"
                 borderRadius="5"
                 width="100%"
               >
                 <Flex
-                  align="left"
                   justifyContent="space-between"
                   mt="1"
                   width="100%"
                   direction="column"
                 >
-                  <Heading fontSize="md" width="100%">{c.text}</Heading>
-                  <Flex direction="row" justifyContent="flex-end" width="100%">
-                    <Text fontSize="md" mr={2}>{c.creator.username}</Text>
-                    <Text fontSize="md" mr={2}>{format(c.createdAt)}</Text>
+                  <Flex align="left" width="80%" m="auto">
+                    <Heading fontSize="md">{c.text}</Heading>
+                  </Flex>
+                  <Flex
+                    direction="row"
+                    justifyContent="flex-end"
+                    width="100%"
+                    mt={2}
+                  >
+                    <Text fontSize="md" mr={2}>
+                      {c.creator.username}
+                    </Text>
+                    <Text fontSize="md" mr={2}>
+                      {format(c.createdAt)}
+                    </Text>
                   </Flex>
                 </Flex>
               </Box>

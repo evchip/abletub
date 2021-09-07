@@ -3,6 +3,7 @@ import { Comments } from "components/Comments";
 import CreateComment from "components/CreateComment";
 import S3Image from "components/Image";
 import WaveForm from "components/WaveForm";
+import WaveFormFC from "components/WaveFormFC";
 import { withUrqlClient } from "next-urql";
 import React from "react";
 import { EditDeletePostBtns } from "../../components/EditDeletePostBtns";
@@ -42,12 +43,12 @@ const Post = ({}) => {
           width="100%"
           flexDirection="row"
           justifyContent="space-between"
-          bgColor="twitter.50"
+          bgColor="blackAlpha.400"
         >
           <Box width="70%">
             <Heading mb={4}>{data.post.title}</Heading>
               <Box ml="5px">{data.post.creator.username}</Box>
-              <WaveForm audioURL={data.post.audioFileName} />
+                <WaveForm audioURL={data.post.audioFileName} />
               <Box ml="5px">{data.post.text}</Box>
             </Box>
             <Box ml={5}>
