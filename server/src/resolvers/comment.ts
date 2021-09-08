@@ -34,7 +34,6 @@ class PaginatedComments {
 
 @Resolver(Comment)
 export class CommentResolver {
-
   @FieldResolver(() => User)
   creator(@Root() comment: Comment, @Ctx() { userLoader }: MyContext) {
     return userLoader.load(comment.creatorId);
@@ -46,18 +45,34 @@ export class CommentResolver {
   }
 
   @Mutation(() => Comment)
-  // @UseMiddleware(isAuth)
+  @UseMiddleware(isAuth)
   async createComment(
     @Arg("postId", () => Int) postId: number,
     @Arg("input") input: CommentInput,
     @Ctx() { req }: MyContext
   ): Promise<Comment> {
-    console.log("req.session", req.session);
-    return Comment.create({
+    const newComment = await Comment.create({
       ...input,
       creatorId: req.session.userId,
       postId,
     }).save();
+
+    req.session.newComment = newComment;
+    console.log("new comment in createComment resolver", newComment);
+    return newComment;
+  }
+
+  @Query(() => Comment, { nullable: true })
+  async getNewComment(@Ctx() { req }: MyContext) {
+    // no new comment by this user
+    if (!req.session.newComment) {
+      console.log("no new comment by this user");
+      return null;
+    }
+
+    const newComment = await Comment.findOne(req.session.newComment.id);
+    console.log("new comment in getNewComment resolver", newComment);
+    return newComment;
   }
 
   @Query(() => PaginatedComments)
@@ -70,17 +85,12 @@ export class CommentResolver {
     const realLimitPlusOne = realLimit + 1;
     const replacements: any[] = [realLimitPlusOne];
 
-    if (cursor) {
-      replacements.push(new Date(parseInt(cursor)));
-    }
-
     const comments = await getConnection().query(
       `
         select c.*
         from comment c
         where c."postId" = ${postId}
-        ${cursor ? `where c."createdAt" < $2` : ""}
-        order by c."createdAt" DESC
+        ${cursor ? `order by c."createdAt" ${cursor}` : ''}
         limit $1
         `,
       replacements
@@ -91,27 +101,4 @@ export class CommentResolver {
       hasMore: comments.length === realLimitPlusOne,
     };
   }
-
-  // @Mutation(() => Boolean)
-  //   @UseMiddleware(isAuth)
-  //   async setNewComment(
-  //       @Arg("comment") comment: CommentInput,
-  //       @Ctx() { req }: MyContext
-  //   ): Promise<boolean> {
-
-  //       req.session.newComment = comment
-  //       return true
-  //   }
-
-  //   @Query(() => Comment, { nullable: true })
-  //   @UseMiddleware(isAuth)
-  //   async getNewComment(
-  //       @Ctx() { req }: MyContext
-  //   ): Promise<Comment> {
-  //       if (!req.session) {
-  //           return "null"
-  //       }
-  //       const newComment: Comment = req!.session!.newComment as Comment;
-  //       return newComment;
-  //   }
 }
