@@ -36,6 +36,22 @@ const theme = extendTheme(
         color: "black", // Normally, it is "semibold"
         bgColor: "black"
       }
+    },
+    MenuButton: {
+      baseStyle: {
+        fontSize:"{ base: 12px, md: 14px, lg: 16px }",
+        as:"Button",
+        rightIcon:"<ChevronDownIcon />",
+        px:"4",
+        py:"2",
+        color:"black",
+        transition:"all 0.2s",
+        borderRadius:"md",
+        borderWidth:"1px",
+        _hover:"{ bg: gray.400 }",
+        _expanded:"{ bg: blue.400 }",
+        _focus:"{ boxShadow: outline }"
+      }
     }
   }}
 )
