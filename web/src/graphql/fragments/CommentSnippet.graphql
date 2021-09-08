@@ -1,6 +1,7 @@
 fragment CommentSnippet on Comment {
     createdAt
     text
+    id
     creator {
         id
         username
