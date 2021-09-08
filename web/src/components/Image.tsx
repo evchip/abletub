@@ -12,8 +12,7 @@ function S3Image(post) {
         );
       }
     return (
-        <Box>
-            
+        <Box display="flex" justifyContent="flex-end">
             {post.post.imageFileName !== null ? (
               <Image 
                 boxSize="250px"
