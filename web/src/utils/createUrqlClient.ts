@@ -18,7 +18,7 @@ export const errorExchange: Exchange = ({ forward }) => ops$ => {
   );
 };
 
-export const cursorPagination = (): Resolver => {
+export const cursorPagePagination = (): Resolver => {
 
   return (_parent, fieldArgs, cache, info) => {
     const { parentKey: entityKey, fieldName } = info;
@@ -82,10 +82,11 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
     exchanges: [dedupExchange, cacheExchange({
       keys: {
         PaginatedPosts: () => null,
+        PaginatedComments: () => null
       },
       resolvers: {
         Query: {
-          posts: cursorPagination()
+          posts: cursorPagePagination()
         }
       },
       updates: {
