@@ -4,16 +4,24 @@ import CreateComment from "components/CreateComment";
 import S3Image from "components/Image";
 import WaveForm from "components/WaveForm";
 import WaveFormFC from "components/WaveFormFC";
+import { useCommentsQuery, useGetNewCommentQuery } from "generated/graphql";
 import { withUrqlClient } from "next-urql";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { EditDeletePostBtns } from "../../components/EditDeletePostBtns";
 import { Layout } from "../../components/Layout";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useGetPostFromUrl } from "../../utils/useGetPostfromUrl";
+import Comment from '../../components/Comment'
 
 const Post = ({}) => {
   const [{ data, error, fetching }] = useGetPostFromUrl();
-  console.log("data in post query", data);
+  const [newComment, setNewComment] = useState({})
+
+  const getNewComment = async (postId: number, values: { text: string }) => {
+    const now = new Date()
+    setNewComment({text: values.text, creator: {username: "you"}, createdAt: now, i: 0})
+  }
+
   if (fetching) {
     return (
       <Layout>
@@ -48,7 +56,7 @@ const Post = ({}) => {
           <Box width="70%">
             <Heading mb={4}>{data.post.title}</Heading>
               <Box ml="5px">{data.post.creator.username}</Box>
-                <WaveForm audioURL={data.post.audioFileName} />
+                <WaveFormFC audioURL={data.post.audioFileName} />
               <Box ml="5px">{data.post.text}</Box>
             </Box>
             <Box ml={5}>
@@ -63,8 +71,8 @@ const Post = ({}) => {
               ) : null}
             </Box>
         </Flex>
-        <CreateComment postId={data.post.id}/>
-        <Comments postId={data.post.id} />
+        <CreateComment postId={data.post.id} getNewComment={getNewComment}/>
+        <Comments postId={data.post.id} newComment={newComment}/>
     </Layout>
   );
 };
