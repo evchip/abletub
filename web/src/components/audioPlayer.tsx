@@ -44,7 +44,6 @@ export const AudioPlayer = (props: Props) => {
 
     // // User selects file, read it as an ArrayBuffer and pass to the API.
 
-
     // const inputFile  = (e) => {  
     // var reader = new FileReader();
     //     console.log(reader)

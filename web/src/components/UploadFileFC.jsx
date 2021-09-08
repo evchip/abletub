@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import axios from "axios";
 import moment from "moment";
-// import { compose, gql, graphql } from "react-apollo";
 import { gql, compose, graphql } from 'urql'
 import {useS3SignMutation} from "../generated/graphql"
 const AmazonS3URI = require('amazon-s3-uri')
@@ -16,7 +15,6 @@ const UploadFile = () => {
   
     const onChange = e => {
       console.log(e.target.files)
-      // setState({file: e.target.files[0]});
       submit(e.target.files[0])
     };
   
