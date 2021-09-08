@@ -139,6 +139,7 @@ export type Query = {
   getAudioFile?: Maybe<Scalars['String']>;
   me?: Maybe<User>;
   comment?: Maybe<Comment>;
+  getNewComment?: Maybe<Comment>;
   comments: PaginatedComments;
 };
 
@@ -212,7 +213,7 @@ export type _Post = {
 
 export type CommentSnippetFragment = (
   { __typename?: 'Comment' }
-  & Pick<Comment, 'createdAt' | 'text'>
+  & Pick<Comment, 'createdAt' | 'text' | 'id'>
   & { creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
@@ -422,6 +423,17 @@ export type GetAudioFileQuery = (
   & Pick<Query, 'getAudioFile'>
 );
 
+export type GetNewCommentQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetNewCommentQuery = (
+  { __typename?: 'Query' }
+  & { getNewComment?: Maybe<(
+    { __typename?: 'Comment' }
+    & CommentSnippetFragment
+  )> }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -472,6 +484,7 @@ export const CommentSnippetFragmentDoc = gql`
     fragment CommentSnippet on Comment {
   createdAt
   text
+  id
   creator {
     id
     username
@@ -676,6 +689,17 @@ export const GetAudioFileDocument = gql`
 
 export function useGetAudioFileQuery(options: Omit<Urql.UseQueryArgs<GetAudioFileQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GetAudioFileQuery>({ query: GetAudioFileDocument, ...options });
+};
+export const GetNewCommentDocument = gql`
+    query getNewComment {
+  getNewComment {
+    ...CommentSnippet
+  }
+}
+    ${CommentSnippetFragmentDoc}`;
+
+export function useGetNewCommentQuery(options: Omit<Urql.UseQueryArgs<GetNewCommentQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetNewCommentQuery>({ query: GetNewCommentDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {
