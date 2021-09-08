@@ -6,6 +6,7 @@ import {
   HStack,
   Link,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import AudioFooter from "components/AudioFooter";
 import S3Image from "components/Image";
@@ -18,6 +19,8 @@ import { UpvoteSection } from "../components/UpvoteSection";
 import { usePostsQuery, useSetAudioFileMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import axios from "axios";
+import WaveForm from "components/WaveForm";
+import PlayPauseAudio from 'components/PlayPauseAudio'
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -28,15 +31,6 @@ const Index = () => {
     variables,
   });
   const [, setAudioLink] = useSetAudioFileMutation();
-
-  const getData = async () => {
-    try {
-      const { data } = await axios.get("https://randomuser.me/api/?results=20");
-      console.log(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   if (!fetching && !data) {
     return (
@@ -58,7 +52,7 @@ const Index = () => {
       {!data && fetching ? (
         <div>Loading...</div>
       ) : (
-        <HStack align="center" flexWrap="wrap" width="100%">
+        <VStack align="center" flexWrap="wrap" width="100%">
           {data!.posts.posts.map((p, i) =>
             !p ? null : (
               <Box
@@ -66,22 +60,16 @@ const Index = () => {
                 key={p.id}
                 p={5}
                 display="flex"
-                flexDirection="column"
+                flexDirection="row"
                 shadow="md"
                 borderColor="black"
                 borderWidth="1px"
-                direction="column"
                 bgColor="darksalmon"
                 borderRadius="40"
+                width="100%"
               >
-                <Box flex={1}>
-                  <NextLink href="/post/[id]" as={`/post/${p.id}`}>
-                    <Link>
-                      <S3Image post={p} />
-                    </Link>
-                  </NextLink>
-                </Box>
                 <Flex align="center" justifyContent="space-between" mt="5">
+                  <UpvoteSection post={p} />
                   <Flex direction="column">
                     <Heading
                       fontSize="3xl"
@@ -89,19 +77,28 @@ const Index = () => {
                     >
                       {p.title}
                     </Heading>
-                    <Text fontSize="xl" onClick={() => getData()}>
-                      {p.creator.username}
-                    </Text>
+                    <Text fontSize="xl">{p.creator.username}</Text>
                   </Flex>
-                  <UpvoteSection post={p} />
+                  {p.audioFileName ? (
+                    null
+                    /*{<WaveForm audioURL={p.audioFileName} />}*/
+                  ) : null}
+                  <PlayPauseAudio audioURL={p.audioFileName}/>
                   {/* <Text flex={1} mt={4}>
                     {p.textSnippet}
                   </Text> */}
                 </Flex>
+                <Box flex={1}>
+                  <NextLink href="/post/[id]" as={`/post/${p.id}`}>
+                    <Link>
+                      <S3Image post={p} />
+                    </Link>
+                  </NextLink>
+                </Box>
               </Box>
             )
           )}
-        </HStack>
+        </VStack>
       )}
       {data && data.posts.hasMore ? (
         <Flex>
