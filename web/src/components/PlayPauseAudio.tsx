@@ -2,12 +2,17 @@ import React from 'react'
 import ReactHowler from 'react-howler'
 import {Button, Box, IconButton, Icon } from "@chakra-ui/react"
 import { FaRegPauseCircle, FaRegPlayCircle } from "react-icons/fa"
+import { useGetAudioFileQuery, useSetAudioFileMutation } from 'generated/graphql'
 
-class OnlyPlayPauseButton extends React.Component {
-  constructor (props) {
+interface PlayPauseButtonProps {
+  audioURL: string;
+  postId: number;
+  assignPostPlaying(postId: number): any
+}
+
+class PlayPauseButton extends React.Component<PlayPauseButtonProps> {
+  constructor (props: PlayPauseButtonProps) {
     super(props)
-    
-    console.log(props)
 
     this.state = {
       playing: false,
@@ -20,10 +25,11 @@ class OnlyPlayPauseButton extends React.Component {
   }
 
 
+
   handlePlay () {
-    this.setState({
-      playing: true
-    })
+      this.setState({
+        playing: true
+      })
   }
 
   handlePause () {
@@ -34,34 +40,38 @@ class OnlyPlayPauseButton extends React.Component {
 
   render () {
     return (
-      <div>
+      <Box >
         <ReactHowler
-          src={[this.props.audioURL, 'sound.mp3']}
+          src={[this.props.audioURL]}
           playing={this.state.playing}
         />
         {this.state.playing === true ? (
             <IconButton
+              borderRadius="15px"
               as={FaRegPauseCircle}
               mb={4}
               aria-label="FaRegPauseCircle"
               ml="auto"
               onClick={this.handlePause}
-              variant="solid"
+              variant="ghost"
+              size="lg"
             />
           ) : (
             <IconButton
+              borderRadius="15px"
               as={FaRegPlayCircle}
               mb={4}
               aria-label="FaRegPlayCircle"
               ml="auto"
               onClick={this.handlePlay}
-              variant="solid"
+              variant="ghost"
+              size="lg"
             />
           ) 
          }
-      </div>
+      </Box>
     )
   }
 }
 
-export default OnlyPlayPauseButton
+export default PlayPauseButton
