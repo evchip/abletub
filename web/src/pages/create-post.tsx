@@ -28,6 +28,7 @@ const CreatePost: React.FC<{}> = ({}) => {
         if (!e.target.files) {
             return
         }
+        console.log("e.target.files",e.target!.files[0]!)
         const result = await submitSignReq(e.target!.files[0]!)
         return result
     };
