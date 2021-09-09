@@ -16,21 +16,33 @@ import React, { useState } from "react";
 import { EditDeletePostBtns } from "../components/EditDeletePostBtns";
 import { Layout } from "../components/Layout";
 import { UpvoteSection } from "../components/UpvoteSection";
-import { usePostsQuery, useSetAudioFileMutation } from "../generated/graphql";
+import {
+  useGetAudioFileQuery,
+  usePostsQuery,
+  useSetAudioFileMutation,
+} from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import axios from "axios";
 import WaveForm from "components/WaveForm";
-import PlayPauseAudio from 'components/PlayPauseAudio'
+import PlayPauseAudio from "components/PlayPauseAudio";
+import AudioBar from "components/AudioBar";
+import { format } from "timeago.js";
 
 const Index = () => {
   const [variables, setVariables] = useState({
-    limit: 10,
+    limit: 12,
     cursor: null as null | string,
   });
   const [{ data, error, fetching }] = usePostsQuery({
     variables,
   });
-  const [, setAudioLink] = useSetAudioFileMutation();
+
+  const [postPlaying, setPostPlaying] = useState(0);
+
+  const assignPostPlaying = (postId: number) => {
+    setPostPlaying(postId);
+    console.log(postId);
+  };
 
   if (!fetching && !data) {
     return (
@@ -41,64 +53,70 @@ const Index = () => {
     );
   }
 
-  const setAudio = async (audioFileName: string) => {
-    console.log(audioFileName, typeof audioFileName);
-    const result = await setAudioLink({ audioFileName });
-    console.log(result);
-  };
-
   return (
     <Layout>
       {!data && fetching ? (
         <div>Loading...</div>
       ) : (
-        <VStack align="center" flexWrap="wrap" width="100%">
+        <HStack align="center" justify="center" flexWrap="wrap" width="100%">
           {data!.posts.posts.map((p, i) =>
             !p ? null : (
-              <Box
-                style={{ margin: "10px 20px" }}
-                key={p.id}
-                p={5}
-                display="flex"
-                flexDirection="row"
-                shadow="md"
-                borderColor="black"
-                borderWidth="1px"
-                bgColor="darksalmon"
-                borderRadius="40"
-                width="100%"
-              >
-                <Flex align="center" justifyContent="space-between" mt="5">
-                  <UpvoteSection post={p} />
-                  <Flex direction="column">
-                    <Heading
-                      fontSize="3xl"
-                      onClick={() => setAudio(p.audioFileName)}
+              <Box display="flex" flexDirection="row" justifyContent="center" width="380px" style={{ margin: "0px" }}>
+                <Flex
+                  style={{ margin: "20px 0px" }}
+                  key={p.id}
+                  p={5}
+                  display="flex"
+                  flexDirection="column"
+                  borderWidth="1px"
+                  width="80%"
+                  justifyContent="space-between"
+                  bgColor="blackAlpha.400"
+                  borderBottomRadius="30px"
+                  borderColor="pink.200"
+                >
+                  <Box display="flex" justifyContent="center">
+                    {p.imageFileName !== null ? <S3Image post={p} /> : null}
+                  </Box>
+                  <Box width="100%" mt={5}>
+                    <Box ml="2px">
+                      <NextLink href="/post/[id]" as={`/post/${p.id}`}>
+                        <Link>
+                          <Heading fontSize="xl" overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis" >{p.title}</Heading>
+                        </Link>
+                      </NextLink>
+                    </Box>
+                    <Box ml="5px" mt={2}>
+                      <Heading mb={4} fontSize="md" color="white">
+                        {p.creator.username}
+                      </Heading>
+                    </Box>
+                    <Flex
+                      justifyContent="space-between"
+                      mt="3"
+                      ml="1"
+                      width="100%"
+                      direction="column"
+                      height="60%"
                     >
-                      {p.title}
-                    </Heading>
-                    <Text fontSize="xl">{p.creator.username}</Text>
-                  </Flex>
-                  {p.audioFileName ? (
-                    null
-                    /*{<WaveForm audioURL={p.audioFileName} />}*/
-                  ) : null}
-                  <PlayPauseAudio audioURL={p.audioFileName}/>
-                  {/* <Text flex={1} mt={4}>
-                    {p.textSnippet}
-                  </Text> */}
+                      <Flex
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="end"
+                        width="100%"
+                        mt={2}
+                      >
+                        <Text color="white" fontSize="md" mr={2}>
+                          {format(p.createdAt)}
+                        </Text>
+                      </Flex>
+                    </Flex>
+                  </Box>
                 </Flex>
-                <Box flex={1}>
-                  <NextLink href="/post/[id]" as={`/post/${p.id}`}>
-                    <Link>
-                      <S3Image post={p} />
-                    </Link>
-                  </NextLink>
-                </Box>
               </Box>
             )
           )}
-        </VStack>
+        </HStack>
       )}
       {data && data.posts.hasMore ? (
         <Flex>
@@ -115,7 +133,7 @@ const Index = () => {
             m="auto"
             my={8}
           >
-            Load More
+            load more
           </Button>
         </Flex>
       ) : null}
