@@ -37,7 +37,9 @@ export const Comments: React.FC<CommentsProps> = ({ postId, newComment }) => {
   if ((!fetching && !data) || (!fetching && !data!.comments.comments[0])) {
     return (
       <Box display="flex" justifyContent="center" mt={10}>
-        <Text color="white">There are no comments yet. Would you do the honors?</Text>
+        <Text color="white">
+          there are no comments yet. why don't u start us off?
+        </Text>
         <div>{error?.message}</div>
       </Box>
     );
@@ -46,7 +48,7 @@ export const Comments: React.FC<CommentsProps> = ({ postId, newComment }) => {
   return (
     <Box>
       {!data && fetching ? (
-        <div>Loading...</div>
+        <div>loading...</div>
       ) : (
         <>
           <Flex justifyContent="flex-end">
@@ -68,22 +70,29 @@ export const Comments: React.FC<CommentsProps> = ({ postId, newComment }) => {
                 sort by
               </MenuButton>
               <MenuList bgColor="black">
-                <MenuItem onClick={() => {
-                setVariables({
-                  postId,
-                  limit: variables.limit,
-                  cursor: "DESC"
-                });
-            }} _hover={{ bg: "gray.400" }}>New</MenuItem>
-                <MenuItem onClick={() => {
-                setVariables({
-                  postId,
-                  limit: variables.limit,
-                  cursor:
-                    "ASC"
-                });
-            }} _hover={{ bg: "gray.400" }}>
-                  Old
+                <MenuItem
+                  onClick={() => {
+                    setVariables({
+                      postId,
+                      limit: variables.limit,
+                      cursor: "DESC",
+                    });
+                  }}
+                  _hover={{ bg: "gray.400" }}
+                >
+                  new
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setVariables({
+                      postId,
+                      limit: variables.limit,
+                      cursor: "ASC",
+                    });
+                  }}
+                  _hover={{ bg: "gray.400" }}
+                >
+                  old
                 </MenuItem>
               </MenuList>
             </Menu>
@@ -116,20 +125,20 @@ export const Comments: React.FC<CommentsProps> = ({ postId, newComment }) => {
           <Button
             isLoading={fetching}
             onClick={() => {
-                setVariables({
-                  postId,
-                  limit: variables.limit,
-                  cursor:
-                    data.comments.comments[data.comments.comments.length - 1]
-                      .createdAt,
-                });
+              setVariables({
+                postId,
+                limit: variables.limit,
+                cursor:
+                  data.comments.comments[data.comments.comments.length - 1]
+                    .createdAt,
+              });
             }}
             colorScheme="teal"
             variant="solid"
             m="auto"
             my={8}
           >
-            Load More
+            load more
           </Button>
         </Flex>
       ) : null}
