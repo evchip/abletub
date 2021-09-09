@@ -21,20 +21,29 @@ const theme = extendTheme(
     Text: {
       // 1. We can update the base styles
       baseStyle: {
-        color: "black", // Normally, it is "semibold"
+        color: "white", // Normally, it is "semibold"
+        letterSpacing:".15rem"
+      }
+    },
+    Button: {
+      // 1. We can update the base styles
+      baseStyle: {
+        letterSpacing:".25rem", // Normally, it is "semibold"
       }
     },
     Heading: {
       // 1. We can update the base styles
       baseStyle: {
-        color: "black", // Normally, it is "semibold"
+        color: "white", // Normally, it is "semibold"
+        letterSpacing:".2rem"
       }
     },
     Menu: {
       // 1. We can update the base styles
       baseStyle: {
         color: "black", // Normally, it is "semibold"
-        bgColor: "black"
+        bgColor: "black",
+        letterSpacing:".5rem"
       }
     },
     MenuButton: {
@@ -50,7 +59,14 @@ const theme = extendTheme(
         borderWidth:"1px",
         _hover:"{ bg: gray.400 }",
         _expanded:"{ bg: blue.400 }",
-        _focus:"{ boxShadow: outline }"
+        _focus:"{ boxShadow: outline }",
+        letterSpacing:".5rem"
+      }
+    },
+    FormLabel: {
+      baseStyle: {
+        fontWeight: "normal",
+        letterSpacing:".2rem"
       }
     }
   }}
