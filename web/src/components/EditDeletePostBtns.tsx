@@ -20,14 +20,12 @@ export const EditDeletePostBtns: React.FC<EditDeletePostBtnsProps> = ({
         return null;
     }
     return (
-        <Flex direction="column">
+        <Flex direction="row" mr={4}>
             <NextLink href="/post/edit/[id]" as={`/post/edit/${id}`}>
                 <IconButton
                 as={Link}
-                mb={4}
                 aria-label="edit post"
                 icon={<EditIcon/>}
-                ml="auto"
                 />
             </NextLink>
             
