@@ -1,0 +1,46 @@
+.portfolio-img {
+  max-width: 250px;
+}
+
+.port-img-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: .8;
+    transition: .5s ease;
+    background-color: rgba(247, 0, 255, 0);
+  }
+  
+  .port-cont-hov:hover .port-img-overlay {
+    opacity: 1;
+    background-color: rgba(255, 71, 230, 0.418);
+  }
+  
+  .port-text {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+.tile { 
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    -webkit-transition: all 350ms ease;
+    transition: all 350ms ease;
+
+}
+
+
+.scale-anm {
+  transform: scale(1);
+}
