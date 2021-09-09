@@ -32,22 +32,22 @@ function CreateComment({ postId, getNewComment }: Props): ReactElement {
       >
         {({ isSubmitting }) => (
           <Flex direction="row" width="100%">
-            <Form>
-              <Box mt={4} width="500px">
+            <Form style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly"}}>
+              <Box mt={4} width="85%" >
                 <InputField
                   textarea
                   name="text"
                   placeholder="Tell them what you think"
-                  label="Comment"
+                  label=""
                 />
               </Box>
               <Button
                 mt={4}
                 type="submit"
                 isLoading={isSubmitting}
-                colorScheme="teal"
+                colorScheme="pink"
               >
-                Comment
+                comment
               </Button>
             </Form>
           </Flex>
