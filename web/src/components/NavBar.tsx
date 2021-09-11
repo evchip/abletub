@@ -51,12 +51,12 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
       <Flex align="center" >
         <Menu >
           <MenuButton
-            size={{ sm:"8px", md: "10px", lg: "12px" }}
             as={Button}
             rightIcon={<ChevronDownIcon />}
             px={4}
             py={2}
             color="white"
+            bgColor="black"
             transition="all 0.2s"
             borderRadius="md"
             borderWidth="1px"
@@ -96,7 +96,7 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
 
   return (
     <Flex zIndex={50} position="sticky" top={0} bg="black" p={2}>
-      <Flex flex={1} m="auto" maxWidth={1200} align="center">
+      <Flex flex={1} m="auto" maxWidth={1400} align="center">
         <NextLink href="/">
           <Link>
             <Heading
@@ -105,6 +105,7 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
               color="pink.50"
               fontSize={{ sm:"12px", md: "18px", lg: "40px" }}
               pb={0}
+              ml={4}
               fontWeight="normal"
               _hover={{ color: "pink.400" }}
               _focus={{ boxShadow: "outline" }}

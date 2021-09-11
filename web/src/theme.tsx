@@ -43,8 +43,25 @@ const theme = extendTheme(
       baseStyle: {
         color: "black", // Normally, it is "semibold"
         bgColor: "black",
-        letterSpacing:".5rem"
-      }
+        letterSpacing:".5rem",
+      },
+      sizes: {
+        md: {
+          h: "24px",
+          fontSize: "sm",
+          px: "18px",
+        },
+        lg: {
+          h: "36px",
+          fontSize: "md",
+          px: "24px",
+        },
+        xl: {
+          h: "56px",
+          fontSize: "lg",
+          px: "32px",
+        },
+      },
     },
     MenuButton: {
       baseStyle: {
