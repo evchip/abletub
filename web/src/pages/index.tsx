@@ -57,7 +57,9 @@ const Index = () => {
     <>
     <Layout>
       {!data && fetching ? (
-        <div>Loading...</div>
+        <Box m="auto">
+        <Heading>Loading...</Heading>
+        </Box>
       ) : (
         <HStack align="center" justify="center" flexWrap="wrap" width="100%">
           {data!.posts.posts.map((p, i) =>
@@ -72,13 +74,13 @@ const Index = () => {
                   borderWidth="1px"
                   width="80%"
                   justifyContent="space-between"
-                  bgColor="blackAlpha.400"
+                  bgColor="blackAlpha.800"
                   borderBottomRadius="30px"
                   borderColor="pink.200"
                   borderTop="none"
                 >
                   <Box display="flex" justifyContent="center">
-                    {p.imageFileName !== null ? <S3Image post={p} assignPostPlaying={assignPostPlaying} playingTrackId={playingTrackId}/> : null}
+                    {p.imageFileName !== null ? <S3Image post={p} assignPostPlaying={assignPostPlaying} playingTrackId={playingTrackId!}/> : null}
                   </Box>
                   <Box width="100%" mt={5}>
                     <Box ml="2px">
@@ -88,7 +90,7 @@ const Index = () => {
                         </Link>
                       </NextLink>
                     </Box>
-                    <Box ml="5px" mt={2}>
+                    <Box ml="2px" mt={2}>
                       <Heading mb={4} fontSize="md" color="white">
                         {p.creator.username}
                       </Heading>
@@ -111,6 +113,7 @@ const Index = () => {
                         <Text color="white" fontSize="sm" mr={2}>
                           {format(p.createdAt)}
                         </Text>
+                        <UpvoteSection post={p} variant="24px" fontVariant="16px"/>
                       </Flex>
                     </Flex>
                   </Box>
@@ -130,7 +133,7 @@ const Index = () => {
                 cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
               });
             }}
-            colorScheme="teal"
+            colorScheme="pink"
             variant="solid"
             m="auto"
             my={8}
@@ -142,7 +145,7 @@ const Index = () => {
       
     </Layout>
     {songInfo.audioURL !== "" ? (
-      <AudioFooter streamURL={songInfo.audioURL} trackTitle={songInfo.title} artist={songInfo.artist} playPause={playPause} togglePausePlayOnPost={togglePausePlayOnPost} />
+      <AudioFooter streamURL={songInfo.audioURL} trackTitle={songInfo.title} artist={songInfo.artist} playPause={playPause} trackId={songInfo.trackId} togglePausePlayOnPost={togglePausePlayOnPost} />
     ): null }
     
     </>
