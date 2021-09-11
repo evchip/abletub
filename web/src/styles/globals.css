@@ -37,10 +37,36 @@
     transform: scale(0);
     -webkit-transition: all 350ms ease;
     transition: all 350ms ease;
-
 }
 
 
 .scale-anm {
   transform: scale(1);
+}
+
+input#file {
+  display: inline-block;
+  width: 100%;
+  padding: 120px 0 0 0;
+  height: 100px;
+  overflow: hidden;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background: url('https://cdn1.iconfinder.com/data/icons/hawcons/32/698394-icon-130-cloud-upload-512.png') center center no-repeat #000000;
+  border-color: #D53F8C;
+  border-radius: 20px;
+  background-size: 60px 60px;
+}
+
+.rounded-left { 
+  background-color: #D53F8C;
+  width:100%;
+  height: 100%;
+}
+
+.progress-bar {
+  width: 100%; 
+  height: 5px;
+  background-color: white;
 }
