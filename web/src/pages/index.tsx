@@ -8,25 +8,19 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import AudioFooter from "components/AudioFooter";
 import S3Image from "components/Image";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import React, { useState } from "react";
-import { EditDeletePostBtns } from "../components/EditDeletePostBtns";
 import { Layout } from "../components/Layout";
 import { UpvoteSection } from "../components/UpvoteSection";
 import {
-  useGetAudioFileQuery,
   usePostsQuery,
-  useSetAudioFileMutation,
 } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
-import axios from "axios";
-import WaveForm from "components/WaveForm";
-import PlayPauseAudio from "components/PlayPauseAudio";
-import AudioBar from "components/AudioBar";
 import { format } from "timeago.js";
+import AudioFooter from "components/AudioFooter";
+import { Wrapper } from "components/Wrapper";
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -37,12 +31,18 @@ const Index = () => {
     variables,
   });
 
-  const [postPlaying, setPostPlaying] = useState(0);
+  const [songInfo, setSongInfo] = useState({title: "", artist: "", audioURL: "", trackId: 0})
+  const [playPause, setPlayPause] = useState(false)
+  const [playingTrackId, setPlayingTrackId] = useState<number>()
 
-  const assignPostPlaying = (postId: number) => {
-    setPostPlaying(postId);
-    console.log(postId);
+  const assignPostPlaying = (audioURL: string, artist: string, title: string, playPause: boolean, trackId: number ): void => {
+    setPlayPause(playPause)
+    setSongInfo({title, artist, audioURL, trackId})
   };
+
+  const togglePausePlayOnPost = (postId: number) => {
+    setPlayingTrackId(postId)
+  }
 
   if (!fetching && !data) {
     return (
@@ -54,6 +54,7 @@ const Index = () => {
   }
 
   return (
+    <>
     <Layout>
       {!data && fetching ? (
         <div>Loading...</div>
@@ -61,7 +62,7 @@ const Index = () => {
         <HStack align="center" justify="center" flexWrap="wrap" width="100%">
           {data!.posts.posts.map((p, i) =>
             !p ? null : (
-              <Box display="flex" flexDirection="row" justifyContent="center" width="380px" style={{ margin: "0px" }}>
+              <Box display="flex" flexDirection="row" justifyContent="center" width="360px" style={{ margin: "0px" }}>
                 <Flex
                   style={{ margin: "20px 0px" }}
                   key={p.id}
@@ -74,9 +75,10 @@ const Index = () => {
                   bgColor="blackAlpha.400"
                   borderBottomRadius="30px"
                   borderColor="pink.200"
+                  borderTop="none"
                 >
                   <Box display="flex" justifyContent="center">
-                    {p.imageFileName !== null ? <S3Image post={p} /> : null}
+                    {p.imageFileName !== null ? <S3Image post={p} assignPostPlaying={assignPostPlaying} playingTrackId={playingTrackId}/> : null}
                   </Box>
                   <Box width="100%" mt={5}>
                     <Box ml="2px">
@@ -106,7 +108,7 @@ const Index = () => {
                         width="100%"
                         mt={2}
                       >
-                        <Text color="white" fontSize="md" mr={2}>
+                        <Text color="white" fontSize="sm" mr={2}>
                           {format(p.createdAt)}
                         </Text>
                       </Flex>
@@ -137,8 +139,13 @@ const Index = () => {
           </Button>
         </Flex>
       ) : null}
-      {/* <AudioFooter /> */}
+      
     </Layout>
+    {songInfo.audioURL !== "" ? (
+      <AudioFooter streamURL={songInfo.audioURL} trackTitle={songInfo.title} artist={songInfo.artist} playPause={playPause} togglePausePlayOnPost={togglePausePlayOnPost} />
+    ): null }
+    
+    </>
   );
 };
 export default withUrqlClient(createUrqlClient, { ssr: true })(Index);
