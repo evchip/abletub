@@ -11,7 +11,12 @@ import { useGetPostFromUrl } from "../../utils/useGetPostfromUrl";
 import { format } from "timeago.js";
 import { UpvoteSection } from "components/UpvoteSection";
 
-const Post = ({}) => {
+interface PostProps {
+  assignPostPlaying(audioURL: string, artist: string, title: string, playPause: boolean, trackId: number ): void;
+  playingTrackId: number
+}
+
+const Post = ({assignPostPlaying, playingTrackId}: PostProps) => {
   const [{ data, error, fetching }] = useGetPostFromUrl();
   const [newComment, setNewComment] = useState({});
 
@@ -45,7 +50,8 @@ const Post = ({}) => {
     );
   }
   return (
-    <Layout>
+    <Layout variant={"small"}>
+      <Box display="flex" direction= "row">
       <Flex
         p={5}
         mt="0"
@@ -54,7 +60,7 @@ const Post = ({}) => {
         width="100%"
         flexDirection="row"
         justifyContent="space-between"
-        bgColor="blackAlpha.400"
+        bgColor="blackAlpha.600"
         borderBottomRadius="30px"
         borderColor="pink.200"
         borderTop="none"
@@ -99,14 +105,16 @@ const Post = ({}) => {
           </Flex>
         </Box>
         <Box display="flex" direction="row" >
-        <UpvoteSection post={data.post} />
           {data.post.imageFileName !== null ? (
-            <S3Image post={data.post} />
+            <S3Image post={data.post} assignPostPlaying={assignPostPlaying} playingTrackId={playingTrackId}/>
           ) : null}
         </Box>
+        <UpvoteSection post={data.post} />
       </Flex>
+      </Box>
       <CreateComment postId={data.post.id} getNewComment={getNewComment} />
       <Comments postId={data.post.id} newComment={newComment} />
+      
     </Layout>
   );
 };
