@@ -2,12 +2,12 @@ import React from 'react'
 import ReactHowler from 'react-howler'
 import {Button, Box, IconButton, Icon } from "@chakra-ui/react"
 import { FaRegPauseCircle, FaRegPlayCircle } from "react-icons/fa"
-import { useGetAudioFileQuery, useSetAudioFileMutation } from 'generated/graphql'
+import { useGetAudioFileQuery, useSetAudioFileMutation, PostSnippetFragment } from 'generated/graphql'
 
 interface PlayPauseButtonProps {
-  audioURL: string;
-  postId: number;
-  assignPostPlaying(postId: number): any
+
+  post: PostSnippetFragment;
+  assignPostPlaying(postId: string, creator: string, playPause: boolean): any
 }
 
 class PlayPauseButton extends React.Component<PlayPauseButtonProps> {
@@ -16,17 +16,16 @@ class PlayPauseButton extends React.Component<PlayPauseButtonProps> {
 
     this.state = {
       playing: false,
-      audioURL: props.audioURL,
-      getStatus: () => {console.log('this state', this.state)}
     }
 
+    // this.props.assignPostPlaying = this.props.assignPostPlaying.bind(this)
     this.handlePlay = this.handlePlay.bind(this)
     this.handlePause = this.handlePause.bind(this)
   }
 
 
-
   handlePlay () {
+    this.props.assignPostPlaying(this.props.post.audioURL, this.props.creator, this.state.playing)
       this.setState({
         playing: true
       })
