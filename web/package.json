@@ -30,6 +30,7 @@
     "react-howler": "^5.2.0",
     "react-icons": "^4.2.0",
     "react-is": "^17.0.2",
+    "react-soundplayer": "^1.0.5",
     "timeago.js": "^4.0.2",
     "urql": "^2.0.4",
     "wavesurfer.js": "^5.2.0"
@@ -44,6 +45,7 @@
     "@types/axios": "^0.14.0",
     "@types/howler": "^2.2.3",
     "@types/node": "^16.0.1",
+    "@types/react-dom": "^17.0.9",
     "@types/react-howler": "^3.7.3",
     "@types/wavesurfer.js": "^5.2.0",
     "typescript": "^4.3.5"
