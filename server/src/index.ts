@@ -58,6 +58,7 @@ const main = async () => {
         disableTouch: true,
       }),
       cookie: {
+        
         maxAge: 1000 * 60 * 24 * 365 * 10, // 10 years
         httpOnly: true,
         sameSite: "lax", //csrf
