@@ -8,7 +8,7 @@ interface WrapperProps {
 
 export const Wrapper: React.FC<WrapperProps> = ({children, variant = "regular"}) => {
     return (
-        <Box mt={0} mx="auto" maxW={variant === "regular" ? "1200px" : "400px"} width="100%" >
+        <Box mt={0} mx="auto" maxW={variant === "regular" ? "1500px" : "950px"} width="100%" >
             {children}
         </Box>
     )

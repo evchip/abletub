@@ -1,34 +1,42 @@
-import { Box, Image } from '@chakra-ui/react';
-import { _Post } from 'generated/graphql';
-import React from 'react'
-import { useGetPostFromUrl } from 'utils/useGetPostfromUrl';
-import PlayPauseAudio from './PlayPauseAudio';
+import { Box, Image } from "@chakra-ui/react";
+import { _Post, PostSnippetFragment } from "generated/graphql";
+import React from "react";
+import PlayPauseAudio from "./PlayPauseAudio";
+import PlayPauseAudioFC from "./PlayPauseAudioFC";
 
-function S3Image(post, assignPostPlaying) {
+type assignPostPlayingType = (audioURL: string, artist: string, title: string, playPause: boolean, trackId: number ) => any;
 
-      if (!post) {
-        
-        return (
-            <Box>?</Box>
-        );
-      }
-    return (
-          <div className="port-cont-hov tile scale-anm">
-        <Image
-          boxSize="250px"
-          borderRadius="2rem"
-          className="portfolio-img"
-          src={post.post.imageFileName}
-          alt=""
-          objectFit="cover"
-        />
-        <Box className="port-img-overlay" borderRadius="2rem">
-          <div className="port-text">
-            <PlayPauseAudio postId={post.postId} audioURL={post.post.audioFileName} assignPostPlaying={assignPostPlaying}/>
-          </div>
-        </Box>
-      </div>
-    )
+interface S3ImageProps {
+  assignPostPlaying: assignPostPlayingType;
+  post: PostSnippetFragment;
+  playingTrackId: number;
 }
 
-export default S3Image
+function S3Image({post, assignPostPlaying, playingTrackId}: S3ImageProps) {
+  if (!post) {
+    return <Box>?</Box>;
+  }
+  return (
+    <div className="port-cont-hov tile scale-anm">
+      <Image
+        boxSize="250px"
+        borderRadius="2rem"
+        className="portfolio-img"
+        src={post.imageFileName}
+        alt=""
+        objectFit="cover"
+      />
+      <Box className="port-img-overlay" borderRadius="2rem">
+        <div className="port-text">
+          <PlayPauseAudioFC
+            post={post}
+            assignPostPlaying={assignPostPlaying}
+            playingTrackId={playingTrackId}
+          />
+        </div>
+      </Box>
+    </div>
+  );
+}
+
+export default S3Image;

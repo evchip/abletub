@@ -22,9 +22,13 @@ function Comment({ i, text, creator, createdAt }: Props): ReactElement {
       shadow="md"
       borderWidth="1px"
       direction="column"
-      bgColor="gray.400"
+      bgColor="blackAlpha.700"
       borderRadius="5"
       width="100%"
+      borderBottomRadius="30px"
+      borderColor="pink.200"
+      borderTop="none"
+      style={{marginTop: "20px "}}
     >
       <Flex
         justifyContent="space-between"
@@ -33,7 +37,7 @@ function Comment({ i, text, creator, createdAt }: Props): ReactElement {
         direction="column"
       >
         <Flex align="left" width="80%" m="auto">
-          <Heading fontSize="md">{text}</Heading>
+          <Text fontSize="md">{text}</Text>
         </Flex>
         <Flex direction="row" justifyContent="flex-end" width="100%" mt={2}>
           <Text fontSize="md" mr={2}>

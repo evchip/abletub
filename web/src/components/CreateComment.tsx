@@ -18,29 +18,29 @@ function CreateComment({ postId, getNewComment }: Props): ReactElement {
     <Box variant="small" display="flex" direction="row" width="100%">
       <Formik
         initialValues={{ text: "" }}
-        onSubmit={async (values) => {
+        onSubmit={async (values, {resetForm}) => {
           const { error } = await createComment({ postId, input: values });
           
           if (error) {
             console.log("error", error);
           } else {
             getNewComment(postId, values)
-
+            resetForm({ values: {text: ''} })
             // router.push(`/post/${postId}`);
           }
         }}
       >
         {({ isSubmitting }) => (
           <Flex direction="row" width="100%">
-            <Form style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-evenly"}}>
-              <Box mt={4} width="85%" >
+            <Form style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
+              <Flex mt={4} width="85%" justifyContent="flex-start" >
                 <InputField
                   textarea
                   name="text"
-                  placeholder="Tell them what you think"
+                  placeholder="tell them what you think"
                   label=""
                 />
-              </Box>
+              </Flex>
               <Button
                 mt={4}
                 type="submit"

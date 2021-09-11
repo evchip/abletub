@@ -22,7 +22,7 @@ export const InputField: React.FC<InputFieldProps> = ({
         <FormControl isInvalid={!!error}>
             <FormLabel htmlFor={field.name}>{label}</FormLabel>
             {textarea ? (
-                <Textarea {...field} placeholder={props.placeholder} id={field.name} border="1px" borderColor="white" />
+                <Textarea {...field} placeholder={props.placeholder} id={field.name} border="1px" borderColor="pink" />
             ): (
                 <Input {...field} {...props} id={field.name} border="1px" borderColor="white" />
             )}
