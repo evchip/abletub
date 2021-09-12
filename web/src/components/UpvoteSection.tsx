@@ -2,7 +2,6 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { Flex, IconButton, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import {
-  PostSnippetFragment,
   _Post,
   useVoteMutation,
 } from "../generated/graphql";
@@ -21,7 +20,6 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post, variant, fon
   const [voteStatus, setVoteStatus] = useState(post.voteStatus);
 
   const handleVote = async () => {
-    console.log("post.voteStatus", post.voteStatus, "voteStatus", voteStatus);
     if (post.voteStatus !== voteStatus) {
       return;
     }
@@ -48,9 +46,9 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post, variant, fon
     <Flex
       direction="row"
       alignItems="center"
-      justifyContent="space-evenly"
+      justifyContent="space-between"
       h="20px"
-      width="5rem"
+      width="4rem"
     >
       <IconButton
         variant="ghost"
