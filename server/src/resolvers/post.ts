@@ -12,6 +12,10 @@ class PostInput {
     title!: string
     @Field()
     text!: string
+    @Field({ nullable: true })
+    audioFileName: string
+    @Field({ nullable: true })
+    imageFileName: string
 }
 
 @ObjectType()
@@ -21,7 +25,6 @@ class PaginatedPosts {
     @Field()
     hasMore?: boolean;
 }
-
 
 @Resolver(Post)
 export class PostResolver {
@@ -91,7 +94,6 @@ export class PostResolver {
                     where id = $2;
                 `, [realValue, postId])
             })
-            
         }
 
         await getConnection().query(
@@ -150,7 +152,6 @@ export class PostResolver {
             ...input, 
             creatorId: req.session.userId})
             .save();
-
     }
 
     @Mutation(() => Post, { nullable: true })
@@ -184,4 +185,29 @@ export class PostResolver {
         await Post.delete({id, creatorId: req.session.userId})
         return true;
     }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth)
+    async setAudioFile(
+        @Arg("audioFileName") audioFileName: string,
+        @Ctx() { req }: MyContext
+    ): Promise<boolean> {
+
+        req.session.audioFile = audioFileName
+        return true
+    }
+
+    @Query(() => String, { nullable: true })
+    @UseMiddleware(isAuth)
+    async getAudioFile(
+        @Ctx() { req }: MyContext
+    ): Promise<string> {
+        if (!req.session) {
+            return "null"
+        }
+        const audioURL: string = req!.session!.audioFile as any;
+        return audioURL;
+    }
+
+
 }

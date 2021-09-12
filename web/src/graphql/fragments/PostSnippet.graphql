@@ -4,6 +4,8 @@ fragment PostSnippet on _Post {
     updatedAt
     title
     points
+    audioFileName
+    imageFileName
     textSnippet
     voteStatus
     creator {

@@ -6,6 +6,7 @@ type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
     label: string;
     name: string;
     textarea?: boolean;
+    size?: string;
 };
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -21,9 +22,9 @@ export const InputField: React.FC<InputFieldProps> = ({
         <FormControl isInvalid={!!error}>
             <FormLabel htmlFor={field.name}>{label}</FormLabel>
             {textarea ? (
-                <Textarea {...field} placeholder={props.placeholder} id={field.name} />
+                <Textarea {...field} placeholder={props.placeholder} id={field.name} border="1px" borderColor="pink" bgColor="black" />
             ): (
-                <Input {...field} {...props} id={field.name} />
+                <Input {...field} {...props} id={field.name} border="1px" borderColor="pink" bgColor="black"/>
             )}
             
             {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}

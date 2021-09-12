@@ -1,0 +1,5 @@
+query getNewComment {
+    getNewComment {
+        ...CommentSnippet
+    }
+}

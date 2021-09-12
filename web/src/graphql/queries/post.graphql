@@ -5,6 +5,8 @@ query Post ($id: Int!) {
         updatedAt
         title
         points
+        audioFileName
+        imageFileName
         text
         voteStatus
         creator {

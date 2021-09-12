@@ -14,6 +14,20 @@ export type Scalars = {
   Float: number;
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  id: Scalars['Int'];
+  text: Scalars['String'];
+  creatorId: Scalars['Float'];
+  creator: User;
+  postId: Scalars['Int'];
+  createdAt: Scalars['String'];
+};
+
+export type CommentInput = {
+  text: Scalars['String'];
+};
+
 export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String'];
@@ -26,11 +40,14 @@ export type Mutation = {
   createPost: _Post;
   updatePost?: Maybe<_Post>;
   deletePost: Scalars['Boolean'];
+  setAudioFile: Scalars['Boolean'];
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  signS3: S3Payload;
+  createComment: Comment;
 };
 
 
@@ -57,6 +74,11 @@ export type MutationDeletePostArgs = {
 };
 
 
+export type MutationSetAudioFileArgs = {
+  audioFileName: Scalars['String'];
+};
+
+
 export type MutationChangePasswordArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
@@ -78,6 +100,24 @@ export type MutationLoginArgs = {
   usernameOrEmail: Scalars['String'];
 };
 
+
+export type MutationSignS3Args = {
+  filetype: Scalars['String'];
+  filename: Scalars['String'];
+};
+
+
+export type MutationCreateCommentArgs = {
+  input: CommentInput;
+  postId: Scalars['Int'];
+};
+
+export type PaginatedComments = {
+  __typename?: 'PaginatedComments';
+  comments: Array<Comment>;
+  hasMore: Scalars['Boolean'];
+};
+
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
   posts: Array<_Post>;
@@ -87,6 +127,8 @@ export type PaginatedPosts = {
 export type PostInput = {
   title: Scalars['String'];
   text: Scalars['String'];
+  audioFileName?: Maybe<Scalars['String']>;
+  imageFileName?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -94,7 +136,11 @@ export type Query = {
   hello: Scalars['String'];
   posts: PaginatedPosts;
   post?: Maybe<_Post>;
+  getAudioFile?: Maybe<Scalars['String']>;
   me?: Maybe<User>;
+  comment?: Maybe<Comment>;
+  getNewComment?: Maybe<Comment>;
+  comments: PaginatedComments;
 };
 
 
@@ -106,6 +152,25 @@ export type QueryPostsArgs = {
 
 export type QueryPostArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryCommentArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type QueryCommentsArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
+  postId: Scalars['Int'];
+};
+
+export type S3Payload = {
+  __typename?: 'S3Payload';
+  id: Scalars['Int'];
+  signedRequest: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type User = {
@@ -134,18 +199,30 @@ export type _Post = {
   id: Scalars['Int'];
   title: Scalars['String'];
   text: Scalars['String'];
+  audioFileName: Scalars['String'];
+  imageFileName: Scalars['String'];
   points: Scalars['Float'];
   voteStatus?: Maybe<Scalars['Int']>;
   creatorId: Scalars['Float'];
   creator: User;
+  comments: Comment;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   textSnippet: Scalars['String'];
 };
 
+export type CommentSnippetFragment = (
+  { __typename?: 'Comment' }
+  & Pick<Comment, 'createdAt' | 'text' | 'id'>
+  & { creator: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username'>
+  ) }
+);
+
 export type PostSnippetFragment = (
   { __typename?: '_Post' }
-  & Pick<_Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'textSnippet' | 'voteStatus'>
+  & Pick<_Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'audioFileName' | 'imageFileName' | 'textSnippet' | 'voteStatus'>
   & { creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
@@ -184,6 +261,20 @@ export type ChangePasswordMutation = (
   & { changePassword: (
     { __typename?: 'UserResponse' }
     & RegularUserResponseFragment
+  ) }
+);
+
+export type CreateCommentMutationVariables = Exact<{
+  postId: Scalars['Int'];
+  input: CommentInput;
+}>;
+
+
+export type CreateCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { createComment: (
+    { __typename?: 'Comment' }
+    & Pick<Comment, 'postId' | 'id' | 'createdAt' | 'text' | 'creatorId'>
   ) }
 );
 
@@ -255,6 +346,30 @@ export type RegisterMutation = (
   ) }
 );
 
+export type S3SignMutationVariables = Exact<{
+  filename: Scalars['String'];
+  filetype: Scalars['String'];
+}>;
+
+
+export type S3SignMutation = (
+  { __typename?: 'Mutation' }
+  & { signS3: (
+    { __typename?: 'S3Payload' }
+    & Pick<S3Payload, 'signedRequest' | 'url'>
+  ) }
+);
+
+export type SetAudioFileMutationVariables = Exact<{
+  audioFileName: Scalars['String'];
+}>;
+
+
+export type SetAudioFileMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'setAudioFile'>
+);
+
 export type UpdatePostMutationVariables = Exact<{
   id: Scalars['Int'];
   title: Scalars['String'];
@@ -281,6 +396,44 @@ export type VoteMutation = (
   & Pick<Mutation, 'vote'>
 );
 
+export type CommentsQueryVariables = Exact<{
+  postId: Scalars['Int'];
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+}>;
+
+
+export type CommentsQuery = (
+  { __typename?: 'Query' }
+  & { comments: (
+    { __typename?: 'PaginatedComments' }
+    & Pick<PaginatedComments, 'hasMore'>
+    & { comments: Array<(
+      { __typename?: 'Comment' }
+      & CommentSnippetFragment
+    )> }
+  ) }
+);
+
+export type GetAudioFileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAudioFileQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'getAudioFile'>
+);
+
+export type GetNewCommentQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetNewCommentQuery = (
+  { __typename?: 'Query' }
+  & { getNewComment?: Maybe<(
+    { __typename?: 'Comment' }
+    & CommentSnippetFragment
+  )> }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -301,7 +454,7 @@ export type PostQuery = (
   { __typename?: 'Query' }
   & { post?: Maybe<(
     { __typename?: '_Post' }
-    & Pick<_Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'text' | 'voteStatus'>
+    & Pick<_Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'audioFileName' | 'imageFileName' | 'text' | 'voteStatus'>
     & { creator: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
@@ -327,6 +480,17 @@ export type PostsQuery = (
   ) }
 );
 
+export const CommentSnippetFragmentDoc = gql`
+    fragment CommentSnippet on Comment {
+  createdAt
+  text
+  id
+  creator {
+    id
+    username
+  }
+}
+    `;
 export const PostSnippetFragmentDoc = gql`
     fragment PostSnippet on _Post {
   id
@@ -334,6 +498,8 @@ export const PostSnippetFragmentDoc = gql`
   updatedAt
   title
   points
+  audioFileName
+  imageFileName
   textSnippet
   voteStatus
   creator {
@@ -375,6 +541,21 @@ export const ChangePasswordDocument = gql`
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const CreateCommentDocument = gql`
+    mutation CreateComment($postId: Int!, $input: CommentInput!) {
+  createComment(postId: $postId, input: $input) {
+    postId
+    id
+    createdAt
+    text
+    creatorId
+  }
+}
+    `;
+
+export function useCreateCommentMutation() {
+  return Urql.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument);
 };
 export const CreatePostDocument = gql`
     mutation CreatePost($input: PostInput!) {
@@ -442,6 +623,27 @@ export const RegisterDocument = gql`
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
+export const S3SignDocument = gql`
+    mutation S3Sign($filename: String!, $filetype: String!) {
+  signS3(filename: $filename, filetype: $filetype) {
+    signedRequest
+    url
+  }
+}
+    `;
+
+export function useS3SignMutation() {
+  return Urql.useMutation<S3SignMutation, S3SignMutationVariables>(S3SignDocument);
+};
+export const SetAudioFileDocument = gql`
+    mutation setAudioFile($audioFileName: String!) {
+  setAudioFile(audioFileName: $audioFileName)
+}
+    `;
+
+export function useSetAudioFileMutation() {
+  return Urql.useMutation<SetAudioFileMutation, SetAudioFileMutationVariables>(SetAudioFileDocument);
+};
 export const UpdatePostDocument = gql`
     mutation UpdatePost($id: Int!, $title: String!, $text: String!) {
   updatePost(id: $id, title: $title, text: $text) {
@@ -465,6 +667,40 @@ export const VoteDocument = gql`
 export function useVoteMutation() {
   return Urql.useMutation<VoteMutation, VoteMutationVariables>(VoteDocument);
 };
+export const CommentsDocument = gql`
+    query Comments($postId: Int!, $limit: Int!, $cursor: String) {
+  comments(postId: $postId, cursor: $cursor, limit: $limit) {
+    hasMore
+    comments {
+      ...CommentSnippet
+    }
+  }
+}
+    ${CommentSnippetFragmentDoc}`;
+
+export function useCommentsQuery(options: Omit<Urql.UseQueryArgs<CommentsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<CommentsQuery>({ query: CommentsDocument, ...options });
+};
+export const GetAudioFileDocument = gql`
+    query getAudioFile {
+  getAudioFile
+}
+    `;
+
+export function useGetAudioFileQuery(options: Omit<Urql.UseQueryArgs<GetAudioFileQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetAudioFileQuery>({ query: GetAudioFileDocument, ...options });
+};
+export const GetNewCommentDocument = gql`
+    query getNewComment {
+  getNewComment {
+    ...CommentSnippet
+  }
+}
+    ${CommentSnippetFragmentDoc}`;
+
+export function useGetNewCommentQuery(options: Omit<Urql.UseQueryArgs<GetNewCommentQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetNewCommentQuery>({ query: GetNewCommentDocument, ...options });
+};
 export const MeDocument = gql`
     query Me {
   me {
@@ -484,6 +720,8 @@ export const PostDocument = gql`
     updatedAt
     title
     points
+    audioFileName
+    imageFileName
     text
     voteStatus
     creator {

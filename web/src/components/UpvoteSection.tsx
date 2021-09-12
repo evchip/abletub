@@ -1,58 +1,74 @@
-import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons'
-import { Flex, IconButton, Text } from '@chakra-ui/react'
-import { withUrqlClient } from 'next-urql'
-import React, { useState } from 'react'
-import { PostSnippetFragment, useVoteMutation } from '../generated/graphql'
-import { createUrqlClient } from '../utils/createUrqlClient'
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { Flex, IconButton, Text } from "@chakra-ui/react";
+import React, { useState } from "react";
+import {
+  _Post,
+  useVoteMutation,
+} from "../generated/graphql";
 
 interface UpvoteSectionProps {
-    post: PostSnippetFragment;
+  post: _Post;
+  variant: string;
+  fontVariant: string;
 }
 
-export const UpvoteSection: React.FC<UpvoteSectionProps> = ({post}) => {
+export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post, variant, fontVariant }) => {
+  const [loadingState, setLoadingState] = useState<
+    "upvote-loading" | "downvote-loading" | "not-loading"
+  >("not-loading");
+  const [, vote] = useVoteMutation();
+  const [voteStatus, setVoteStatus] = useState(post.voteStatus);
 
-    const [loadingState, setLoadingState] = useState<'upvote-loading' | 'downvote-loading' | 'not-loading'>('not-loading')
-    const [, vote] = useVoteMutation();
+  const handleVote = async () => {
+    if (post.voteStatus !== voteStatus) {
+      return;
+    }
+    if (post.voteStatus === 1) {
+      setLoadingState("downvote-loading");
+      await vote({
+        postId: post.id,
+        value: -1,
+      });
+      setVoteStatus(-1);
+    } else {
+      setLoadingState("upvote-loading");
+      await vote({
+        postId: post.id,
+        value: 1,
+      });
+      setVoteStatus(1);
+    }
 
-    return (
-        <Flex direction="column" alignItems="center" justifyContent="center" mr={4}>
-            <IconButton
-            aria-label="upvote post"
-            
-            icon={<ChevronUpIcon boxSize="2em"/>}
-            
-            onClick={async () => {
-                if (post.voteStatus === 1) {
-                    return;
-                }
-                setLoadingState('upvote-loading')
-                await vote({
-                    postId: post.id,
-                    value: 1
-                    });
-                setLoadingState('not-loading');
-            }}
-            colorScheme={post.voteStatus === 1 ? "green" : undefined}
-            isLoading={loadingState==='upvote-loading'}
-            />
-            <Text fontSize="16px">{post.points}</Text>
-            <IconButton
-            aria-label="downvote post"
-            icon={<ChevronDownIcon boxSize="2em" />}
-            onClick={async () => {
-                if (post.voteStatus === -1) {
-                    return;
-                }
-                setLoadingState('downvote-loading')
-                await vote({
-                    postId: post.id,
-                    value: -1
-                    });
-                setLoadingState('not-loading');
-            }}
-            colorScheme={post.voteStatus === -1 ? "red" : undefined}
-            isLoading={loadingState==='downvote-loading'}
-            />
-        </Flex>
-    )
-}
+    setLoadingState("not-loading");
+  };
+
+  return (
+    <Flex
+      direction="row"
+      alignItems="center"
+      justifyContent="space-between"
+      h="20px"
+      width="4rem"
+    >
+      <IconButton
+        variant="ghost"
+        aria-label="upvote post"
+        icon={
+          post.voteStatus === 1 ? (
+            <AiFillHeart color="pink" size={variant} />
+          ) : (
+            <AiOutlineHeart color="pink" size={variant} />
+          )
+        }
+
+        borderBottomRadius="10px"
+        onClick={async () => {
+          handleVote();
+        }}
+        colorScheme={post.voteStatus === 1 ? "black" : undefined}
+        isLoading={loadingState === "upvote-loading"}
+      />
+      <Text fontSize={fontVariant}>{post.points}</Text>
+    </Flex>
+  );
+};

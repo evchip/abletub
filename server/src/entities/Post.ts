@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, UpdateDateColumn, BaseEntity, C
 import { Field, ObjectType, Int } from "type-graphql";
 import { User } from './User';
 import { Updoot } from './Updoot';
+import { Comment } from './Comment';
 
 @ObjectType()
 @Entity()
@@ -19,6 +20,14 @@ export class _Post extends BaseEntity {
     text!: string;
 
     @Field()
+    @Column({ nullable: true })
+    audioFileName: string;
+
+    @Field()
+    @Column({ nullable: true })
+    imageFileName: string;
+
+    @Field()
     @Column({type: 'int', default: 0})
     points!: number;
 
@@ -33,8 +42,12 @@ export class _Post extends BaseEntity {
     @ManyToOne(() => User, user => user.posts)
     creator!: User;
 
-    @OneToMany(() => Updoot, (updoot) => updoot.post)
+    @OneToMany(() => Updoot, updoot => updoot.post)
     updoots!: Updoot[]
+
+    @Field(() => Comment)
+    @OneToMany(() => Comment, comment => comment.post)
+    comments?: Comment[]
 
     @Field(() => String)
     @CreateDateColumn()
@@ -43,4 +56,5 @@ export class _Post extends BaseEntity {
     @Field(() => String)
     @UpdateDateColumn()
     updatedAt!: Date;
+
 }
