@@ -38,9 +38,7 @@ export class FileResolver {
 
         const command = new PutObjectCommand(objectParams);
         const signedRequest = await getSignedUrl(client, command)
-        console.log('signed req!!!!!!!', signedRequest)
         const url = 'https://abletubtest.s3.amazonaws.com/' + filename;
-        console.log("url", url)
         return {
             signedRequest,
             url

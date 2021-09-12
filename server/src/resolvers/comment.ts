@@ -58,7 +58,6 @@ export class CommentResolver {
     }).save();
 
     req.session.newComment = newComment;
-    console.log("new comment in createComment resolver", newComment);
     return newComment;
   }
 
@@ -66,12 +65,10 @@ export class CommentResolver {
   async getNewComment(@Ctx() { req }: MyContext) {
     // no new comment by this user
     if (!req.session.newComment) {
-      console.log("no new comment by this user");
       return null;
     }
 
     const newComment = await Comment.findOne(req.session.newComment.id);
-    console.log("new comment in getNewComment resolver", newComment);
     return newComment;
   }
 
