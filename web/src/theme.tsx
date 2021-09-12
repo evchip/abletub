@@ -35,7 +35,7 @@ const theme = extendTheme(
       // 1. We can update the base styles
       baseStyle: {
         color: "white", // Normally, it is "semibold"
-        letterSpacing:".2rem"
+        letterSpacing:".2rem",
       }
     },
     Menu: {
