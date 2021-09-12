@@ -56,7 +56,7 @@ const Post = ({ assignPostPlaying, playingTrackId }: PostProps) => {
     );
   }
   return (
-    <Layout variant={"small"}>
+    <Layout variant={"regular"}>
       <Box display="flex" direction="row">
         <Flex
           p={5}
@@ -74,24 +74,24 @@ const Post = ({ assignPostPlaying, playingTrackId }: PostProps) => {
         >
           <Box display="flex" direction="row" justifyContent="space-between">
             <Box width="70%">
-              <Heading mb={4} color="white">
+              <Heading mb={4} color="white" fontSize={["medium", "large", "x-large"]}>
                 {data.post.title}
               </Heading>
-              <Box ml="2px">
-                <Heading mb={4} size="md" color="white">
+              <Box ml=".15rem">
+                <Heading mb={4} color="white" fontSize={["small", "medium", "x-large"]}>
                   {data.post.creator.username}
                 </Heading>
               </Box>
               <Flex
                 justifyContent="space-between"
                 mt="3"
-                ml="2px"
+                ml=".15rem"
                 width="100%"
                 direction="column"
                 height="60%"
               >
                 <Flex align="left" width="100%">
-                  <Text color="white" fontSize="md" mr={2}>
+                  <Text color="white" mr={2} fontSize={["xs", "sm", "md"]}>
                     {data.post.text}
                   </Text>
                 </Flex>
@@ -120,7 +120,7 @@ const Post = ({ assignPostPlaying, playingTrackId }: PostProps) => {
               id={data.post.id}
               creatorId={data.post.creator.id}
             />
-            <Text color="white" fontSize="md" mr={2}>
+            <Text color="white" fontSize={["xx-small", "xs", "sm"]} mr={2}>
               published {format(data.post.createdAt)}
             </Text>
             </Flex>
