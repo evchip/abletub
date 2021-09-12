@@ -1,4 +1,4 @@
-import { Box, Button, extendTheme, Text, Input } from "@chakra-ui/react";
+import { Box, Button, extendTheme, Text, Input, Flex } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
@@ -10,6 +10,7 @@ import { createUrqlClient } from "../utils/createUrqlClient";
 import { useIsAuth } from "../utils/useIsAuth";
 import { useS3SignMutation } from "../generated/graphql";
 import axios from "axios";
+import * as Yup from "yup";
 
 const CreatePost: React.FC<{}> = ({}) => {
   const router = useRouter();
@@ -23,11 +24,31 @@ const CreatePost: React.FC<{}> = ({}) => {
   const [, s3Sign] = useS3SignMutation();
   const [{ data, fetching }] = useMeQuery();
 
+  const PostSchema = Yup.object().shape({
+    audioFileSize: Yup.number()
+      .min(1, "please upload a file.")
+      .max(50000000, "file is too large. max size is 50 MB.")
+      .required("required"),
+    imageFileSize: Yup.number()
+      .min(1, "please upload a file.")
+      .max(15000000, "file is too large. max size is 12 MB.")
+      .required("required"),
+  });
+
+  const validateText = (value: string, maxLength: number) => {
+    let error;
+    if (!value) {
+      error = "required";
+    } else if (value.length > maxLength) {
+      error = "sorry, that's too long";
+    }
+    return error;
+  };
   const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+
     if (!e.target.files) {
       return;
     }
-    console.log("e.target.files", e.target!.files[0]!);
     const result = await submitSignReq(e.target!.files[0]!);
     return result;
   };
@@ -96,7 +117,10 @@ const CreatePost: React.FC<{}> = ({}) => {
           text: "",
           audioFileName: "",
           imageFileName: "",
+          audioFileSize: 0,
+          imageFileSize: 0,
         }}
+        validationSchema={PostSchema}
         onSubmit={async (values) => {
           if (audioFile) {
             await uploadToS3(audioFile!, audioSignedReq);
@@ -105,7 +129,14 @@ const CreatePost: React.FC<{}> = ({}) => {
             await uploadToS3(imageFile!, imageSignedReq);
           }
 
-          const { error } = await createPost({ input: values });
+          const { error } = await createPost({
+            input: {
+              title: values.title,
+              text: values.text,
+              audioFileName: values.audioFileName,
+              imageFileName: values.imageFileName,
+            },
+          });
           if (error) {
             console.log("error", error);
           } else {
@@ -113,54 +144,92 @@ const CreatePost: React.FC<{}> = ({}) => {
           }
         }}
       >
-        {({ isSubmitting, setFieldValue }) => (
-          <Form>
-            <InputField name="title" placeholder="title" label="song title" />
-            <Box mt={4}>
+        {({
+          isSubmitting,
+          setFieldValue,
+          touched,
+          isValidating,
+          errors,
+          values,
+        }) => (
+          <Form style={{ marginTop: "3rem", marginBottom: "3rem" }}>
+            <Box mt={4} pb={2}>
+              <Text mb={2}>song title</Text>
+              <Field
+                id="title-field"
+                className="field"
+                name="title"
+                placeholder="title"
+                label="song title"
+                validate={() => validateText(values.title, 45)}
+              />
+              {errors.title && touched.title && (
+                <Text mt={1} color="red.200">
+                  {errors.title}
+                </Text>
+              )}
+            </Box>
+            <Box mt={4} pb={2}>
               <InputField
-                textarea
                 name="text"
+                textarea
                 placeholder="talk about your song"
                 label="description"
               />
             </Box>
             <Box mt="4">
-              <Text>upload image</Text>
+              <Text>upload image ({"<"} 15 mb)</Text>
               <Input
                 onChange={async (e) => {
-
                   const imageFileName = await onChange(e);
                   setFieldValue("imageFileName", imageFileName);
-                  if (e.target!.files[0]) {
-                    setPictureName(e.target!.files[0].name!)
+
+                  if (e!.target!.files[0]) {
+                    setPictureName(e!.target!.files[0].name!);
                   }
+                  setFieldValue("imageFileSize", e.target.files[0].size);
                 }}
+                name="image"
                 id="file"
                 type="file"
                 accept="image/*"
+                mt={2}
               />
+              {errors.imageFileSize && touched.imageFileSize ? (
+                <Text mt={1} color="red.200">
+                  {errors.imageFileSize}
+                </Text>
+              ) : null}
               <Text>{pictureName}</Text>
-              {/* {picture !== '' ? <img src={picture}></img> : null} */}
             </Box>
-            <Box mt="4">
-              <Text>upload audio</Text>
-              <input
+            <Box mt={4}>
+              <Text>upload audio ({"<"} 50 mb)</Text>
+              <Input
                 onChange={async (e) => {
                   const audioFileName = await onChange(e);
                   setFieldValue("audioFileName", audioFileName);
+                  setFieldValue("audioFileSize", e.target.files[0].size);
                 }}
+                name="audio"
+                mt={2}
+                id="file"
                 type="file"
                 accept=".mp3"
-              ></input>
+              ></Input>
+              {errors.audioFileSize && touched.audioFileSize ? (
+                <Text color="red.200">{errors.audioFileSize}</Text>
+              ) : null}
             </Box>
-            <Button
-              mt={4}
-              type="submit"
-              isLoading={isSubmitting}
-              colorScheme="pink"
-            >
-              create post
-            </Button>
+            <Flex justifyContent="center">
+              <Button
+                mt={4}
+                type="submit"
+                isLoading={isSubmitting}
+                colorScheme="pink"
+              >
+                create post
+              </Button>
+            </Flex>
           </Form>
         )}
       </Formik>

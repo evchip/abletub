@@ -3,7 +3,7 @@ import { Comments } from "components/Comments";
 import CreateComment from "components/CreateComment";
 import S3Image from "components/Image";
 import { withUrqlClient } from "next-urql";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { EditDeletePostBtns } from "../../components/EditDeletePostBtns";
 import { Layout } from "../../components/Layout";
 import { createUrqlClient } from "../../utils/createUrqlClient";
@@ -57,6 +57,7 @@ const Post = ({ assignPostPlaying, playingTrackId }: PostProps) => {
   }
   return (
     <Layout variant={"regular"}>
+      <Flex direction="column" width="92%" justifyContent="center" mx="auto">
       <Box display="flex" direction="row">
         <Flex
           p={5}
@@ -112,7 +113,7 @@ const Post = ({ assignPostPlaying, playingTrackId }: PostProps) => {
             justifyContent="space-between"
             alignItems="end"
             width="100%"
-            mt={2}
+            mt={4}
           >
             <UpvoteSection post={data.post} variant="30px" fontVariant="20px"/>
             <Flex alignItems="center">
@@ -129,6 +130,7 @@ const Post = ({ assignPostPlaying, playingTrackId }: PostProps) => {
       </Box>
       <CreateComment postId={data.post.id} getNewComment={getNewComment} />
       <Comments postId={data.post.id} newComment={newComment} />
+      </Flex>
     </Layout>
   );
 };
