@@ -9,10 +9,10 @@ import {
 interface PlayPauseButtonProps {
   post: PostSnippetFragment
   assignPostPlaying(audioURL: string, artist: string, title: string, playPause: boolean, trackId: number): any;
-  playingTrackId: number
+  songInfo: {title: string, artist: string, audioURL: string, trackId: number}
 }
 
-function PlayPauseAudioFC({post, assignPostPlaying, playingTrackId}: PlayPauseButtonProps) {
+function PlayPauseAudioFC({post, assignPostPlaying, songInfo}: PlayPauseButtonProps) {
   const [playPause, setPlayPause] = useState(false);
 
   function handlePlay() {
@@ -24,13 +24,6 @@ function PlayPauseAudioFC({post, assignPostPlaying, playingTrackId}: PlayPauseBu
     assignPostPlaying(post.audioFileName, post.creator.username, post.title, false, post.id);
     setPlayPause(false);
   }
-
-  useEffect(() => {
-      console.log("playPause", playPause, playingTrackId)
-    if (playingTrackId === post.id) {
-        setPlayPause(!playPause)
-    }
-  })
 
   return (
     <Box>

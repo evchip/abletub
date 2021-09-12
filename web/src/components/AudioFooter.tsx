@@ -12,21 +12,11 @@ interface Props {
   artist: string;
   playPause: boolean;
   trackId: number;
-  togglePausePlayOnPost(postId: number): void;
 }
 
 const AudioPlayer = withCustomAudio((props) => {
-  console.log(props);
-  const {
-    trackTitle,
-    artist,
-    playPause,
-    playing,
-    soundCloudAudio,
-    track,
-    trackId,
-    togglePausePlayOnPost,
-  } = props;
+  const { trackTitle, artist, playPause, playing, soundCloudAudio, track } =
+    props;
 
   useEffect(() => {
     if (playPause) {
@@ -42,7 +32,6 @@ const AudioPlayer = withCustomAudio((props) => {
     } else {
       soundCloudAudio.play();
     }
-    togglePausePlayOnPost(trackId);
   };
 
   return (
@@ -61,10 +50,26 @@ const AudioPlayer = withCustomAudio((props) => {
           {...props}
           onTogglePlay={() => handleChange()}
         />
-        <Text ml={8}>{trackTitle}</Text>
-        <Text ml={8}>{artist}</Text>
+        <Text
+          ml={8}
+          width="10rem"
+          overflow="hidden"
+          whiteSpace="nowrap"
+          textOverflow="ellipsis"
+        >
+          {trackTitle}
+        </Text>
+        <Text
+          ml={4}
+          width="10rem"
+          overflow="hidden"
+          whiteSpace="nowrap"
+          textOverflow="ellipsis"
+        >
+          {artist}
+        </Text>
       </Flex>
-      <Flex alignItems="center" width="50%">
+      <Flex alignItems="center" width={["20%", "30%", "60%"]}>
         <Progress
           className="progress-bar"
           innerClassName="rounded-left"
@@ -72,7 +77,7 @@ const AudioPlayer = withCustomAudio((props) => {
           {...props}
         />
       </Flex>
-      <Timer style={{ marginRight: "2rem" }} {...props} />
+      <Timer style={{ marginRight: "2rem", marginLeft:"2rem" }} {...props} />
     </Flex>
   );
 });
@@ -86,7 +91,6 @@ class AudioFooter extends React.Component<Props> {
         artist={this.props.artist}
         playPause={this.props.playPause}
         playing={this.props.playPause}
-        togglePausePlayOnPost={this.props.togglePausePlayOnPost}
       />
     );
   }

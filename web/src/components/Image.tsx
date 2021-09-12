@@ -1,7 +1,6 @@
 import { Box, Image } from "@chakra-ui/react";
 import { _Post, PostSnippetFragment } from "generated/graphql";
 import React from "react";
-import PlayPauseAudio from "./PlayPauseAudio";
 import PlayPauseAudioFC from "./PlayPauseAudioFC";
 
 type assignPostPlayingType = (audioURL: string, artist: string, title: string, playPause: boolean, trackId: number ) => any;
@@ -9,10 +8,10 @@ type assignPostPlayingType = (audioURL: string, artist: string, title: string, p
 interface S3ImageProps {
   assignPostPlaying: assignPostPlayingType;
   post: PostSnippetFragment;
-  playingTrackId: number;
+  songInfo: {title: string, artist: string, audioURL: string, trackId: number}
 }
 
-function S3Image({post, assignPostPlaying, playingTrackId}: S3ImageProps) {
+function S3Image({post, assignPostPlaying, songInfo}: S3ImageProps) {
   if (!post) {
     return <Box>?</Box>;
   }
@@ -31,7 +30,7 @@ function S3Image({post, assignPostPlaying, playingTrackId}: S3ImageProps) {
           <PlayPauseAudioFC
             post={post}
             assignPostPlaying={assignPostPlaying}
-            playingTrackId={playingTrackId}
+            songInfo={songInfo}
           />
         </div>
       </Box>
