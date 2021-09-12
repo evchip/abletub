@@ -19,7 +19,7 @@ function S3Image({post, assignPostPlaying, playingTrackId}: S3ImageProps) {
   return (
     <div className="port-cont-hov tile scale-anm">
       <Image
-        boxSize="250px"
+        boxSize={["40", "72"]}
         borderRadius="2rem"
         className="portfolio-img"
         src={post.imageFileName}

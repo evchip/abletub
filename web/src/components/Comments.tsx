@@ -14,6 +14,7 @@ import router from "next/router";
 import React, { useEffect, useState } from "react";
 import { useCommentsQuery } from "../generated/graphql";
 import Comment from "./Comment";
+import SortMenu from "./SortMenu"
 
 interface CommentsProps {
   postId: number;
@@ -24,8 +25,12 @@ export const Comments: React.FC<CommentsProps> = ({ postId, newComment }) => {
   const [variables, setVariables] = useState({
     postId,
     limit: 50,
-    cursor: null as null | string,
+    cursor: 'DESC',
   });
+
+  const handleSort = (cursorProp: string):void => {
+    setVariables({postId: variables.postId, limit: variables.limit, cursor: cursorProp})
+  }
 
   const [{ data, error, fetching }] = useCommentsQuery({
     variables,
@@ -48,56 +53,7 @@ export const Comments: React.FC<CommentsProps> = ({ postId, newComment }) => {
         <div>loading...</div>
       ) : (
         <>
-          <Flex justifyContent="flex-start" mt={5}>
-            <Menu>
-              <MenuButton
-                fontSize={{ base: "12px", md: "14px", lg: "16px" }}
-                as={Button}
-                rightIcon={<ChevronDownIcon />}
-                px={4}
-                py={2}
-                color="white"
-                transition="all 0.2s"
-                borderRadius="md"
-                borderWidth="1px"
-                borderColor="pink.200"
-                _hover={{ bg: "pink.400" }}
-                _expanded={{ bg: "white", color: "black" }}
-                _focus={{ boxShadow: "outline" }}
-                defaultValue="new"
-              >
-                sort
-              </MenuButton>
-              <MenuList bgColor="black">
-                <MenuItem
-                  onClick={() => {
-                    setVariables({
-                      postId,
-                      limit: variables.limit,
-                      cursor: "DESC",
-                    });
-                  }}
-                  _hover={{ bg: "gray.400" }}
-                  value="new"
-                >
-                  new
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    setVariables({
-                      postId,
-                      limit: variables.limit,
-                      cursor: "ASC",
-                    });
-                  }}
-                  _hover={{ bg: "gray.400" }}
-                  value="old"
-                >
-                  old
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </Flex>
+        <SortMenu handleSort={handleSort}/>
           <VStack align="center" flexWrap="wrap" width="100%" my={5}>
             {newComment.text ? (
               <Comment

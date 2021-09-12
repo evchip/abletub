@@ -10,6 +10,7 @@ import {
   MenuItem,
   MenuList,
   useColorMode,
+  Text
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -48,12 +49,12 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
     // user is logged in
   } else {
     body = (
-      <Flex align="center" >
+      <Flex align="center" px={0}>
         <Menu >
           <MenuButton
             as={Button}
             rightIcon={<ChevronDownIcon />}
-            px={4}
+            px={3}
             py={2}
             color="white"
             bgColor="black"
@@ -62,10 +63,12 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
             borderWidth="1px"
             borderColor="pink.200"
             _hover={{ bg: "pink.400" }}
-            _expanded={{ bg: "white", color: "black" }}
             _focus={{ boxShadow: "outline" }}
+            fontSize="xs"
+            boxSize="sx"
           >
-            {data.me.username}
+            <Text maxW={[28, 48]} overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis">{data.me.username}</Text>
+            
           </MenuButton>
           <MenuList bgColor="black" borderColor="pink.200" borderWidth="1px">
             <NextLink href="/create-post">

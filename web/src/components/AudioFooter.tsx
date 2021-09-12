@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import { PlayButton, Timer, Progress } from "react-soundplayer/components";
 import { withCustomAudio } from "react-soundplayer/addons";
 import { Flex, Text } from "@chakra-ui/react";
+import { useSpring, animated, Spring } from "react-spring";
 
 interface Props {
   streamURL: string;
@@ -15,50 +16,68 @@ interface Props {
 }
 
 const AudioPlayer = withCustomAudio((props) => {
-    console.log(props)
-  const { trackTitle, artist, playPause, playing, soundCloudAudio, track, trackId, togglePausePlayOnPost } = props;
-
+  console.log(props);
+  const {
+    trackTitle,
+    artist,
+    playPause,
+    playing,
+    soundCloudAudio,
+    track,
+    trackId,
+    togglePausePlayOnPost,
+  } = props;
 
   useEffect(() => {
     if (playPause) {
-        soundCloudAudio.play();
+      soundCloudAudio.play();
     } else {
-        soundCloudAudio.pause();
+      soundCloudAudio.pause();
     }
-  }, [playPause])
+  }, [playPause]);
 
   const handleChange = () => {
     if (playing) {
-        soundCloudAudio.pause();
+      soundCloudAudio.pause();
     } else {
-        soundCloudAudio.play();
+      soundCloudAudio.play();
     }
-    togglePausePlayOnPost(trackId)
-  }
-  
+    togglePausePlayOnPost(trackId);
+  };
 
   return (
-    <Flex zIndex={60} position="sticky" bottom={0} bg="black" p={4} alignContent="center" justifyContent="space-between">
-        <Flex alignItems="center">
-      <PlayButton style={{ width: "20px", height: "20px", marginLeft:"2rem" }} {...props} onTogglePlay={() => handleChange()}/>
-      <Text ml={8}>{trackTitle}</Text>
-      <Text ml={8}>{artist}</Text>
+    <Flex
+      zIndex={60}
+      position="sticky"
+      bottom={0}
+      bg="black"
+      p={4}
+      alignContent="center"
+      justifyContent="space-between"
+    >
+      <Flex alignItems="center">
+        <PlayButton
+          style={{ width: "20px", height: "20px", marginLeft: "1rem" }}
+          {...props}
+          onTogglePlay={() => handleChange()}
+        />
+        <Text ml={8}>{trackTitle}</Text>
+        <Text ml={8}>{artist}</Text>
       </Flex>
       <Flex alignItems="center" width="50%">
-      <Progress
-        className="progress-bar"
-        innerClassName="rounded-left"
-        value={(props.currentTime / props.duration) * 100 || 0}
-        {...props}
-      />
+        <Progress
+          className="progress-bar"
+          innerClassName="rounded-left"
+          value={(props.currentTime / props.duration) * 100 || 0}
+          {...props}
+        />
       </Flex>
-    <Timer style={{ marginRight:"2rem" }} {...props} />
+      <Timer style={{ marginRight: "2rem" }} {...props} />
     </Flex>
   );
 });
 
 class AudioFooter extends React.Component<Props> {
-
   render() {
     return (
       <AudioPlayer
