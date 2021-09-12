@@ -1,5 +1,5 @@
 import { Box, Button, Flex } from "@chakra-ui/react";
-import { Formik, Form } from "formik";
+import { Form, Formik } from "formik";
 import { useCreateCommentMutation } from "generated/graphql";
 import router from "next/router";
 import React, { ReactElement } from "react";
@@ -26,7 +26,7 @@ function CreateComment({ postId, getNewComment }: Props): ReactElement {
           } else {
             getNewComment(postId, values)
             resetForm({ values: {text: ''} })
-            // router.push(`/post/${postId}`);
+            router.push(`/post/${postId}`);
           }
         }}
       >

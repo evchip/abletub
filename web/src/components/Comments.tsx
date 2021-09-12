@@ -1,20 +1,14 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Flex,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Text,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
-import router from "next/router";
 import React, { useEffect, useState } from "react";
 import { useCommentsQuery } from "../generated/graphql";
 import Comment from "./Comment";
-import SortMenu from "./SortMenu"
+import SortMenu from "./SortMenu";
 
 interface CommentsProps {
   postId: number;
@@ -36,9 +30,15 @@ export const Comments: React.FC<CommentsProps> = ({ postId, newComment }) => {
     variables,
   });
 
+  useEffect(() => {
+
+  
+    
+  }, [newComment])
+
   if ((!fetching && !data) || (!fetching && !data!.comments.comments[0])) {
     return (
-      <Box display="flex" justifyContent="center" mt={10}>
+      <Box display="flex" justifyContent="center" mt={10} minHeight="20">
         <Text color="white">
           there are no comments yet. why don't you start us off?
         </Text>
