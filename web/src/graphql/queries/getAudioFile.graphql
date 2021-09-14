@@ -1,3 +1,5 @@
 query getAudioFile {
-    getAudioFile
+    getAudioFile {
+        ...TrackInfo
+    }
 }

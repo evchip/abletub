@@ -1,4 +1,3 @@
-mutation setAudioFile ($audioFileName: String!) {
-    setAudioFile (audioFileName: $audioFileName)
-
+mutation setAudioFile ($trackInput: TrackInput!) {
+    setAudioFile (trackInput: $trackInput)
 }
