@@ -5,7 +5,7 @@ export default class Document extends NextDocument {
     return (
       <Html>
         <Head >
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="/baby-tub.ico" />
         </Head >
         <body>
           <Main />
