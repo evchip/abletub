@@ -40,7 +40,6 @@ export type Mutation = {
   createPost: _Post;
   updatePost?: Maybe<_Post>;
   deletePost: Scalars['Boolean'];
-  setAudioFile: Scalars['Boolean'];
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
   register: UserResponse;
@@ -71,11 +70,6 @@ export type MutationUpdatePostArgs = {
 
 export type MutationDeletePostArgs = {
   id: Scalars['Int'];
-};
-
-
-export type MutationSetAudioFileArgs = {
-  audioFileName: Scalars['String'];
 };
 
 
@@ -136,10 +130,8 @@ export type Query = {
   hello: Scalars['String'];
   posts: PaginatedPosts;
   post?: Maybe<_Post>;
-  getAudioFile?: Maybe<Scalars['String']>;
   me?: Maybe<User>;
   comment?: Maybe<Comment>;
-  getNewComment?: Maybe<Comment>;
   comments: PaginatedComments;
 };
 
@@ -360,16 +352,6 @@ export type S3SignMutation = (
   ) }
 );
 
-export type SetAudioFileMutationVariables = Exact<{
-  audioFileName: Scalars['String'];
-}>;
-
-
-export type SetAudioFileMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'setAudioFile'>
-);
-
 export type UpdatePostMutationVariables = Exact<{
   id: Scalars['Int'];
   title: Scalars['String'];
@@ -413,25 +395,6 @@ export type CommentsQuery = (
       & CommentSnippetFragment
     )> }
   ) }
-);
-
-export type GetAudioFileQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAudioFileQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'getAudioFile'>
-);
-
-export type GetNewCommentQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetNewCommentQuery = (
-  { __typename?: 'Query' }
-  & { getNewComment?: Maybe<(
-    { __typename?: 'Comment' }
-    & CommentSnippetFragment
-  )> }
 );
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
@@ -635,15 +598,6 @@ export const S3SignDocument = gql`
 export function useS3SignMutation() {
   return Urql.useMutation<S3SignMutation, S3SignMutationVariables>(S3SignDocument);
 };
-export const SetAudioFileDocument = gql`
-    mutation setAudioFile($audioFileName: String!) {
-  setAudioFile(audioFileName: $audioFileName)
-}
-    `;
-
-export function useSetAudioFileMutation() {
-  return Urql.useMutation<SetAudioFileMutation, SetAudioFileMutationVariables>(SetAudioFileDocument);
-};
 export const UpdatePostDocument = gql`
     mutation UpdatePost($id: Int!, $title: String!, $text: String!) {
   updatePost(id: $id, title: $title, text: $text) {
@@ -680,26 +634,6 @@ export const CommentsDocument = gql`
 
 export function useCommentsQuery(options: Omit<Urql.UseQueryArgs<CommentsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<CommentsQuery>({ query: CommentsDocument, ...options });
-};
-export const GetAudioFileDocument = gql`
-    query getAudioFile {
-  getAudioFile
-}
-    `;
-
-export function useGetAudioFileQuery(options: Omit<Urql.UseQueryArgs<GetAudioFileQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<GetAudioFileQuery>({ query: GetAudioFileDocument, ...options });
-};
-export const GetNewCommentDocument = gql`
-    query getNewComment {
-  getNewComment {
-    ...CommentSnippet
-  }
-}
-    ${CommentSnippetFragmentDoc}`;
-
-export function useGetNewCommentQuery(options: Omit<Urql.UseQueryArgs<GetNewCommentQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<GetNewCommentQuery>({ query: GetNewCommentDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {
