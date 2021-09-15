@@ -16,7 +16,6 @@ import { UpvoteSection } from "../components/UpvoteSection";
 import { usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { format } from "timeago.js";
-import AudioFooter from "components/AudioFooter";
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -26,25 +25,6 @@ const Index = () => {
   const [{ data, error, fetching }] = usePostsQuery({
     variables,
   });
-
-  const [songInfo, setSongInfo] = useState({
-    title: "",
-    artist: "",
-    audioURL: "",
-    trackId: 0,
-  });
-  const [playPause, setPlayPause] = useState(false);
-
-  const assignPostPlaying = (
-    audioURL: string,
-    artist: string,
-    title: string,
-    playPause: boolean,
-    trackId: number
-  ): void => {
-    setPlayPause(playPause);
-    setSongInfo({ title, artist, audioURL, trackId });
-  };
 
   if (!fetching && !data) {
     return (
@@ -59,9 +39,9 @@ const Index = () => {
     <>
       <Layout>
         {!data && fetching ? (
-          <Box width="100%" m="auto">
-            <Heading>Loading...</Heading>
-          </Box>
+          <Flex width="100%" m="auto" mt={10} justifyContent="center">
+            <Heading>loading...</Heading>
+          </Flex>
         ) : (
           <HStack align="center" justify="center" flexWrap="wrap" width="100%">
             {data!.posts.posts.map((p, i) =>
@@ -91,8 +71,6 @@ const Index = () => {
                       {p.imageFileName !== null ? (
                         <S3Image
                           post={p}
-                          assignPostPlaying={assignPostPlaying}
-                          songInfo={songInfo}
                         />
                       ) : null}
                     </Box>
@@ -171,15 +149,6 @@ const Index = () => {
           </Flex>
         ) : null}
       </Layout>
-      {songInfo.audioURL !== "" ? (
-        <AudioFooter
-          streamURL={songInfo.audioURL}
-          trackTitle={songInfo.title}
-          artist={songInfo.artist}
-          playPause={playPause}
-          trackId={songInfo.trackId}
-        />
-      ) : null}
     </>
   );
 };

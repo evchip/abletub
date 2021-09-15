@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, Flex } from "@chakra-ui/react";
 import { Wrapper } from "../components/Wrapper";
 import { InputField } from "../components/InputField";
 import { useRegisterMutation } from "../generated/graphql";
@@ -16,8 +16,9 @@ const Register: React.FC<registerProps> = ({}) => {
   const [, register] = useRegisterMutation();
   return (
     <Wrapper >
+      <Flex w="100%" justifyContent="center">
       <Box
-        width="30%"
+        width="20rem"
         display="flex"
         justifyContent="center"
         p={10}
@@ -46,32 +47,35 @@ const Register: React.FC<registerProps> = ({}) => {
             <Form>
               <InputField
                 name="username"
-                placeholder="username"
-                label="Username"
+                placeholder="rlgrime92"
+                label="username"
               />
               <Box mt={4}>
-                <InputField name="email" placeholder="email" label="Email" />
+                <InputField name="email" placeholder="henry@core.com" label="email" />
               </Box>
               <Box mt={4}>
                 <InputField
                   name="password"
-                  placeholder="password"
-                  label="Password"
+                  placeholder="vO!d^Mons00n"
+                  label="password"
                   type="password"
                 />
               </Box>
+              <Flex mt={8} justifyContent="center">
               <Button
-                mt={4}
+                
                 type="submit"
                 isLoading={isSubmitting}
                 colorScheme="pink"
               >
                 Register
               </Button>
+              </Flex>
             </Form>
           )}
         </Formik>
       </Box>
+      </Flex>
     </Wrapper>
   );
 };
