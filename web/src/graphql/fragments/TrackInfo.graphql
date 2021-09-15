@@ -1,6 +1,0 @@
-fragment TrackInfo on TrackOutput {
-    audioURL
-    audioFileName
-    artist
-    isPlaying
-}
