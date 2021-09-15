@@ -3,19 +3,19 @@ import {
   Button,
   Flex,
   Text,
-  VStack
+  VStack,
+  Heading
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useCommentsQuery } from "../generated/graphql";
 import Comment from "./Comment";
 import SortMenu from "./SortMenu";
 
 interface CommentsProps {
   postId: number;
-  newComment: any;
 }
 
-export const Comments: React.FC<CommentsProps> = ({ postId, newComment }) => {
+export const Comments: React.FC<CommentsProps> = ({ postId}) => {
   const [variables, setVariables] = useState({
     postId,
     limit: 50,
@@ -29,12 +29,6 @@ export const Comments: React.FC<CommentsProps> = ({ postId, newComment }) => {
   const [{ data, error, fetching }] = useCommentsQuery({
     variables,
   });
-
-  useEffect(() => {
-
-  
-    
-  }, [newComment])
 
   if ((!fetching && !data) || (!fetching && !data!.comments.comments[0])) {
     return (
@@ -50,19 +44,13 @@ export const Comments: React.FC<CommentsProps> = ({ postId, newComment }) => {
   return (
     <Box>
       {!data && fetching ? (
-        <div>loading...</div>
+        <Flex width="100%" m="auto" mt={10} justifyContent="center">
+          <Heading>loading...........</Heading>
+        </Flex>
       ) : (
         <>
         <SortMenu handleSort={handleSort}/>
           <VStack align="center" flexWrap="wrap" width="100%" my={5}>
-            {newComment.text ? (
-              <Comment
-                i={newComment.i}
-                text={newComment.text}
-                creator={newComment.creator}
-                createdAt={newComment.createdAt}
-              />
-            ) : null}
             {data!.comments.comments.map((c, i) =>
               !c ? null : (
                 <Comment

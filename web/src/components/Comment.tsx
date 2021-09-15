@@ -37,13 +37,13 @@ function Comment({ i, text, creator, createdAt }: Props): ReactElement {
         direction="column"
       >
         <Flex align="left" width="80%" m="auto">
-          <Text fontSize="md">{text}</Text>
+          <Text fontSize={["xs", "sm", "md"]}>{text}</Text>
         </Flex>
         <Flex direction="row" justifyContent="flex-end" width="100%" mt={2}>
-          <Text fontSize="md" mr={2}>
+          <Text fontSize={["xs", "sm", "md"]} mr={2}>
             {creator.username}
           </Text>
-          <Text fontSize="md" mr={2}>
+          <Text fontSize={["xs", "sm", "md"]} mr={2}>
             {format(createdAt)}
           </Text>
         </Flex>
