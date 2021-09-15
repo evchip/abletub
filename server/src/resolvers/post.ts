@@ -26,6 +26,31 @@ class PaginatedPosts {
     hasMore?: boolean;
 }
 
+@InputType()
+class TrackInput {
+    @Field()
+    audioURL: string
+    @Field()
+    audioFileName: string
+    @Field()
+    artist: string
+    @Field()
+    isPlaying: boolean
+}
+
+
+@ObjectType()
+class TrackOutput {
+    @Field()
+    audioURL: string
+    @Field()
+    audioFileName: string
+    @Field()
+    artist: string
+    @Field()
+    isPlaying: boolean
+}
+
 @Resolver(Post)
 export class PostResolver {
 
@@ -184,29 +209,6 @@ export class PostResolver {
         // cascades delete on postgres
         await Post.delete({id, creatorId: req.session.userId})
         return true;
-    }
-
-    @Mutation(() => Boolean)
-    @UseMiddleware(isAuth)
-    async setAudioFile(
-        @Arg("audioFileName") audioFileName: string,
-        @Ctx() { req }: MyContext
-    ): Promise<boolean> {
-
-        req.session.audioFile = audioFileName
-        return true
-    }
-
-    @Query(() => String, { nullable: true })
-    @UseMiddleware(isAuth)
-    async getAudioFile(
-        @Ctx() { req }: MyContext
-    ): Promise<string> {
-        if (!req.session) {
-            return "null"
-        }
-        const audioURL: string = req!.session!.audioFile as any;
-        return audioURL;
     }
 
 

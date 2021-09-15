@@ -57,18 +57,6 @@ export class CommentResolver {
       postId,
     }).save();
 
-    req.session.newComment = newComment;
-    return newComment;
-  }
-
-  @Query(() => Comment, { nullable: true })
-  async getNewComment(@Ctx() { req }: MyContext) {
-    // no new comment by this user
-    if (!req.session.newComment) {
-      return null;
-    }
-
-    const newComment = await Comment.findOne(req.session.newComment.id);
     return newComment;
   }
 
