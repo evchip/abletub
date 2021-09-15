@@ -3,15 +3,12 @@ import { _Post, PostSnippetFragment } from "generated/graphql";
 import React from "react";
 import PlayPauseAudioFC from "./PlayPauseAudioFC";
 
-type assignPostPlayingType = (audioURL: string, artist: string, title: string, playPause: boolean, trackId: number ) => any;
-
 interface S3ImageProps {
-  assignPostPlaying: assignPostPlayingType;
-  post: PostSnippetFragment;
-  songInfo: {title: string, artist: string, audioURL: string, trackId: number}
+  post: Pick<_Post, "id" | "createdAt" | "updatedAt" | "title" | "points" | "audioFileName" | "imageFileName" | "text" | "voteStatus"> | undefined;
 }
 
-function S3Image({post, assignPostPlaying, songInfo}: S3ImageProps) {
+function S3Image({post}: S3ImageProps) {
+
   if (!post) {
     return <Box>?</Box>;
   }
@@ -29,8 +26,6 @@ function S3Image({post, assignPostPlaying, songInfo}: S3ImageProps) {
         <div className="port-text">
           <PlayPauseAudioFC
             post={post}
-            assignPostPlaying={assignPostPlaying}
-            songInfo={songInfo}
           />
         </div>
       </Box>

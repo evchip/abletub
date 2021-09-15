@@ -1,20 +1,20 @@
-import { ChakraProvider, ColorModeProvider } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 import theme from '../theme';
-import { extendTheme } from "@chakra-ui/react"
 import '../styles/globals.css'
+import { TrackContext } from '../utils/trackContext';
+import { useState } from 'react';
+import FooterWrapper from '../components/FooterWrapper'
 
 function MyApp({ Component, pageProps }: any) {
+  const [track, setTrack] = useState()
+
   return (
 
     <ChakraProvider resetCSS theme={theme}>
-      <ColorModeProvider
-        options={{
-          useSystemColorMode: false,
-          initialColorMode: "dark",
-        }}
-      >
+      <TrackContext.Provider value={{track, setTrack}}>
         <Component {...pageProps} />
-      </ColorModeProvider>
+        <FooterWrapper />
+      </TrackContext.Provider >
     </ChakraProvider>
   )
 }

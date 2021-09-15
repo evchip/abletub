@@ -11,30 +11,14 @@ import { useGetPostFromUrl } from "../../utils/useGetPostfromUrl";
 import { format } from "timeago.js";
 import { UpvoteSection } from "components/UpvoteSection";
 
+
 interface PostProps {
-  assignPostPlaying(
-    audioURL: string,
-    artist: string,
-    title: string,
-    playPause: boolean,
-    trackId: number
-  ): void;
-  playingTrackId: number;
+
 }
 
-const Post = ({ assignPostPlaying, playingTrackId }: PostProps) => {
+const Post = ({ }: PostProps) => {
   const [{ data, error, fetching }] = useGetPostFromUrl();
-  const [newComment, setNewComment] = useState({});
 
-  const getNewComment = async (postId: number, values: { text: string }) => {
-    const now = new Date();
-    setNewComment({
-      text: values.text,
-      creator: { username: "you" },
-      createdAt: now,
-      i: 0,
-    });
-  };
 
   if (fetching) {
     return (
@@ -73,8 +57,8 @@ const Post = ({ assignPostPlaying, playingTrackId }: PostProps) => {
           borderTop="none"
           minH="xs"
         >
-          <Box display="flex" direction="row" justifyContent="space-between">
-            <Box width="70%">
+          <Box display="flex" justifyContent="space-between">
+            <Box >
               <Heading mb={4} color="white" fontSize={["medium", "large", "x-large"]}>
                 {data.post.title}
               </Heading>
@@ -102,8 +86,6 @@ const Post = ({ assignPostPlaying, playingTrackId }: PostProps) => {
               {data.post.imageFileName !== null ? (
                 <S3Image
                   post={data.post}
-                  assignPostPlaying={assignPostPlaying}
-                  playingTrackId={playingTrackId}
                 />
               ) : null}
             </Box>
@@ -128,8 +110,8 @@ const Post = ({ assignPostPlaying, playingTrackId }: PostProps) => {
           </Flex>
         </Flex>
       </Box>
-      <CreateComment postId={data.post.id} getNewComment={getNewComment} />
-      <Comments postId={data.post.id} newComment={newComment} />
+      <CreateComment pageProps={data.post.id} postId={data.post.id} />
+      <Comments postId={data.post.id} />
       </Flex>
     </Layout>
   );

@@ -1,37 +1,48 @@
-import { useGetAudioFileQuery } from "generated/graphql";
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import React, { useEffect, useContext } from "react";
 import { PlayButton, Timer, Progress } from "react-soundplayer/components";
 import { withCustomAudio } from "react-soundplayer/addons";
 import { Flex, Text } from "@chakra-ui/react";
-import { useSpring, animated, Spring } from "react-spring";
+import { TrackContext } from "utils/trackContext";
 
 interface Props {
-  streamURL: string;
-  trackTitle: string;
+  streamUrl: string;
+  title: string;
   artist: string;
-  playPause: boolean;
+  isPlaying: boolean;
   trackId: number;
 }
 
-const AudioPlayer = withCustomAudio((props) => {
-  const { trackTitle, artist, playPause, playing, soundCloudAudio, track } =
+const AudioPlayer = withCustomAudio((props: any) => {
+  const { streamUrl, trackTitle, artist, isPlaying, playing, soundCloudAudio, trackId} =
     props;
+    const { track, setTrack } = useContext(TrackContext);
+
+    const songInfo = {
+      title: trackTitle,
+      artist,
+      streamUrl,
+      trackId,
+      isPlaying
+    };
 
   useEffect(() => {
-    if (playPause) {
+
+    if (isPlaying) {
       soundCloudAudio.play();
     } else {
       soundCloudAudio.pause();
     }
-  }, [playPause]);
+  }, [isPlaying, trackId]);
 
   const handleChange = () => {
     if (playing) {
       soundCloudAudio.pause();
+      songInfo.isPlaying = false;
     } else {
       soundCloudAudio.play();
+      songInfo.isPlaying = true;
     }
+    setTrack(songInfo)
   };
 
   return (
@@ -44,14 +55,15 @@ const AudioPlayer = withCustomAudio((props) => {
       alignContent="center"
       justifyContent="space-between"
     >
-      <Flex alignItems="center">
+      <Flex alignItems="center" >
         <PlayButton
           style={{ width: "20px", height: "20px", marginLeft: "1rem" }}
           {...props}
           onTogglePlay={() => handleChange()}
         />
+        <Flex direction={[ "column", "row"]}>
         <Text
-          ml={8}
+          ml={4}
           width="10rem"
           overflow="hidden"
           whiteSpace="nowrap"
@@ -68,6 +80,7 @@ const AudioPlayer = withCustomAudio((props) => {
         >
           {artist}
         </Text>
+        </Flex>
       </Flex>
       <Flex alignItems="center" width={["20%", "30%", "60%"]}>
         <Progress
@@ -77,20 +90,22 @@ const AudioPlayer = withCustomAudio((props) => {
           {...props}
         />
       </Flex>
-      <Timer style={{ marginRight: "2rem", marginLeft:"2rem" }} {...props} />
+      <Timer style={{ marginRight: "2rem", marginLeft: "2rem" }} {...props} />
     </Flex>
   );
 });
 
 class AudioFooter extends React.Component<Props> {
+  
+
   render() {
     return (
       <AudioPlayer
-        streamUrl={this.props.streamURL}
-        trackTitle={this.props.trackTitle}
+        streamUrl={this.props.streamUrl}
+        trackTitle={this.props.title}
         artist={this.props.artist}
-        playPause={this.props.playPause}
-        playing={this.props.playPause}
+        isPlaying={this.props.isPlaying}
+        trackId={this.props.trackId}
       />
     );
   }

@@ -7,7 +7,7 @@ import {
 } from "../generated/graphql";
 
 interface UpvoteSectionProps {
-  post: _Post;
+  post: { __typename?: "_Post" | undefined; } & { __typename?: "_Post" | undefined; } & Pick<_Post, "title" | "id" | "createdAt" | "updatedAt" | "points" | "audioFileName" | "imageFileName" | "textSnippet" | "voteStatus">;
   variant: string;
   fontVariant: string;
 }

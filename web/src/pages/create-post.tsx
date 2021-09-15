@@ -1,4 +1,4 @@
-import { Box, Button, extendTheme, Text, Input, Flex } from "@chakra-ui/react";
+import { Box, Button, Text, Input, Flex } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
@@ -184,10 +184,11 @@ const CreatePost: React.FC<{}> = ({}) => {
                   const imageFileName = await onChange(e);
                   setFieldValue("imageFileName", imageFileName);
 
-                  if (e!.target!.files[0]) {
-                    setPictureName(e!.target!.files[0].name!);
+                  if (e!.target!.files![0]) {
+                    setPictureName(e!.target!.files![0].name!);
+                    setFieldValue("imageFileSize", e.target.files![0].size);
                   }
-                  setFieldValue("imageFileSize", e.target.files[0].size);
+                  
                 }}
                 name="image"
                 id="file"
@@ -207,8 +208,12 @@ const CreatePost: React.FC<{}> = ({}) => {
               <Input
                 onChange={async (e) => {
                   const audioFileName = await onChange(e);
-                  setFieldValue("audioFileName", audioFileName);
-                  setFieldValue("audioFileSize", e.target.files[0].size);
+                  if (e!.target!.files![0]) {
+                    setFieldValue("audioFileName", audioFileName);
+                    setFieldValue("audioFileSize", e!.target!.files![0].size);
+                  }
+                  
+                  
                 }}
                 name="audio"
                 mt={2}

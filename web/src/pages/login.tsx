@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { Box, Button, Link, Flex } from "@chakra-ui/react";
+import { Box, Button, Link, Flex, Text } from "@chakra-ui/react";
 import { Wrapper } from "../components/Wrapper";
 import { InputField } from "../components/InputField";
 import { useLoginMutation } from "../generated/graphql";
@@ -17,8 +17,9 @@ const Login: React.FC<{}> = ({}) => {
   const [, login] = useLoginMutation();
   return (
     <Wrapper>
+      <Flex w="100%" justifyContent="center">
       <Box
-        width="30%"
+        width="20rem"
         display="flex"
         justifyContent="center"
         p={10}
@@ -52,13 +53,13 @@ const Login: React.FC<{}> = ({}) => {
             <Form>
               <InputField
                 name="usernameOrEmail"
-                placeholder="username or email"
+                placeholder="rlgrime92"
                 label="username or email"
               />
               <Box mt={4}>
                 <InputField
                   name="password"
-                  placeholder="password"
+                  placeholder="vO!d^Mons00n"
                   label="password"
                   type="password"
                 />
@@ -66,10 +67,11 @@ const Login: React.FC<{}> = ({}) => {
               <Flex mt={2}>
                 <Box ml="auto">
                   <NextLink href="/forgot-password">
-                    <Link>forgot password?</Link>
+                    <Link><Text>forgot password?</Text></Link>
                   </NextLink>
                 </Box>
               </Flex>
+              <Flex mt={8} justifyContent="center">
               <Button
                 mt={4}
                 type="submit"
@@ -78,10 +80,12 @@ const Login: React.FC<{}> = ({}) => {
               >
                 login
               </Button>
+              </Flex>
             </Form>
           )}
         </Formik>
       </Box>
+      </Flex>
     </Wrapper>
   );
 };

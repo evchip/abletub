@@ -186,28 +186,5 @@ export class PostResolver {
         return true;
     }
 
-    @Mutation(() => Boolean)
-    @UseMiddleware(isAuth)
-    async setAudioFile(
-        @Arg("audioFileName") audioFileName: string,
-        @Ctx() { req }: MyContext
-    ): Promise<boolean> {
-
-        req.session.audioFile = audioFileName
-        return true
-    }
-
-    @Query(() => String, { nullable: true })
-    @UseMiddleware(isAuth)
-    async getAudioFile(
-        @Ctx() { req }: MyContext
-    ): Promise<string> {
-        if (!req.session) {
-            return "null"
-        }
-        const audioURL: string = req!.session!.audioFile as any;
-        return audioURL;
-    }
-
 
 }

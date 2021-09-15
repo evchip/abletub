@@ -34,16 +34,16 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
     // user not logged in
   } else if (!data?.me) {
     body = (
-      <>
+      <Flex >
         <NextLink href="/login">
           <Link color="white" mr={4}>
-            Login
+            <Text>login</Text>
           </Link>
         </NextLink>
         <NextLink href="/register">
-          <Link color="white">Register</Link>
+          <Link color="white"><Text>register</Text></Link>
         </NextLink>
-      </>
+      </Flex>
     );
 
     // user is logged in
