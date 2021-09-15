@@ -26,31 +26,6 @@ class PaginatedPosts {
     hasMore?: boolean;
 }
 
-@InputType()
-class TrackInput {
-    @Field()
-    audioURL: string
-    @Field()
-    audioFileName: string
-    @Field()
-    artist: string
-    @Field()
-    isPlaying: boolean
-}
-
-
-@ObjectType()
-class TrackOutput {
-    @Field()
-    audioURL: string
-    @Field()
-    audioFileName: string
-    @Field()
-    artist: string
-    @Field()
-    isPlaying: boolean
-}
-
 @Resolver(Post)
 export class PostResolver {
 
