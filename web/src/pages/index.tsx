@@ -65,7 +65,6 @@ const Index = () => {
                     bgColor="blackAlpha.800"
                     borderBottomRadius="30px"
                     borderColor="pink.200"
-                    borderTop="none"
                   >
                     <Box display="flex" justifyContent="center">
                       {p.imageFileName !== null ? (
@@ -84,7 +83,7 @@ const Index = () => {
                               whiteSpace="nowrap"
                               textOverflow="ellipsis"
                             >
-                              {p.title}
+                              {p.title || "untitled"} 
                             </Heading>
                           </Link>
                         </NextLink>

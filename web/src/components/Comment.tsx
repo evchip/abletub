@@ -27,7 +27,6 @@ function Comment({ i, text, creator, createdAt }: Props): ReactElement {
       width="100%"
       borderBottomRadius="30px"
       borderColor="pink.200"
-      borderTop="none"
       style={{marginTop: "20px "}}
     >
       <Flex
