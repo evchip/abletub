@@ -8,6 +8,7 @@ import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/dist/client/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { Layout } from "components/Layout";
 
 interface registerProps {}
 
@@ -15,7 +16,7 @@ const Register: React.FC<registerProps> = ({}) => {
   const router = useRouter();
   const [, register] = useRegisterMutation();
   return (
-    <Wrapper >
+    <Layout >
       <Flex w="100%" justifyContent="center">
       <Box
         width="20rem"
@@ -76,7 +77,7 @@ const Register: React.FC<registerProps> = ({}) => {
         </Formik>
       </Box>
       </Flex>
-    </Wrapper>
+    </Layout>
   );
 };
 

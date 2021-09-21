@@ -9,6 +9,7 @@ import { useRouter } from "next/dist/client/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import NextLink from "next/link";
+import { Layout } from "components/Layout";
 
 interface loginProps {}
 
@@ -16,7 +17,7 @@ const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [, login] = useLoginMutation();
   return (
-    <Wrapper>
+    <Layout>
       <Flex w="100%" justifyContent="center">
       <Box
         width="20rem"
@@ -86,7 +87,7 @@ const Login: React.FC<{}> = ({}) => {
         </Formik>
       </Box>
       </Flex>
-    </Wrapper>
+    </Layout>
   );
 };
 
