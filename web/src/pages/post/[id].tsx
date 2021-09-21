@@ -1,15 +1,16 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
-import { Comments } from "components/Comments";
-import CreateComment from "components/CreateComment";
-import S3Image from "components/Image";
+import { Comments } from "components/Comments/Comments";
+import CreateComment from "components/Comments/CreateComment";
+import S3Image from "components/Posts/Image";
 import { withUrqlClient } from "next-urql";
 import React, { useState } from "react";
-import { EditDeletePostBtns } from "../../components/EditDeletePostBtns";
+import { EditDeletePostBtns } from "../../components/Posts/EditDeletePostBtns";
 import { Layout } from "../../components/Layout";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useGetPostFromUrl } from "../../utils/useGetPostfromUrl";
 import { format } from "timeago.js";
-import { UpvoteSection } from "components/UpvoteSection";
+import { UpvoteSection } from "components/Posts/UpvoteSection";
+import IPFSImage from "components/Posts/IPFSImage";
 
 
 interface PostProps {
@@ -83,8 +84,8 @@ const Post = ({ }: PostProps) => {
               </Flex>
             </Box>
             <Box display="flex" direction="row" alignItems="center">
-              {data.post.imageFileName !== null ? (
-                <S3Image
+              {data.post.imageFileName !== null && data.post.imageFileName.startsWith("bafy") ? (
+                <IPFSImage
                   post={data.post}
                 />
               ) : null}
