@@ -1,5 +1,5 @@
 {
-  "name": "with-chakra-ui",
+  "name": "abletub-frontend",
   "version": "0.1.0",
   "scripts": {
     "dev": "next dev",
@@ -8,7 +8,7 @@
     "gen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^1.0.14",
+    "@chakra-ui/icons": "^1.0.15",
     "@chakra-ui/react": "^1.6.4",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.3.0",
@@ -35,6 +35,7 @@
     "timeago.js": "^4.0.2",
     "urql": "^2.0.4",
     "wavesurfer.js": "^5.2.0",
+    "web3.storage": "^3.3.2",
     "yup": "^0.32.9"
   },
   "license": "MIT",
