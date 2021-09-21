@@ -52,6 +52,7 @@ const Index = () => {
                   justifyContent="center"
                   width="360px"
                   style={{ margin: "0px" }}
+                  className="post-card"
                 >
                   <Flex
                     style={{ margin: "20px 0px" }}
