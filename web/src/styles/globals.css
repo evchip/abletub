@@ -11,6 +11,14 @@ html, .chakra-ui-dark, #__next {
   max-width: 250px;
 }
 
+.post-card {
+  transition: .5s ease;
+}
+
+.post-card:hover {
+  transform: scale(1.05);
+}
+
 .port-img-overlay {
     position: absolute;
     top: 0;
@@ -62,10 +70,22 @@ input#file {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  background: url('https://cdn1.iconfinder.com/data/icons/hawcons/32/698394-icon-130-cloud-upload-512.png') center center no-repeat #000000;
   border-color: #FBB6CE;
   border-radius: 10px;
   background-size: 50px 50px;
+}
+
+input.audio-file {
+  background: url('https://cdn2.iconfinder.com/data/icons/frosted-glass/512/Volume.png') center center no-repeat #000000;
+}
+
+input.image-file {
+  background: url('https://cdn2.iconfinder.com/data/icons/frosted-glass/512/Gallery.png') center center no-repeat #000000;
+}
+
+.glowing-text:hover {
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.521), 0 0 10px rgba(255, 255, 255, 0.541), 0 0 30px #ffc3f593, 0 0 40px #ffc3f5c7, 0 0 30px #fbb6ce, 0 0 30px #ffc3f5c7, 0 0 30px #fbb6cea8;
+  display: inline-block;
 }
 
 .rounded-left { 
