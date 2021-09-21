@@ -1,4 +1,4 @@
-import { Box, Button, Text, Input, Flex } from "@chakra-ui/react";
+import { Box, Button, Text, Input, Flex, Heading } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
@@ -160,6 +160,9 @@ const CreatePost: React.FC<{}> = ({}) => {
 
   return (
     <Layout variant="small">
+      <Box display="flex" justifyContent="center">
+        <Heading >upload your track</Heading>
+      </Box>
       <Formik
         initialValues={{
           title: "",
@@ -243,6 +246,7 @@ const CreatePost: React.FC<{}> = ({}) => {
                 }}
                 name="image"
                 id="file"
+                className="image-file"
                 type="file"
                 accept="image/*"
                 mt={2}
@@ -269,6 +273,7 @@ const CreatePost: React.FC<{}> = ({}) => {
                 name="audio"
                 mt={2}
                 id="file"
+                className="audio-file"
                 type="file"
                 accept=".mp3"
               ></Input>
