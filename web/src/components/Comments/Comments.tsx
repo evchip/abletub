@@ -7,9 +7,9 @@ import {
   Heading
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { useCommentsQuery } from "../generated/graphql";
+import { useCommentsQuery } from "../../generated/graphql";
 import Comment from "./Comment";
-import SortMenu from "./SortMenu";
+import SortMenu from "../SortMenu";
 
 interface CommentsProps {
   postId: number;

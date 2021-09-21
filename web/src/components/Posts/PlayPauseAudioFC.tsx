@@ -55,6 +55,7 @@ function PlayPauseAudioFC({ post }: PlayPauseButtonProps) {
           onClick={handlePause}
           variant="ghost"
           size="lg"
+          className="play-pause-icon"
         />
       ) : (
         <IconButton
@@ -66,6 +67,7 @@ function PlayPauseAudioFC({ post }: PlayPauseButtonProps) {
           onClick={handlePlay}
           variant="ghost"
           size="lg"
+          className="play-pause-icon"
         />
       )}
     </Box>

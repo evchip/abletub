@@ -71,7 +71,7 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
             
           </MenuButton>
           <MenuList bgColor="black" borderColor="pink.200" borderWidth="1px">
-            <NextLink href="/create-post">
+            <NextLink href="/upload-post">
               <MenuItem
                 as={Link}
                 style={{ textDecoration: "none" }}
