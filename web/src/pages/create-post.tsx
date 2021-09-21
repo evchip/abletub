@@ -11,6 +11,7 @@ import { useIsAuth } from "../utils/useIsAuth";
 import { useS3SignMutation } from "../generated/graphql";
 import axios from "axios";
 import * as Yup from "yup";
+import { Web3Storage } from "web3.storage";
 
 const CreatePost: React.FC<{}> = ({}) => {
   const router = useRouter();
@@ -109,6 +110,54 @@ const CreatePost: React.FC<{}> = ({}) => {
     return fileUrl;
   };
 
+
+  // IPFS
+  const uploadToIPFS = async (files: File[]) => {
+
+    const getAccessToken = () => {
+        return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGY5RGIxZDcwNzI2NjBCNjM4YjI0QWIwQjFGOEQ5OGFGZWNhZTlERUYiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2MzIxNjk0NTI3NjcsIm5hbWUiOiJhYmxldHViIn0.fFhf0CfKqDOST6pADwgrffCz4P2AU5_FwmLOcMcxws4" as string;
+      }
+
+    const makeStorageClient = () => {
+        const client = new Web3Storage({ token: getAccessToken() })
+        return client
+      }
+
+    const storeFiles = async (files: File[]) => {
+        const client = makeStorageClient()
+        console.log('client', client)
+        const cid = await client.put(files)
+        console.log('stored files with cid:', cid)
+        return cid
+    }
+
+    const result = await storeFiles(files)
+    return result
+    
+  }
+
+  const makeFileObjects = async (uploads: FileList | null) => {
+    console.log('uploads', uploads)
+
+    if (uploads) {
+      await uploads[0].arrayBuffer().then((res) => {
+        console.log('bufferPromise', res)
+
+        const blob = new Blob([new Uint8Array(res)], {type : 'file'})
+        console.log('blob', blob)
+        const files = [
+          new File(['contents-of-file-1'], 'plain-utf8.txt'),
+          new File([blob], uploads[0].name)
+        ]
+        return uploadToIPFS(files)
+      })
+       
+    } else {
+      return null
+    }
+
+  }
+
   return (
     <Layout variant="small">
       <Formik
@@ -122,6 +171,7 @@ const CreatePost: React.FC<{}> = ({}) => {
         }}
         validationSchema={PostSchema}
         onSubmit={async (values) => {
+          
           if (audioFile) {
             await uploadToS3(audioFile!, audioSignedReq);
           }
@@ -181,6 +231,7 @@ const CreatePost: React.FC<{}> = ({}) => {
               <Text>upload image ({"<"} 15 mb)</Text>
               <Input
                 onChange={async (e) => {
+                  await makeFileObjects(e.target.files)
                   const imageFileName = await onChange(e);
                   setFieldValue("imageFileName", imageFileName);
 
