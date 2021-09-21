@@ -12,6 +12,7 @@ import { useS3SignMutation } from "../generated/graphql";
 import axios from "axios";
 import * as Yup from "yup";
 import { Web3Storage } from "web3.storage";
+import UploadTrack from "components/UploadTrack";
 
 const CreatePost: React.FC<{}> = ({}) => {
   const router = useRouter();
@@ -24,6 +25,7 @@ const CreatePost: React.FC<{}> = ({}) => {
   const [pictureName, setPictureName] = useState("");
   const [, s3Sign] = useS3SignMutation();
   const [{ data, fetching }] = useMeQuery();
+  const [CIDAddress, setCIDAddress] = useState("")
 
   const PostSchema = Yup.object().shape({
     audioFileSize: Yup.number()
@@ -128,6 +130,7 @@ const CreatePost: React.FC<{}> = ({}) => {
         console.log('client', client)
         const cid = await client.put(files)
         console.log('stored files with cid:', cid)
+        setCIDAddress(cid)
         return cid
     }
 
@@ -141,7 +144,6 @@ const CreatePost: React.FC<{}> = ({}) => {
 
     if (uploads) {
       await uploads[0].arrayBuffer().then((res) => {
-        console.log('bufferPromise', res)
 
         const blob = new Blob([new Uint8Array(res)], {type : 'file'})
         console.log('blob', blob)
@@ -149,7 +151,8 @@ const CreatePost: React.FC<{}> = ({}) => {
           new File(['contents-of-file-1'], 'plain-utf8.txt'),
           new File([blob], uploads[0].name)
         ]
-        return uploadToIPFS(files)
+        const CID = uploadToIPFS(files)
+        return CID
       })
        
     } else {
@@ -187,7 +190,7 @@ const CreatePost: React.FC<{}> = ({}) => {
               title: values.title,
               text: values.text,
               audioFileName: values.audioFileName,
-              imageFileName: values.imageFileName,
+              imageFileName: CIDAddress,
             },
           });
           if (error) {
@@ -294,6 +297,7 @@ const CreatePost: React.FC<{}> = ({}) => {
           </Form>
         )}
       </Formik>
+      <UploadTrack />
     </Layout>
   );
 };
