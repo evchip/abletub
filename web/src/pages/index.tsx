@@ -7,17 +7,18 @@ import {
   Link,
   Text,
 } from "@chakra-ui/react";
-import S3Image from "components/Image";
+import S3Image from "components/Posts/Image";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import React, { useState } from "react";
 import { Layout } from "../components/Layout";
-import { UpvoteSection } from "../components/UpvoteSection";
+import { UpvoteSection } from "../components/Posts/UpvoteSection";
 import { usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { format } from "timeago.js";
 
 const Index = () => {
+  const [imgClass, setImgClass] = useState("")
   const [variables, setVariables] = useState({
     limit: 12,
     cursor: null as null | string,
@@ -52,7 +53,7 @@ const Index = () => {
                   justifyContent="center"
                   width="360px"
                   style={{ margin: "0px" }}
-                  className="post-card"
+                  
                 >
                   <Flex
                     style={{ margin: "20px 0px" }}
@@ -66,6 +67,8 @@ const Index = () => {
                     bgColor="blackAlpha.800"
                     borderBottomRadius="30px"
                     borderColor="pink.200"
+                    className="post-card"
+                    onMouseEnter={() => setImgClass("pink")}
                   >
                     <Box display="flex" justifyContent="center">
                       {p.imageFileName !== null ? (
@@ -83,6 +86,7 @@ const Index = () => {
                               overflow="hidden"
                               whiteSpace="nowrap"
                               textOverflow="ellipsis"
+                              color={imgClass}
                             >
                               {p.title || "untitled"} 
                             </Heading>
