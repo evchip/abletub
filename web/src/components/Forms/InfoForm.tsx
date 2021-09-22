@@ -23,45 +23,7 @@ const genres = [
   }
 ];
 
-const states = [
-  {
-    value: undefined,
-    label: 'None'
-  },
-  {
-    value: '11',
-    label: 'Florida'
-  },
-  {
-    value: '22',
-    label: 'Michigan'
-  },
-  {
-    value: '33',
-    label: 'Texas'
-  }
-];
-
-const countries = [
-  {
-    value: null,
-    label: 'None'
-  },
-  {
-    value: '111',
-    label: 'United States'
-  },
-  {
-    value: '222',
-    label: 'Italy'
-  },
-  {
-    value: '333',
-    label: 'Vietnam'
-  }
-];
-
-export default function AddressForm(props) {
+export default function InfoForm(props) {
   const {
     formField: {
       trackName,
