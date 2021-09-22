@@ -78,7 +78,7 @@ export const Comments: React.FC<CommentsProps> = ({ postId}) => {
                     .createdAt,
               });
             }}
-            colorScheme="teal"
+            colorScheme="pink"
             variant="solid"
             m="auto"
             my={8}
