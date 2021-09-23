@@ -1,42 +1,37 @@
-import { Box, FormControl, Input, Text, Flex, Heading, FormErrorMessage, Textarea } from "@chakra-ui/react";
-import { FieldAttributes, FieldHookConfig, FormikHelpers, FormikProps, useField } from "formik";
+import {
+  Box,
+  FormControl,
+  Input,
+  Text,
+  Flex,
+  Heading,
+  FormErrorMessage,
+  Textarea,
+} from "@chakra-ui/react";
+import {
+  FieldAttributes,
+  FieldHookConfig,
+  FormikHelpers,
+  FormikProps,
+  useField,
+} from "formik";
 import React, { ReactElement, useState } from "react";
 import * as Yup from "yup";
 import { formTypes } from "../../utils/FormModel/postFormModel";
-import { at } from 'lodash'
+import { at } from "lodash";
 
 interface Props {
   formField: formTypes;
-  formProps: FormikProps<{[x: string]: string;}> & FormikHelpers<{}> & {name: string};
+  formProps: FormikProps<{ [x: string]: string }> &
+    FormikHelpers<{}> & { name: string };
 }
 
-interface ICustomFieldProps {
-  label: string;
-}
 
-const FileInput: React.FC<FieldHookConfig<string> & ICustomFieldProps> = ({label, value, onChange, ...props}) => {
-  const [field, meta] = useField(props)
-  const errorText = meta.error && meta.touched ? meta.error : '';
-  return (
-    <Input {...field} onChange={() => {
-      console.log("changed")
-    }} value={undefined} type="file"/>
-  )
-}
-
-const TrackForm: React.FC<Props> = ({formField, formProps}): ReactElement => {
+const TrackForm: React.FC<Props> = ({ formField, formProps }): ReactElement => {
   const { values, setFieldValue, touched, errors, ...rest } = formProps;
+  const { audio } = formField
   const [title, setTitle] = useState("");
-  console.log('formProps', formProps)
-  const [field, meta] = useField(formProps)
-
-  const PostSchema = Yup.object().shape({
-    audioFileSize: Yup.number()
-      .min(1, "please upload a file.")
-      .max(50000000, "file is too large. max size is 50 MB.")
-      .required("required")
-  });
-
+  const [field, meta] = useField(formProps);
 
   return (
     <Flex
@@ -60,7 +55,6 @@ const TrackForm: React.FC<Props> = ({formField, formProps}): ReactElement => {
       <Box mt={10}>
         <Text>{"<"} 50 mb mp3</Text>
         <FormControl isInvalid={meta.touched && !!meta.error}>
-          <FileInput name="input-test" type="input" label="labellll"/>
           <Input
             onChange={(e) => {
               if (e.target.files) {
@@ -68,24 +62,25 @@ const TrackForm: React.FC<Props> = ({formField, formProps}): ReactElement => {
                 setTitle(e.target.files[0].name);
               }
             }}
-            name="audio"
             id="file"
             className="audio-file"
             type="file"
             accept=".mp3"
             mt={2}
+            {...rest}
           />
-        {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
-        <pre>{JSON.stringify(errors, null, 2)}</pre>
+          {errors ? (
+            <Text mt={1} color="red.200">{errors[audio.name]}</Text>
+          ) : null}
         </FormControl>
         <Box width="20rem">
-        <Text overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis">
-          {title}
-        </Text>
+          <Text overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis">
+            {title}
+          </Text>
         </Box>
       </Box>
     </Flex>
   );
-}
+};
 
 export default TrackForm;
