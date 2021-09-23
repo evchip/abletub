@@ -1,17 +1,27 @@
-import { Box, FormControl, Input, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  FormControl,
+  Heading,
+  Input,
+  Text,
+  Image,
+  Button
+} from "@chakra-ui/react";
 import React, { ReactElement, useState, useContext } from "react";
 import * as Yup from "yup";
-import { formTypes } from "../../utils/FormModel/postFormModel"
-
+import { formTypes } from "../../utils/FormModel/postFormModel";
+import InfoForm from "./InfoForm";
 
 interface Props {
-  props: formTypes
+  props: formTypes;
 }
 
 function ImageForm(props): ReactElement {
-  const { formProps } = props
-  const { values, setFieldValue } = formProps
+  const { formProps, formField } = props;
+  const { values, setFieldValue } = formProps;
   const [pictureName, setPictureName] = useState("");
+  const [picture, setPicture] = useState<string>();
 
   const PostSchema = Yup.object().shape({
     audioFileSize: Yup.number()
@@ -24,26 +34,74 @@ function ImageForm(props): ReactElement {
       .required("required"),
   });
 
-
   return (
-   <React.Fragment>
-    <Box mt="4">
-      <Text>upload image ({"<"} 15 mb)</Text>
-      <FormControl>
-      <Input
-        onChange={(e) => setFieldValue("image", e.target.files)}
-        name="image"
-        id="file"
-        className="image-file"
-        type="file"
-        accept="image/*"
-        mt={2}
-      />
-      <pre>{JSON.stringify(values, null, 2)}</pre>
-      </FormControl>
-      <Text>{pictureName}</Text>
-    </Box>
-    </React.Fragment>
+    <Flex
+      mt={0}
+      width={["20rem", "30rem", "50rem"]}
+      height="20rem"
+      display="flex"
+      alignItems="space-evenly"
+      p={10}
+      shadow="md"
+      borderWidth="1px"
+      flexDirection="row"
+      bgColor="blackAlpha.400"
+      borderBottomRadius="30px"
+      borderColor="pink.200"
+      borderTop="none"
+    >
+      <Box mx={2}>
+        <FormControl>
+          <Flex className="scale-anm" >
+          
+          {picture ? (
+            <Box >
+            <Image
+            boxSize={["32", "60"]}
+            borderRadius="2rem"
+            border="1px"
+            borderColor="pink"
+            className="portfolio-img"
+            src={picture}
+            alt=""
+            objectFit="cover"
+          />
+          
+          </Box>
+          ) : (
+            <Box >
+            <Input
+              boxSize={["40", "78"]}
+              className="image-file"
+              bgColor="whiteAlpha.400"
+              onChange={(e) =>{
+                setFieldValue("image", e.target.files)
+                setPictureName(e.target.files[0].name)
+                const image = URL.createObjectURL(e.target.files[0]);
+                setPicture(image)
+              }}
+              name="image"
+              id="file"
+              type="file"
+              accept="image/*"
+              mt={2}
+            />
+            <Box className="input-overlay" borderRadius="2rem">
+              <Text className="port-text">add artwork</Text>
+            </Box>
+            </Box>
+
+          )}
+          </Flex>
+          {/* <Text>{pictureName}</Text> */}
+        </FormControl>
+      </Box>
+      <Box mx={2} width="100%">
+        <FormControl>
+          <InfoForm formField={formField} />
+        </FormControl>
+      </Box>
+    </Flex>
   );
 }
 
