@@ -18,7 +18,7 @@ import { createUrqlClient } from "../utils/createUrqlClient";
 import { format } from "timeago.js";
 
 const Index = () => {
-  const [imgClass, setImgClass] = useState("")
+  const [imgClass, setImgClass] = useState("");
   const [variables, setVariables] = useState({
     limit: 12,
     cursor: null as null | string,
@@ -53,7 +53,6 @@ const Index = () => {
                   justifyContent="center"
                   width="360px"
                   style={{ margin: "0px" }}
-                  
                 >
                   <Flex
                     style={{ margin: "20px 0px" }}
@@ -71,11 +70,7 @@ const Index = () => {
                     onMouseEnter={() => setImgClass("pink")}
                   >
                     <Box display="flex" justifyContent="center">
-                      {p.imageFileName !== null ? (
-                        <S3Image
-                          post={p}
-                        />
-                      ) : null}
+                      {p.imageFileName !== null ? <S3Image post={p} /> : null}
                     </Box>
                     <Box width="100%" mt={5}>
                       <Box ml="2px">
@@ -88,15 +83,20 @@ const Index = () => {
                               textOverflow="ellipsis"
                               color={imgClass}
                             >
-                              {p.title || "untitled"} 
+                              {p.title || "untitled"}
                             </Heading>
                           </Link>
                         </NextLink>
                       </Box>
                       <Box ml="2px" mt={2}>
-                        <Heading mb={4} fontSize="md" color="white" overflow="hidden"
-                              whiteSpace="nowrap"
-                              textOverflow="ellipsis">
+                        <Heading
+                          mb={4}
+                          fontSize="md"
+                          color="white"
+                          overflow="hidden"
+                          whiteSpace="nowrap"
+                          textOverflow="ellipsis"
+                        >
                           {p.creator.username}
                         </Heading>
                       </Box>
