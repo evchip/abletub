@@ -17,11 +17,15 @@ export default {
       },
       image: {
         name: 'image',
-        label: 'image'
+        label: 'image',
+        requiredErrorMsg: 'image is required',
+        invalidErroMsg: 'file is too large. max size is 12 MB.'
       },
       audio: {
         name: 'audio',
-        label: 'audio'
+        label: 'audio',
+        requiredErrorMsg: 'audio track is required',
+        invalidErrorMsg: "file is too large. max size is 50 MB."
       }
     }
   };
@@ -45,11 +49,15 @@ export interface formTypes {
     },
     image: {
       name: string,
-      label: string
+      label: string,
+      requiredErrorMsg: string,
+      invalidErrorMsg: string
     },
     audio: {
       name: string,
-      label: string
+      label: string,
+      requiredErrorMsg: string,
+      invalidErrorMsg: string
     }
   }
 }
