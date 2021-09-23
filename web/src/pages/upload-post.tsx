@@ -1,13 +1,13 @@
 import React, { ReactElement, useState, createContext } from "react";
 import { Formik, Form } from "formik";
-import { Text, Button } from "@chakra-ui/react";
+import { Text, Button, Box, Heading, Flex } from "@chakra-ui/react";
 
 import InfoForm from "../components/Forms/InfoForm";
 // import PaymentForm from './Forms/PaymentForm';
 // import ReviewOrder from './ReviewOrder';
 import PostSuccess from "../components/PostSuccess";
 import { useCreatePostMutation } from "../generated/graphql";
-// import validationSchema from '../utils/FormModel/validationSchema';
+import validationSchema from '../utils/FormModel/validationSchema';
 import postFormModel from "../utils/FormModel/postFormModel";
 import formInitialValues from "../utils/FormModel/formInitialValues";
 import ImageForm from "components/Forms/ImageForm";
@@ -16,6 +16,7 @@ import { Web3Storage } from "web3.storage";
 import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "utils/createUrqlClient";
+import { Layout } from "components/Layout";
 
 export const FormContext = createContext("");
 
@@ -30,7 +31,6 @@ function _renderStepContent(step: number, formProps) {
       return (
         <>
           <ImageForm formField={formField} formProps={formProps} />
-          <InfoForm formField={formField} />
         </>
       );
     default:
@@ -41,10 +41,10 @@ function _renderStepContent(step: number, formProps) {
 interface Props {}
 
 function UploadPost({}: Props): ReactElement {
-  const [, createPost] = useCreatePostMutation()
+  const [, createPost] = useCreatePostMutation();
   const router = useRouter();
   const [activeStep, setActiveStep] = useState(0);
-  // const currentValidationSchema = validationSchema[activeStep];
+  const currentValidationSchema = validationSchema[activeStep];
   const isLastStep = activeStep === steps.length - 1;
 
   const uploadToIPFS = async (files: File[]) => {
@@ -104,7 +104,7 @@ function UploadPost({}: Props): ReactElement {
     if (error) {
       console.log("error", error);
     } else {
-      console.log('success!')
+      console.log("success!");
       //router.push("/");
     }
 
@@ -130,53 +130,56 @@ function UploadPost({}: Props): ReactElement {
   }
 
   return (
-    <React.Fragment>
-      <Text component="h1" align="center">
-        post track
-      </Text>
-      <React.Fragment>
+    <Layout variant="regular">
+      <Flex justifyContent="center">
         {activeStep === steps.length ? (
           <PostSuccess />
         ) : (
           <Formik
             initialValues={formInitialValues}
-            // validationSchema={currentValidationSchema}
+            validationSchema={currentValidationSchema}
             onSubmit={_handleSubmit}
           >
             {(FormProps) => (
-              <Form id={formId}>
-                {_renderStepContent(activeStep, FormProps)}
+              <Flex width="100%" justifyContent="center">
+                <Form
+                  id={formId}
+                >
+                  {_renderStepContent(activeStep, FormProps)}
 
-                <div>
-                  {activeStep !== 0 && (
-                    <Button
-                      colorScheme="pink"
-                      variant="solid"
-                      m="auto"
-                      onClick={_handleBack}
-                    >
-                      back
-                    </Button>
-                  )}
-                  <div>
-                    <Button
-                      disabled={FormProps.isSubmitting}
-                      type="submit"
-                      colorScheme="pink"
-                      variant="solid"
-                      m="auto"
-                      my={8}
-                    >
-                      {isLastStep ? "submit" : "next"}
-                    </Button>
-                  </div>
-                </div>
-              </Form>
+                  <Flex justifyContent={isLastStep ? "space-between": "flex-end"}>
+                    {activeStep !== 0 && (
+                      <Flex justifyContent="flex-start">
+                      <Button
+                        colorScheme="pink"
+                        variant="solid"
+                        m="auto"
+                        onClick={_handleBack}
+                      >
+                        back
+                      </Button>
+                      </Flex>
+                    )}
+                    <Flex justifyContent="flex-end">
+                      <Button
+                        disabled={FormProps.isSubmitting}
+                        type="submit"
+                        colorScheme="pink"
+                        variant="solid"
+                        m="auto"
+                        my={8}
+                      >
+                        {isLastStep ? "submit" : "next"}
+                      </Button>
+                    </Flex>
+                  </Flex>
+                </Form>
+              </Flex>
             )}
           </Formik>
         )}
-      </React.Fragment>
-    </React.Fragment>
+      </Flex>
+    </Layout>
   );
 }
 

@@ -297,7 +297,6 @@ const CreatePost: React.FC<{}> = ({}) => {
           </Form>
         )}
       </Formik>
-      <UploadTrack />
     </Layout>
   );
 };
