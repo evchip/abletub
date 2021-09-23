@@ -1,13 +1,8 @@
 import React, { ReactElement, useState, createContext } from "react";
 import { Formik, Form } from "formik";
-import { Text, Button, Box, Heading, Flex } from "@chakra-ui/react";
-
-import InfoForm from "../components/Forms/InfoForm";
-// import PaymentForm from './Forms/PaymentForm';
-// import ReviewOrder from './ReviewOrder';
-import PostSuccess from "../components/PostSuccess";
+import { Button, Flex, useToast } from "@chakra-ui/react";
 import { useCreatePostMutation } from "../generated/graphql";
-import validationSchema from '../utils/FormModel/validationSchema';
+import validationSchema from "../utils/FormModel/validationSchema";
 import postFormModel from "../utils/FormModel/postFormModel";
 import formInitialValues from "../utils/FormModel/formInitialValues";
 import ImageForm from "components/Forms/ImageForm";
@@ -28,11 +23,7 @@ function _renderStepContent(step: number, formProps) {
     case 0:
       return <TrackForm formField={formField} formProps={formProps} />;
     case 1:
-      return (
-        <>
-          <ImageForm formField={formField} formProps={formProps} />
-        </>
-      );
+      return <ImageForm formField={formField} formProps={formProps} />;
     default:
       return <div>Not Found</div>;
   }
@@ -46,6 +37,18 @@ function UploadPost({}: Props): ReactElement {
   const [activeStep, setActiveStep] = useState(0);
   const currentValidationSchema = validationSchema[activeStep];
   const isLastStep = activeStep === steps.length - 1;
+
+  const toast = useToast();
+
+  const popToast = async () => {
+    toast({
+      title: "post created.",
+      description: "your tub is now on the front page",
+      status: "success",
+      duration: 9000,
+      isClosable: true,
+    });
+  };
 
   const uploadToIPFS = async (files: File[]) => {
     const getAccessToken = () => {
@@ -105,14 +108,11 @@ function UploadPost({}: Props): ReactElement {
       console.log("error", error);
     } else {
       console.log("success!");
-      //router.push("/");
+      popToast()
+      actions.setSubmitting(false);
+      setActiveStep(activeStep + 1);
+      router.push("/");
     }
-
-    await _sleep(1000);
-    alert(JSON.stringify(values, null, 2));
-    actions.setSubmitting(false);
-
-    setActiveStep(activeStep + 1);
   }
 
   function _handleSubmit(values, actions) {
@@ -132,9 +132,6 @@ function UploadPost({}: Props): ReactElement {
   return (
     <Layout variant="regular">
       <Flex justifyContent="center">
-        {activeStep === steps.length ? (
-          <PostSuccess />
-        ) : (
           <Formik
             initialValues={formInitialValues}
             validationSchema={currentValidationSchema}
@@ -142,27 +139,27 @@ function UploadPost({}: Props): ReactElement {
           >
             {(FormProps) => (
               <Flex width="100%" justifyContent="center">
-                <Form
-                  id={formId}
-                >
+                <Form id={formId}>
                   {_renderStepContent(activeStep, FormProps)}
-
-                  <Flex justifyContent={isLastStep ? "space-between": "flex-end"}>
+                  <Flex
+                    justifyContent={isLastStep ? "space-between" : "flex-end"}
+                  >
                     {activeStep !== 0 && (
                       <Flex justifyContent="flex-start">
-                      <Button
-                        colorScheme="pink"
-                        variant="solid"
-                        m="auto"
-                        onClick={_handleBack}
-                      >
-                        back
-                      </Button>
+                        <Button
+                          colorScheme="pink"
+                          variant="solid"
+                          m="auto"
+                          onClick={_handleBack}
+                        >
+                          back
+                        </Button>
                       </Flex>
                     )}
                     <Flex justifyContent="flex-end">
                       <Button
                         disabled={FormProps.isSubmitting}
+                        isLoading={FormProps.isSubmitting}
                         type="submit"
                         colorScheme="pink"
                         variant="solid"
@@ -177,7 +174,7 @@ function UploadPost({}: Props): ReactElement {
               </Flex>
             )}
           </Formik>
-        )}
+
       </Flex>
     </Layout>
   );
