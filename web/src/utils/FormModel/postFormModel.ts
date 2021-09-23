@@ -19,7 +19,7 @@ export default {
         name: 'image',
         label: 'image',
         requiredErrorMsg: 'image is required',
-        invalidErroMsg: 'file is too large. max size is 12 MB.'
+        invalidErrorMsg: 'file is too large. max size is 12 MB.'
       },
       audio: {
         name: 'audio',
@@ -31,8 +31,7 @@ export default {
   };
 
 export interface formTypes {
-  formId: string,
-  formField: {
+
     trackName: {
       name: string,
       label: string,
@@ -59,6 +58,5 @@ export interface formTypes {
       requiredErrorMsg: string,
       invalidErrorMsg: string
     }
-  }
 }
   
