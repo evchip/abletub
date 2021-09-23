@@ -1,17 +1,16 @@
 import React from 'react';
-import { Text } from "@chakra-ui/react"
+import { Flex, Text, Heading } from "@chakra-ui/react"
 
 function PostSuccess() {
   return (
-    <React.Fragment>
+    <Flex justifyContent="center">
+      <Heading >
+        upload successful
+      </Heading>
       <Text >
-        Thank you for your order.
+        your post may take a few minutes to show up. 
       </Text>
-      <Text >
-        Your order number is #2001539. We have emailed your order confirmation,
-        and will send you an update when your order has shipped.
-      </Text>
-    </React.Fragment>
+    </Flex>
   );
 }
 
