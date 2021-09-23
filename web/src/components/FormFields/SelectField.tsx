@@ -21,7 +21,7 @@ function SelectFieldInput(props) {
     <FormControl {...rest} error={isError}>
       <SelectField
         bg="black"
-        borderColor="pink"
+        borderColor="whiteAlpha.400"
         borderWidth="1px"
         borderRadius=".25rem"
         height="2rem"
@@ -35,7 +35,6 @@ function SelectFieldInput(props) {
         value={selectedValue ? selectedValue : ""}
       >
         {data.map((item, index) => (
-
           <option key={index} value={item.value}>
             {item.label}
           </option>
