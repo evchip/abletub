@@ -4,7 +4,7 @@ import { Formik, Form } from "formik";
 import { withUrqlClient } from "next-urql";
 import router, { useRouter } from "next/router";
 import React from "react";
-import { InputField } from "../../../components/InputField";
+import { InputField } from "../../../components/FormFields/InputField";
 import { Layout } from "../../../components/Layout";
 import {
   usePostQuery,
