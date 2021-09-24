@@ -1,5 +1,6 @@
-import React, { ReactElement, useContext } from "react";
-import { TrackContext } from "utils/trackContext";
+import React, { ReactElement, useContext, useEffect, useState } from "react";
+import { IPFSRequestHandler } from "utils/fetchIPFSData";
+import TrackContext from "utils/trackContext";
 import AudioFooter from "./AudioFooter";
 
 interface Props {}
@@ -7,15 +8,38 @@ interface Props {}
 function FooterWrapper({}: Props): ReactElement {
   const { track } = useContext(TrackContext);
 
+  const [audioCID, setAudioCID] = useState("");
+  const [activeTrack, setActiveTrack] = useState("")
+
+  useEffect(() => {
+    console.log('active track', activeTrack, "track.streamURL", track.streamUrl)
+    if (activeTrack !== track.streamUrl) {
+      
+      (async () => {
+        const defaultAudioURL = "https://bafybeigxnmal2kcq5taotnkjxdegx7gshdikgqivrbplldm3pru4eywmka.ipfs.dweb.link/Sparkling%20Water.mp3";
+        let audioURL = defaultAudioURL;
+  
+        if (track && track.streamUrl) {        
+          audioURL = track.streamUrl;
+        }
+        console.log('active track is not stream url')
+        const CID = await (IPFSRequestHandler(defaultAudioURL, audioURL)) as string;
+        setActiveTrack(track.streamUrl)
+        setAudioCID(CID);
+      })();
+    }
+    
+  }, [track.streamUrl]);
+
   return (
     <>
-      {track ? (
+      {audioCID !== "" ? (
         <AudioFooter
-          streamUrl={track!.streamUrl}
+          streamUrl={audioCID}
           title={track.title}
           artist={track.artist}
           isPlaying={track.isPlaying}
-          trackId={track.trackId}
+          trackId={4}
         />
       ) : null}
     </>

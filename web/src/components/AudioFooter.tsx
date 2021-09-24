@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react";
 import { PlayButton, Timer, Progress } from "react-soundplayer/components";
 import { withCustomAudio } from "react-soundplayer/addons";
 import { Flex, Text } from "@chakra-ui/react";
-import { TrackContext } from "utils/trackContext";
+import TrackContext from "utils/trackContext";
 
 interface Props {
   streamUrl: string;
@@ -42,7 +42,7 @@ const AudioPlayer = withCustomAudio((props: any) => {
       soundCloudAudio.play();
       songInfo.isPlaying = true;
     }
-    setTrack(songInfo)
+    // setTrack(songInfo)
   };
 
   return (
