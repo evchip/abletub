@@ -25,13 +25,6 @@ export const InputField: React.FC<InputFieldProps> = ({
   ...props
 }) => {
   const { errorText, ...rest } = props;
-
-  function _renderHelperText() {
-    const [touched, error] = at(meta, "touched", "error");
-    if (touched && error) {
-      return error;
-    }
-  }
   const [field, meta] = useField(props);
 
   return (
