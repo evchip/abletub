@@ -25,7 +25,7 @@ function _renderStepContent(step: number, formProps) {
     case 1:
       return <ImageForm formField={formField} formProps={formProps} />;
     default:
-      return <div>Not Found</div>;
+      return <ImageForm formField={formField} formProps={formProps} />;
   }
 }
 
@@ -42,8 +42,8 @@ function UploadPost({}: Props): ReactElement {
 
   const popToast = async () => {
     toast({
-      title: "post created.",
-      description: "your tub will take a few minutes to show up",
+      title: "tub created.",
+      description: "your tub may take a few moments to show up",
       status: "success",
       duration: 9000,
       isClosable: true,
@@ -52,7 +52,7 @@ function UploadPost({}: Props): ReactElement {
 
   const uploadToIPFS = async (files: File[]) => {
     const getAccessToken = () => {
-      return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGY5RGIxZDcwNzI2NjBCNjM4YjI0QWIwQjFGOEQ5OGFGZWNhZTlERUYiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2MzIxNjk0NTI3NjcsIm5hbWUiOiJhYmxldHViIn0.fFhf0CfKqDOST6pADwgrffCz4P2AU5_FwmLOcMcxws4" as string;
+      return process.env.NEXT_PUBLIC_WEB3_API_TOKEN;
     };
 
     const makeStorageClient = () => {
@@ -87,10 +87,11 @@ function UploadPost({}: Props): ReactElement {
 
   async function _submitForm(values, actions) {
     const audioFileObj = await makeFileObject(values.audio);
-    const imageFileObj = await makeFileObject(values.image);
-
     const audioCID = await uploadToIPFS(audioFileObj);
-    const imageCID = await uploadToIPFS(imageFileObj);
+
+      const imageFileObj = await makeFileObject(values.image);
+      const imageCID = await uploadToIPFS(imageFileObj);
+
 
     const { error } = await createPost({
       input: {
@@ -136,24 +137,23 @@ function UploadPost({}: Props): ReactElement {
               <Flex width="100%" justifyContent="center">
                 <Form id={formId}>
                   {_renderStepContent(activeStep, FormProps)}
-                  <Flex
-                    justifyContent={isLastStep ? "space-between" : "flex-end"}
-                  >
-                    {activeStep !== 0 && (
-                      <Flex justifyContent="flex-start">
-                        <Button
-                          colorScheme="pink"
-                          variant="solid"
-                          m="auto"
-                          onClick={_handleBack}
-                        >
-                          back
-                        </Button>
-                      </Flex>
-                    )}
+
                     <Flex justifyContent="flex-end">
+                    {isLastStep ? (
                       <Button
-                        disabled={FormProps.isSubmitting}
+                      disabled={FormProps.isSubmitting || FormProps.values.image == "" }
+                      isLoading={FormProps.isSubmitting}
+                      type="submit"
+                      colorScheme="pink"
+                      variant="solid"
+                      m="auto"
+                      my={8}
+                    >
+                      submit
+                    </Button>
+                    ) : (
+                    <Button
+                        disabled={FormProps.isSubmitting || FormProps.values.audio == ""}
                         isLoading={FormProps.isSubmitting}
                         type="submit"
                         colorScheme="pink"
@@ -161,10 +161,11 @@ function UploadPost({}: Props): ReactElement {
                         m="auto"
                         my={8}
                       >
-                        {isLastStep ? "submit" : "next"}
+                        next
                       </Button>
+                    )}
+                      
                     </Flex>
-                  </Flex>
                 </Form>
               </Flex>
             )}
