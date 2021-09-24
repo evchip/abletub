@@ -5,20 +5,14 @@ import {
   Text,
   Flex,
   Heading,
-  FormErrorMessage,
-  Textarea,
 } from "@chakra-ui/react";
 import {
-  FieldAttributes,
-  FieldHookConfig,
   FormikHelpers,
   FormikProps,
   useField,
 } from "formik";
 import React, { ReactElement, useState } from "react";
-import * as Yup from "yup";
 import { formTypes } from "../../utils/FormModel/postFormModel";
-import { at } from "lodash";
 
 interface Props {
   formField: formTypes;
