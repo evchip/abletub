@@ -60,6 +60,11 @@ html, .chakra-ui-dark, #__next {
     text-align: center;
   }
 
+  #port-text-input {
+    width: 10rem;
+    top: 70%;
+  }
+
 .tile { 
     -webkit-transform: scale(0);
     transform: scale(0);
