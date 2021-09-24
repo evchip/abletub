@@ -24,14 +24,14 @@ const ImageForm: React.FC<Props> = ({ formField, formProps }): ReactElement => {
   const { values, setFieldValue, touched, errors, ...rest } = formProps;
   const { image } = formField;
   const [field, meta] = useField(formProps);
-  // const [pictureName, setPictureName] = useState("");
+  meta.touched = false;
   const [picture, setPicture] = useState<string>();
 
   return (
     <Flex
       mt={0}
       width={["20rem", "30rem", "50rem"]}
-      height={["35rem", "35rem", "20rem"]}
+      height={["40rem", "40rem", "20rem"]}
       display="flex"
       alignItems="space-evenly"
       p={10}
@@ -57,6 +57,7 @@ const ImageForm: React.FC<Props> = ({ formField, formProps }): ReactElement => {
                   src={picture}
                   alt=""
                   objectFit="cover"
+
                 />
               </Box>
             ) : (
@@ -72,16 +73,13 @@ const ImageForm: React.FC<Props> = ({ formField, formProps }): ReactElement => {
                       setPicture(image);
                     }
                   }}
-                  isInvalid={false}
                   {...rest}
                   id="file"
                   type="file"
                   accept="image/*"
                   mt={2}
                 />
-                <Box className="input-overlay" borderRadius="2rem">
-                  <Text className="port-text">add artwork</Text>
-                </Box>
+                  <Text className="port-text" id="port-text-input">add artwork</Text>
               </Box>
             )}
           </Flex>
