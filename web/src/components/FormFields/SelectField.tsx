@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { at } from "lodash";
 import { useField } from "formik";
-import { InputLabel, Select, MenuItem, FormHelperText } from "@mui/material";
 import { Text, SelectField, FormControl } from "@chakra-ui/react";
 
 function SelectFieldInput(props) {
