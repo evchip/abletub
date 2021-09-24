@@ -14,7 +14,7 @@ interface PlayPauseButtonProps {
 function PlayPauseAudioFC({ post }: PlayPauseButtonProps) {
   const [playPause, setPlayPause] = useState(false);
   const { track, setTrack } = useContext(TrackContext) as ContextType;
-  console.log('post in playpause', post)
+  
   useEffect(() => {
     if (track && track.trackId === post.id) {
       setPlayPause(track.isPlaying)
