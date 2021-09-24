@@ -19,7 +19,6 @@ import { format } from "timeago.js";
 import IPFSImage from "components/Posts/IPFSImage";
 
 const Index = () => {
-  const [imgClass, setImgClass] = useState("");
   const [variables, setVariables] = useState({
     limit: 12,
     cursor: null as null | string,
@@ -68,7 +67,7 @@ const Index = () => {
                     borderBottomRadius="30px"
                     borderColor="pink.200"
                     className="post-card"
-                    onMouseEnter={() => setImgClass("pink")}
+                    
                   >
                     <Box display="flex" justifyContent="center">
                       {p.imageFileName !== null ? <IPFSImage post={p} /> : null}
@@ -78,11 +77,11 @@ const Index = () => {
                         <NextLink href="/post/[id]" as={`/post/${p.id}`}>
                           <Link>
                             <Heading
-                              fontSize="xl"
+                              fontSize="lg"
                               overflow="hidden"
                               whiteSpace="nowrap"
                               textOverflow="ellipsis"
-                              color={imgClass}
+                              color="pink.200"
                             >
                               {p.title || "untitled"}
                             </Heading>
