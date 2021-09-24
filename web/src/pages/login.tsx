@@ -65,13 +65,13 @@ const Login: React.FC<{}> = ({}) => {
                   type="password"
                 />
               </Box>
-              <Flex mt={2}>
+              {/* <Flex mt={2}>
                 <Box ml="auto">
                   <NextLink href="/forgot-password">
                     <Link><Text>forgot password?</Text></Link>
                   </NextLink>
                 </Box>
-              </Flex>
+              </Flex> */}
               <Flex mt={8} justifyContent="center">
               <Button
                 mt={4}
