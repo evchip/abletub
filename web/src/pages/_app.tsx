@@ -1,12 +1,21 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from '../theme';
 import '../styles/globals.css'
-import { TrackContext } from '../utils/trackContext';
+import  TrackContext, {defaultTrack}  from '../utils/trackContext';
 import { useState } from 'react';
 import FooterWrapper from '../components/FooterWrapper'
 
 function MyApp({ Component, pageProps }: any) {
-  const [track, setTrack] = useState()
+
+  const defaultTrack = {
+    title: "",
+    artist: "",
+    streamUrl: "",
+    trackId: 0,
+    isPlaying: false,
+  }
+
+  const [track, setTrack] = useState(defaultTrack)
 
   return (
 
