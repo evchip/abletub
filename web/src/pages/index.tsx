@@ -16,6 +16,7 @@ import { UpvoteSection } from "../components/Posts/UpvoteSection";
 import { usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { format } from "timeago.js";
+import IPFSImage from "components/Posts/IPFSImage";
 
 const Index = () => {
   const [imgClass, setImgClass] = useState("");
@@ -70,7 +71,7 @@ const Index = () => {
                     onMouseEnter={() => setImgClass("pink")}
                   >
                     <Box display="flex" justifyContent="center">
-                      {p.imageFileName !== null ? <S3Image post={p} /> : null}
+                      {p.imageFileName !== null ? <IPFSImage post={p} /> : null}
                     </Box>
                     <Box width="100%" mt={5}>
                       <Box ml="2px">
