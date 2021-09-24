@@ -5,7 +5,7 @@ import { withUrqlClient } from "next-urql";
 import router from "next/router";
 import React, { ReactElement } from "react";
 import { createUrqlClient } from "utils/createUrqlClient";
-import { InputField } from "./InputField";
+import { InputField } from "../FormFields/InputField";
 
 interface Props {
   postId: number;

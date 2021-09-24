@@ -1,8 +1,9 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { PlayButton, Timer, Progress } from "react-soundplayer/components";
 import { withCustomAudio } from "react-soundplayer/addons";
 import { Flex, Text } from "@chakra-ui/react";
-import { TrackContext } from "utils/trackContext";
+import TrackContext from "utils/trackContext";
+import { IPFSRequestHandler } from "utils/fetchIPFSData";
 
 interface Props {
   streamUrl: string;
@@ -15,7 +16,6 @@ interface Props {
 const AudioPlayer = withCustomAudio((props: any) => {
   const { streamUrl, trackTitle, artist, isPlaying, playing, soundCloudAudio, trackId} =
     props;
-    const { track, setTrack } = useContext(TrackContext);
 
     const songInfo = {
       title: trackTitle,
@@ -42,7 +42,7 @@ const AudioPlayer = withCustomAudio((props: any) => {
       soundCloudAudio.play();
       songInfo.isPlaying = true;
     }
-    setTrack(songInfo)
+    // setTrack(songInfo)
   };
 
   return (

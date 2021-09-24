@@ -24,9 +24,11 @@ function S3Image({post}: S3ImageProps) {
       />
       <Box className="port-img-overlay" borderRadius="2rem">
         <div className="port-text">
+          { post.audioFileName ? ( 
           <PlayPauseAudioFC
             post={post}
-          />
+          />) : (null)}
+         
         </div>
       </Box>
     </div>

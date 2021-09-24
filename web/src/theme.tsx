@@ -11,13 +11,20 @@ const breakpoints = createBreakpoints({
 })
 
 const config : ThemeConfig = {
-  initialColorMode: "light",
+  initialColorMode: "dark",
   useSystemColorMode: false,
 }
 
 const theme = extendTheme(
   { config },
   {components: {
+    Box: {
+      baseStyle: {
+        display: "flex",
+        justifyContent: "center"
+      }
+    }
+    ,
     Text: {
       baseStyle: {
         color: "white",
@@ -33,6 +40,7 @@ const theme = extendTheme(
       baseStyle: {
         color: "white", 
         letterSpacing:".2rem",
+        fontWeight: "light"
       }
     },
     Menu: {

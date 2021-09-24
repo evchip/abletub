@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import {
   _Post,
   useVoteMutation,
-} from "../generated/graphql";
+} from "../../generated/graphql";
 
 interface UpvoteSectionProps {
   post: { __typename?: "_Post" | undefined; } & { __typename?: "_Post" | undefined; } & Pick<_Post, "title" | "id" | "createdAt" | "updatedAt" | "points" | "audioFileName" | "imageFileName" | "textSnippet" | "voteStatus">;

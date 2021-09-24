@@ -1,12 +1,16 @@
-import {createContext} from 'react'
+import { createContext, useContext, useState } from "react";
 
-// type track = { title: string, artist: string, audioURL: string, trackId: number }
-const songInfo = {
-    title: "",
-    artist: "",
-    streamUrl: "",
-    trackId: "",
-    isPlaying: false,
-  };
+  export const defaultTrack = {
+    track: {
+      title: "",
+      artist: "",
+      streamUrl: "",
+      trackId: 0,
+      isPlaying: false,
+    },
+    setTrack: () => {}
+}
 
-export const TrackContext = createContext(songInfo);
+const TrackContext = createContext<ContextType>(defaultTrack)
+
+export default TrackContext

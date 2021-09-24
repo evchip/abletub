@@ -7,15 +7,16 @@ import {
   Link,
   Text,
 } from "@chakra-ui/react";
-import S3Image from "components/Image";
+import S3Image from "components/Posts/Image";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import React, { useState } from "react";
 import { Layout } from "../components/Layout";
-import { UpvoteSection } from "../components/UpvoteSection";
+import { UpvoteSection } from "../components/Posts/UpvoteSection";
 import { usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { format } from "timeago.js";
+import IPFSImage from "components/Posts/IPFSImage";
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -65,34 +66,37 @@ const Index = () => {
                     bgColor="blackAlpha.800"
                     borderBottomRadius="30px"
                     borderColor="pink.200"
-                    borderTop="none"
+                    className="post-card"
+                    
                   >
                     <Box display="flex" justifyContent="center">
-                      {p.imageFileName !== null ? (
-                        <S3Image
-                          post={p}
-                        />
-                      ) : null}
+                      {p.imageFileName !== null ? <IPFSImage post={p} /> : null}
                     </Box>
                     <Box width="100%" mt={5}>
                       <Box ml="2px">
                         <NextLink href="/post/[id]" as={`/post/${p.id}`}>
                           <Link>
                             <Heading
-                              fontSize="xl"
+                              fontSize="lg"
                               overflow="hidden"
                               whiteSpace="nowrap"
                               textOverflow="ellipsis"
+                              color="pink.200"
                             >
-                              {p.title}
+                              {p.title || "untitled"}
                             </Heading>
                           </Link>
                         </NextLink>
                       </Box>
                       <Box ml="2px" mt={2}>
-                        <Heading mb={4} fontSize="md" color="white" overflow="hidden"
-                              whiteSpace="nowrap"
-                              textOverflow="ellipsis">
+                        <Heading
+                          mb={4}
+                          fontSize="md"
+                          color="white"
+                          overflow="hidden"
+                          whiteSpace="nowrap"
+                          textOverflow="ellipsis"
+                        >
                           {p.creator.username}
                         </Heading>
                       </Box>
