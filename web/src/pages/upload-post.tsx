@@ -43,7 +43,7 @@ function UploadPost({}: Props): ReactElement {
   const popToast = async () => {
     toast({
       title: "post created.",
-      description: "your tub is now on the front page",
+      description: "your tub will take a few minutes to show up",
       status: "success",
       duration: 9000,
       isClosable: true,
@@ -75,19 +75,15 @@ function UploadPost({}: Props): ReactElement {
     return await upload![0].arrayBuffer().then((res) => {
       const blob = new Blob([new Uint8Array(res)], { type: "file" });
       const files = [
-        new File(
-          [`contents of ${upload![0].name}: ${upload![0]}`],
-          "plain-utf8.txt"
-        ),
+        // new File(
+        //   [`contents of ${upload![0].name}: ${upload![0]}`],
+        //   "plain-utf8.txt"
+        // ),
         new File([blob], upload![0].name),
       ];
       return files;
     });
   };
-
-  function _sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
 
   async function _submitForm(values, actions) {
     const audioFileObj = await makeFileObject(values.audio);
@@ -107,7 +103,6 @@ function UploadPost({}: Props): ReactElement {
     if (error) {
       console.log("error", error);
     } else {
-      console.log("success!");
       popToast()
       actions.setSubmitting(false);
       setActiveStep(activeStep + 1);
