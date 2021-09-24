@@ -29,7 +29,18 @@ html, .chakra-ui-dark, #__next {
     width: 100%;
     opacity: .8;
     transition: .5s ease;
-    background-color: rgba(247, 0, 255, 0);
+    background-color: rgba(231, 231, 231, 0);
+  }
+
+  .input-overlay {
+    position: absolute;
+    top: 60%;
+    left: -1.9rem;
+    height: 3rem;
+    width: 18rem;
+    opacity: .8;
+    transition: .5s ease;
+    background-color: rgba(231, 231, 231, 0);
   }
   
   .port-cont-hov:hover .port-img-overlay {
@@ -56,31 +67,50 @@ html, .chakra-ui-dark, #__next {
     transition: all 350ms ease;
 }
 
-
 .scale-anm {
   transform: scale(1);
 }
 
+.play-pause-icon {
+  transition: all 250ms ease;
+}
+
+.play-pause-icon:hover {
+  transform: scale(1.25);
+}
+
+.animate {
+  background-color:"pink";
+}
+
 input#file {
   display: inline-block;
-  width: 100%;
-  padding: 80px 0 0 0;
-  height: 50px;
   overflow: hidden;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  border-color: #FBB6CE;
+  border-color: #858585;
   border-radius: 10px;
   background-size: 50px 50px;
 }
 
 input.audio-file {
   background: url('https://cdn2.iconfinder.com/data/icons/frosted-glass/512/Volume.png') center center no-repeat #000000;
+  height: 50px;
+  padding: 80px 0 0 0;
+  width: 20rem;
 }
 
 input.image-file {
   background: url('https://cdn2.iconfinder.com/data/icons/frosted-glass/512/Gallery.png') center center no-repeat #000000;
+  height: 100px;
+  padding: 238px 0 0 0;
+  width: 14rem;
+  margin-top: 0px;
+}
+
+.glowing-text {
+  transition: all 350ms ease;
 }
 
 .glowing-text:hover {
