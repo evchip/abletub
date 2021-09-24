@@ -1,7 +1,6 @@
 import React from "react";
-import { Text, Flex, Box, Heading, FormControl, Input } from "@chakra-ui/react";
+import { Flex, Box, FormControl} from "@chakra-ui/react";
 import { InputField as Field } from "../FormFields/InputField";
-import InputField from "../FormFields/InputField";
 import SelectField from "../FormFields/SelectField";
 import { FormikProps, FormikHelpers, useField } from "formik";
 import { formTypes } from "utils/FormModel/postFormModel";
@@ -13,16 +12,63 @@ const genres = [
   },
   {
     value: "1",
-    label: "electronic",
+    label: "drum & bass",
   },
   {
     value: "2",
-    label: "hip hop",
+    label: "electronic",
   },
   {
     value: "3",
+    label: "future",
+  },
+  {
+    value: "4",
+    label: "hip hop",
+  },
+  {
+    value: "5",
+    label: "house",
+  },
+  {
+    value: "6",
+    label: "lo-fi",
+  },
+  {
+    value: "7",
     label: "rock",
   },
+  {
+    value: "8",
+    label: "techno",
+  },
+  {
+    value: "9",
+    label: "trap",
+  }
+];
+
+const moods = [
+  {
+    value: undefined,
+    label: "none",
+  },
+  {
+    value: "1",
+    label: "chill",
+  },
+  {
+    value: "2",
+    label: "hard",
+  },
+  {
+    value: "3",
+    label: "romantic",
+  },
+  {
+    value: "4",
+    label: "upbeat",
+  }
 ];
 
 interface Props {
@@ -32,8 +78,7 @@ interface Props {
 }
 
 export const InfoForm: React.FC<Props> = ({ formField, formProps }) => {
-  const { trackName, trackDescription, genre } = formField;
-  const { errors, ...rest } = formProps;
+  const { trackName, trackDescription, genre, mood } = formField;
 
   const [field, meta] = useField(formProps);
 
@@ -52,7 +97,7 @@ export const InfoForm: React.FC<Props> = ({ formField, formProps }) => {
             <SelectField name={genre.name} label={genre.label} data={genres} />
           </Box>
           <Box width="48%">
-            <SelectField name={genre.name} label={genre.label} data={genres} />
+            <SelectField name={mood.name} label={mood.label} data={moods} />
           </Box>
         </Flex>
         <Box>
