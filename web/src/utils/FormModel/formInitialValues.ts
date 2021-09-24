@@ -4,6 +4,7 @@ const {
     trackName,
     trackDescription,
     genre,
+    mood,
     audio,
     image
   }
@@ -13,6 +14,7 @@ export default {
   [trackName.name]: '',
   [trackDescription.name]: '',
   [genre.name]: '',
+  [mood.name]: '',
   [audio.name]: '',
   [image.name]: ''
 };

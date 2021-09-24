@@ -15,6 +15,10 @@ export default {
         name: 'genre',
         label: 'genre',
       },
+      mood: {
+        name: 'mood',
+        label: 'mood',
+      },
       image: {
         name: 'image',
         label: 'image',
@@ -41,6 +45,10 @@ export interface formTypes {
       name: string,
       label: string,
       requiredErrorMsg: string
+    },
+    mood: {
+      name: string,
+      label: string,
     },
     genre: {
       name: string,

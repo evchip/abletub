@@ -14,7 +14,6 @@ export default [
     [audio.name]: Yup.string().required(`${audio.requiredErrorMsg}`),
     [audio.name]: Yup.mixed()
       .test('audioFileSize', `${audio.invalidErrorMsg}`, (val) => {
-        console.log("audio val", val)
         return val[0].size <= 50000000
       })
   }),
