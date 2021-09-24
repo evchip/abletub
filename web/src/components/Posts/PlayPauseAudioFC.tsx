@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 // import ReactHowler from "react-howler";
-import { Button, Box, IconButton, Icon } from "@chakra-ui/react";
+import { Box, IconButton } from "@chakra-ui/react";
 import { FaRegPauseCircle, FaRegPlayCircle } from "react-icons/fa";
 import {
   PostSnippetFragment,
 } from "generated/graphql";
-import { TrackContext } from "utils/trackContext";
+import TrackContext from "utils/trackContext";
 
 interface PlayPauseButtonProps {
   post: PostSnippetFragment;
@@ -13,8 +13,8 @@ interface PlayPauseButtonProps {
 
 function PlayPauseAudioFC({ post }: PlayPauseButtonProps) {
   const [playPause, setPlayPause] = useState(false);
-  const { track, setTrack } = useContext(TrackContext);
-
+  const { track, setTrack } = useContext(TrackContext) as ContextType;
+  console.log('post in playpause', post)
   useEffect(() => {
     if (track && track.trackId === post.id) {
       setPlayPause(track.isPlaying)
