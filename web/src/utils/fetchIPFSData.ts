@@ -4,14 +4,12 @@ import { Web3Storage } from "web3.storage";
     if (fileName.startsWith("http")) {
       return fileName;
     } else {
-      const CIDURL = await retrieve(fileName, defaultURL);
-      console.log('CIDURL::::', CIDURL)
-      return CIDURL;
+      return await retrieve(fileName, defaultURL);
     }
   };
 
   const getAccessToken = () => {
-    return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGY5RGIxZDcwNzI2NjBCNjM4YjI0QWIwQjFGOEQ5OGFGZWNhZTlERUYiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2MzIxNjk0NTI3NjcsIm5hbWUiOiJhYmxldHViIn0.fFhf0CfKqDOST6pADwgrffCz4P2AU5_FwmLOcMcxws4" as string;
+    return process.env.NEXT_PUBLIC_WEB3_API_TOKEN;
   };
 
   const makeStorageClient = () => {
@@ -29,11 +27,9 @@ import { Web3Storage } from "web3.storage";
       const files = await res?.files();
         
       if (!files!.length) {
-          console.log('no files!!!!!!!!!!!!!')
         return defaultURL;
       } else {
-        console.log('files in fetch', files[0])
-        return `https://${files[0].cid}.ipfs.dweb.link`
+        return `https://${files![0].cid}.ipfs.dweb.link`
         
       }
     }
