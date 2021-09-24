@@ -12,7 +12,6 @@ function FooterWrapper({}: Props): ReactElement {
   const [activeTrack, setActiveTrack] = useState("")
 
   useEffect(() => {
-    console.log('active track', activeTrack, "track.streamURL", track.streamUrl)
     if (activeTrack !== track.streamUrl) {
       
       (async () => {
@@ -22,7 +21,6 @@ function FooterWrapper({}: Props): ReactElement {
         if (track && track.streamUrl) {        
           audioURL = track.streamUrl;
         }
-        console.log('active track is not stream url')
         const CID = await (IPFSRequestHandler(defaultAudioURL, audioURL)) as string;
         setActiveTrack(track.streamUrl)
         setAudioCID(CID);
