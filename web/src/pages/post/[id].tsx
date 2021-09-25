@@ -1,7 +1,6 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { Comments } from "components/Comments/Comments";
 import CreateComment from "components/Comments/CreateComment";
-import S3Image from "components/Posts/Image";
 import { withUrqlClient } from "next-urql";
 import React, { useState } from "react";
 import { EditDeletePostBtns } from "../../components/Posts/EditDeletePostBtns";
