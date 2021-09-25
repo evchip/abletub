@@ -7,7 +7,6 @@ import {
   Link,
   Text,
 } from "@chakra-ui/react";
-import S3Image from "components/Posts/Image";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import React, { useState } from "react";
@@ -52,6 +51,7 @@ const Index = () => {
                   flexDirection="row"
                   justifyContent="center"
                   width="360px"
+                  key={i}
                   style={{ margin: "0px" }}
                 >
                   <Flex
