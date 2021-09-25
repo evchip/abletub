@@ -3,7 +3,7 @@ import {MigrationInterface, QueryRunner} from "typeorm";
 export class Initial1626813976599 implements MigrationInterface {
     name = 'Initial1626813976599'
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
+    public async up(_: QueryRunner): Promise<void> {
         // await queryRunner.query(`CREATE TABLE "updoot" ("value" integer NOT NULL, "userId" integer NOT NULL, "postId" integer NOT NULL, CONSTRAINT "PK_6476d7e464bcb8571004134515c" PRIMARY KEY ("userId", "postId"))`);
         // await queryRunner.query(`CREATE TABLE "user" ("id" SERIAL NOT NULL, "username" character varying NOT NULL, "email" character varying NOT NULL, "password" character varying NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "UQ_78a916df40e02a9deb1c4b75edb" UNIQUE ("username"), CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
         // await queryRunner.query(`CREATE TABLE "__post" ("id" SERIAL NOT NULL, "title" character varying NOT NULL, "text" character varying NOT NULL, "fileName" character varying NULL, "points" integer NOT NULL DEFAULT '0', "creatorId" integer NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_c8f61e64727012991b1c76a0ba2" PRIMARY KEY ("id"))`);
@@ -13,7 +13,7 @@ export class Initial1626813976599 implements MigrationInterface {
 
     }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
+    public async down(_: QueryRunner): Promise<void> {
         // await queryRunner.query(`ALTER TABLE "__post" DROP CONSTRAINT "FK_360c0bef78802b65e6711d832c4"`);
         // await queryRunner.query(`ALTER TABLE "updoot" DROP CONSTRAINT "FK_fd6b77bfdf9eae6691170bc9cb5"`);
         // await queryRunner.query(`ALTER TABLE "updoot" DROP CONSTRAINT "FK_9df9e319a273ad45ce509cf2f68"`);

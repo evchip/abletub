@@ -5,8 +5,5 @@ declare namespace NodeJS {
     PORT: string;
     SESSION_SECRET: string;
     CORS_ORIGIN: string;
-    S3_BUCKET: string;
-    AWS_ACCESS_KEY_ID: string;
-    AWS_SECRET_ACCESS_KEY: string;
   }
 }
