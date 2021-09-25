@@ -3,7 +3,7 @@ import theme from '../theme';
 import '../styles/globals.css'
 import  TrackContext, {defaultTrack}  from '../utils/trackContext';
 import { useState } from 'react';
-import FooterWrapper from '../components/FooterWrapper'
+import FooterWrapper from '../components/Footer/FooterWrapper'
 
 function MyApp({ Component, pageProps }: any) {
 
