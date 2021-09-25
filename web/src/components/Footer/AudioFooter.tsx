@@ -1,9 +1,7 @@
-import React, { useEffect, useContext, useState } from "react";
-import { PlayButton, Timer, Progress } from "react-soundplayer/components";
-import { withCustomAudio } from "react-soundplayer/addons";
+import React, { useEffect } from "react";
+let { PlayButton, Timer, Progress } = require("react-soundplayer/components");
+let { withCustomAudio } = require("react-soundplayer/addons");
 import { Flex, Text } from "@chakra-ui/react";
-import TrackContext from "utils/trackContext";
-import { IPFSRequestHandler } from "utils/fetchIPFSData";
 
 interface Props {
   streamUrl: string;
