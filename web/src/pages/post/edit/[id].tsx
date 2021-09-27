@@ -8,12 +8,10 @@ import { InputField } from "../../../components/FormFields/InputField";
 import { Layout } from "../../../components/Layout";
 import {
   usePostQuery,
-  usePostsQuery,
   useUpdatePostMutation,
 } from "../../../generated/graphql";
 import { createUrqlClient } from "../../../utils/createUrqlClient";
 import { useGetIntId } from "../../../utils/useGetIntId";
-import { useGetPostFromUrl } from "../../../utils/useGetPostfromUrl";
 
 const EditPost = ({}) => {
   const router = useRouter();
