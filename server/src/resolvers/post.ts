@@ -1,6 +1,6 @@
 import { MyContext } from "src/types";
 import { Arg, Ctx, Query, Resolver, Mutation, InputType, Field, UseMiddleware, Int, FieldResolver, Root, ObjectType } from "type-graphql";
-import { _Post as Post } from '../entities/Post';
+import { Post } from '../entities/Post';
 import { isAuth } from "../middleware/isAuth";
 import { getConnection } from "typeorm";
 import { Updoot } from "../entities/Updoot";
@@ -75,7 +75,7 @@ export class PostResolver {
                 `, [realValue, postId, userId]);
 
                 await tm.query(`
-                    update __post
+                    update post
                     set points = points + $1
                     where id = $2;
             `, [realValue, postId]);
@@ -89,7 +89,7 @@ export class PostResolver {
                 `, [userId, postId, realValue]);
 
                 await tm.query(`
-                    update __post
+                    update post
                     set points = points + $1
                     where id = $2;
                 `, [realValue, postId])
@@ -121,7 +121,7 @@ export class PostResolver {
 
         const posts = await getConnection().query(`
         select p.*
-        from __post p
+        from post p
         ${cursor ? `where p."createdAt" < $2`: ''}
         order by p."createdAt" DESC
         limit $1
