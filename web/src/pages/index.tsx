@@ -67,7 +67,6 @@ const Index = () => {
                     borderBottomRadius="30px"
                     borderColor="pink.200"
                     className="post-card"
-                    
                   >
                     <Box display="flex" justifyContent="center">
                       {p.imageFileName !== null ? <IPFSImage post={p} /> : null}
