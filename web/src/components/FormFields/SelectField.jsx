@@ -2,9 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { at } from "lodash";
 import { useField } from "formik";
-import { Text, SelectField, FormControl } from "@chakra-ui/react";
+import { SelectField, FormControl } from "@chakra-ui/react";
 
-function SelectFieldInput(props) {
+
+const SelectFieldInput = (props) => {
   const { label, data, ...rest } = props;
   const [field, meta] = useField(props);
   const { value: selectedValue } = field;
@@ -34,7 +35,6 @@ function SelectFieldInput(props) {
           </option>
         ))}
       </SelectField>
-      {/* {_renderHelperText()} */}
     </FormControl>
   );
 }
