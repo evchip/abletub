@@ -10,7 +10,7 @@ import "dotenv-safe/config";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import { COOKIE_NAME, __prod__ } from "./constants";
-import { _Post as Post } from "./entities/Post";
+import { Post } from "./entities/Post";
 import { Updoot } from "./entities/Updoot";
 import { User } from "./entities/User";
 import { Comment } from "./entities/Comment";
@@ -91,7 +91,7 @@ const main = async () => {
   });
 
   app.listen(parseInt(process.env.PORT), () => {
-    console.log("Node server started");
+    console.log(`Node server started on port ${process.env.PORT}`);
   });
 };
 

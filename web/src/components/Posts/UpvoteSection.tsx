@@ -1,18 +1,31 @@
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { Flex, IconButton, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
-import {
-  _Post,
-  useVoteMutation,
-} from "../../generated/graphql";
+import { Post, useVoteMutation, User } from "../../generated/graphql";
 
 interface UpvoteSectionProps {
-  post: { __typename?: "_Post" | undefined; } & { __typename?: "_Post" | undefined; } & Pick<_Post, "title" | "id" | "createdAt" | "updatedAt" | "points" | "audioFileName" | "imageFileName" | "textSnippet" | "voteStatus">;
+  post: { __typename?: "Post" | undefined } & {
+    __typename?: "Post" | undefined;
+  } & Pick<
+      Post,
+      | "title"
+      | "id"
+      | "createdAt"
+      | "updatedAt"
+      | "points"
+      | "audioFileName"
+      | "imageFileName"
+      | "voteStatus"
+    > & { creator: { __typename?: "User" } & Pick<User, "id" | "username"> };
   variant: string;
   fontVariant: string;
 }
 
-export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post, variant, fontVariant }) => {
+export const UpvoteSection: React.FC<UpvoteSectionProps> = ({
+  post,
+  variant,
+  fontVariant,
+}) => {
   const [loadingState, setLoadingState] = useState<
     "upvote-loading" | "downvote-loading" | "not-loading"
   >("not-loading");
@@ -60,7 +73,6 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post, variant, fon
             <AiOutlineHeart color="pink" size={variant} />
           )
         }
-
         borderBottomRadius="10px"
         onClick={async () => {
           handleVote();

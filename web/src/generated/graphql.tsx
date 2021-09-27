@@ -37,8 +37,8 @@ export type FieldError = {
 export type Mutation = {
   __typename?: 'Mutation';
   vote: Scalars['Boolean'];
-  createPost: _Post;
-  updatePost?: Maybe<_Post>;
+  createPost: Post;
+  updatePost?: Maybe<Post>;
   deletePost: Scalars['Boolean'];
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
@@ -107,8 +107,25 @@ export type PaginatedComments = {
 
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
-  posts: Array<_Post>;
+  posts: Array<Post>;
   hasMore: Scalars['Boolean'];
+};
+
+export type Post = {
+  __typename?: 'Post';
+  id: Scalars['Int'];
+  title: Scalars['String'];
+  text: Scalars['String'];
+  audioFileName: Scalars['String'];
+  imageFileName: Scalars['String'];
+  points: Scalars['Float'];
+  voteStatus?: Maybe<Scalars['Int']>;
+  creatorId: Scalars['Float'];
+  creator: User;
+  comments: Comment;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  textSnippet: Scalars['String'];
 };
 
 export type PostInput = {
@@ -122,7 +139,7 @@ export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
   posts: PaginatedPosts;
-  post?: Maybe<_Post>;
+  post?: Maybe<Post>;
   me?: Maybe<User>;
   comment?: Maybe<Comment>;
   comments: PaginatedComments;
@@ -172,23 +189,6 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
-export type _Post = {
-  __typename?: '_Post';
-  id: Scalars['Int'];
-  title: Scalars['String'];
-  text: Scalars['String'];
-  audioFileName: Scalars['String'];
-  imageFileName: Scalars['String'];
-  points: Scalars['Float'];
-  voteStatus?: Maybe<Scalars['Int']>;
-  creatorId: Scalars['Float'];
-  creator: User;
-  comments: Comment;
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  textSnippet: Scalars['String'];
-};
-
 export type CommentSnippetFragment = (
   { __typename?: 'Comment' }
   & Pick<Comment, 'createdAt' | 'text' | 'id'>
@@ -199,8 +199,8 @@ export type CommentSnippetFragment = (
 );
 
 export type PostSnippetFragment = (
-  { __typename?: '_Post' }
-  & Pick<_Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'audioFileName' | 'imageFileName' | 'textSnippet' | 'voteStatus'>
+  { __typename?: 'Post' }
+  & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'audioFileName' | 'imageFileName' | 'textSnippet' | 'voteStatus'>
   & { creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
@@ -264,8 +264,8 @@ export type CreatePostMutationVariables = Exact<{
 export type CreatePostMutation = (
   { __typename?: 'Mutation' }
   & { createPost: (
-    { __typename?: '_Post' }
-    & Pick<_Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'text' | 'points' | 'creatorId'>
+    { __typename?: 'Post' }
+    & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'text' | 'points' | 'creatorId'>
   ) }
 );
 
@@ -334,8 +334,8 @@ export type UpdatePostMutationVariables = Exact<{
 export type UpdatePostMutation = (
   { __typename?: 'Mutation' }
   & { updatePost?: Maybe<(
-    { __typename?: '_Post' }
-    & Pick<_Post, 'id' | 'title' | 'text' | 'textSnippet'>
+    { __typename?: 'Post' }
+    & Pick<Post, 'id' | 'title' | 'text' | 'textSnippet'>
   )> }
 );
 
@@ -388,8 +388,8 @@ export type PostQueryVariables = Exact<{
 export type PostQuery = (
   { __typename?: 'Query' }
   & { post?: Maybe<(
-    { __typename?: '_Post' }
-    & Pick<_Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'audioFileName' | 'imageFileName' | 'text' | 'voteStatus'>
+    { __typename?: 'Post' }
+    & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'audioFileName' | 'imageFileName' | 'text' | 'voteStatus'>
     & { creator: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
@@ -409,7 +409,7 @@ export type PostsQuery = (
     { __typename?: 'PaginatedPosts' }
     & Pick<PaginatedPosts, 'hasMore'>
     & { posts: Array<(
-      { __typename?: '_Post' }
+      { __typename?: 'Post' }
       & PostSnippetFragment
     )> }
   ) }
@@ -427,7 +427,7 @@ export const CommentSnippetFragmentDoc = gql`
 }
     `;
 export const PostSnippetFragmentDoc = gql`
-    fragment PostSnippet on _Post {
+    fragment PostSnippet on Post {
   id
   createdAt
   updatedAt

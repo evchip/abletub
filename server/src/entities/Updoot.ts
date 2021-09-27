@@ -1,6 +1,6 @@
 import { ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
-import { _Post as Post } from './Post';
+import { Post } from './Post';
 import { User } from './User';
 
 @ObjectType()

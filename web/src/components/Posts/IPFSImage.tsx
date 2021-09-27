@@ -1,22 +1,23 @@
-import { _Post } from "generated/graphql";
+import { Maybe, User, Post } from "generated/graphql";
 import React, { ReactElement, useEffect, useState } from "react";
 import { Box, Image, Skeleton } from "@chakra-ui/react";
 import PlayPauseAudioFC from "./PlayPauseAudioFC";
-import { IPFSRequestHandler } from "../../utils/fetchIPFSData"
+import { IPFSRequestHandler } from "../../utils/fetchIPFSData";
 
 interface Props {
   post:
-    | Pick<
-        _Post,
-        | "id"
-        | "createdAt"
-        | "updatedAt"
-        | "title"
-        | "points"
-        | "audioFileName"
-        | "imageFileName"
-        | "text"
-        | "voteStatus"
+    | Maybe<
+        { __typename?: "Post" } & Pick<
+          Post,
+          | "id"
+          | "createdAt"
+          | "updatedAt"
+          | "title"
+          | "points"
+          | "audioFileName"
+          | "imageFileName"
+          | "voteStatus"
+        > & { creator: { __typename?: "User" } & Pick<User, "id" | "username"> }
       >
     | undefined;
 }
@@ -28,7 +29,10 @@ function IPFSImage({ post }: Props): ReactElement {
 
   useEffect(() => {
     (async () => {
-      const CID = (await IPFSRequestHandler(defaultImageURL, post!.imageFileName)) as string;
+      const CID = (await IPFSRequestHandler(
+        defaultImageURL,
+        post!.imageFileName
+      )) as string;
       setImageCID(CID);
     })();
   }, [imageCID]);
@@ -54,8 +58,10 @@ function IPFSImage({ post }: Props): ReactElement {
           />
           <Box className="port-img-overlay" borderRadius="2rem">
             <div className="port-text">
-            {post?.audioFileName !== "" ? <PlayPauseAudioFC post={post} /> : null}
-          </div>
+              {post && post?.audioFileName !== "" ? (
+                <PlayPauseAudioFC post={post} />
+              ) : null}
+            </div>
           </Box>
         </Skeleton>
       </div>

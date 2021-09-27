@@ -36,6 +36,7 @@ function CreateComment({ postId }: Props): ReactElement {
               <Flex w="100%" direction={["column", "row"]} alignItems="center" justifyContent="space-between">
               <Flex mt={4} width="85%" justifyContent="flex-start" >
                 <InputField
+                  size=""
                   textarea
                   name="text"
                   placeholder="tell them what you think"

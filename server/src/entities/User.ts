@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Field, ObjectType } from "type-graphql";
-import { _Post as Post } from "./Post";
+import { Post } from "./Post";
 import { Updoot } from "./Updoot";
 import { Comment } from "./Comment";
 

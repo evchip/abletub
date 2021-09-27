@@ -1,4 +1,4 @@
-fragment PostSnippet on _Post {
+fragment PostSnippet on Post {
     id
     createdAt
     updatedAt

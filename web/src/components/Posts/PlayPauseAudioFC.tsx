@@ -1,33 +1,44 @@
 import React, { useEffect, useState, useContext } from "react";
-// import ReactHowler from "react-howler";
 import { Box, IconButton } from "@chakra-ui/react";
 import { FaRegPauseCircle, FaRegPlayCircle } from "react-icons/fa";
-import {
-  PostSnippetFragment,
-} from "generated/graphql";
+import { Maybe, User, Post } from "generated/graphql";
 import TrackContext from "utils/trackContext";
 
 interface PlayPauseButtonProps {
-  post: PostSnippetFragment;
+  post:
+    | Maybe<
+        { __typename?: "Post" } & Pick<
+          Post,
+          | "id"
+          | "createdAt"
+          | "updatedAt"
+          | "title"
+          | "points"
+          | "audioFileName"
+          | "imageFileName"
+          | "voteStatus"
+        > & { creator: { __typename?: "User" } & Pick<User, "id" | "username"> }
+      >
+    | undefined;
 }
 
 function PlayPauseAudioFC({ post }: PlayPauseButtonProps) {
   const [playPause, setPlayPause] = useState(false);
   const { track, setTrack } = useContext(TrackContext) as ContextType;
-  
+
   useEffect(() => {
-    if (track && track.trackId === post.id) {
-      setPlayPause(track.isPlaying)
+    if (post && track && track.trackId === post.id) {
+      setPlayPause(track.isPlaying);
     } else {
-      setPlayPause(false)
+      setPlayPause(false);
     }
-  }, [track])
+  }, [track]);
 
   const songInfo = {
-    title: post.title,
-    artist: post.creator.username,
-    streamUrl: post.audioFileName,
-    trackId: post.id,
+    title: post!.title,
+    artist: post!.creator!.username,
+    streamUrl: post!.audioFileName,
+    trackId: post!.id,
     isPlaying: false,
   };
 

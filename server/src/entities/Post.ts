@@ -6,7 +6,7 @@ import { Comment } from './Comment';
 
 @ObjectType()
 @Entity()
-export class _Post extends BaseEntity {
+export class Post extends BaseEntity {
     @Field(() => Int)
     @PrimaryGeneratedColumn()
     id!: number;
