@@ -1,9 +1,9 @@
 #!/bin/bash
 
-echo What should the verison be?
+echo What should the version be?
 read VERSION
 echo $VERSION
 
-docker build -t evanchipman/abletub:$VERSION .
-docker push evanchipman/abletub:$VERSION
-ssh root@165.232.140.234 "docker pull evanchipman/abletub:$VERSION && docker tag evanchipman/abletub:$VERSION dokku/api:$VERSION && dokku deploy api $VERSION"
+docker build -t evanchipman/abletubipfs:$VERSION .
+docker push evanchipman/abletubipfs:$VERSION
+ssh root@147.182.237.175 "docker pull evanchipman/abletubipfs:$VERSION && docker tag evanchipman/abletubipfs:$VERSION dokku/cashewapi:$VERSION && dokku deploy cashewapi $VERSION"
