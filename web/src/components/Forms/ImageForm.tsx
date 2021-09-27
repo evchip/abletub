@@ -34,7 +34,7 @@ const ImageForm: React.FC<Props> = ({ formField, formProps }): ReactElement => {
       height={["40rem", "40rem", "20rem"]}
       display="flex"
       alignItems="space-evenly"
-      p={10}
+      p={5}
       shadow="md"
       borderWidth="1px"
       direction={["column", "column", "row"]}

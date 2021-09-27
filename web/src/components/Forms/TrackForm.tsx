@@ -30,11 +30,12 @@ const TrackForm: React.FC<Props> = ({ formField, formProps }): ReactElement => {
   return (
     <Flex
       mt={0}
-      width="100%"
+      mx="auto"
       height="20rem"
       display="flex"
       alignItems="space-evenly"
-      p={10}
+      justifyContent="center"
+      p={5}
       shadow="md"
       borderWidth="1px"
       flexDirection="column"
@@ -44,11 +45,11 @@ const TrackForm: React.FC<Props> = ({ formField, formProps }): ReactElement => {
       borderTop="none"
     >
       <Box display="flex" justifyContent="center">
-        <Heading fontSize="2xl">upload your track</Heading>
+        <Heading fontSize={["xl", "2xl"]}>upload your track</Heading>
       </Box>
-      <Box mt={10}>
-        <Text>{"<"} 50 mb mp3</Text>
-        <FormControl isInvalid={meta.touched && !!meta.error}>
+      <Flex direction="column" justifyContent="center" mt={10}>
+        <FormControl isInvalid={meta.touched && !!meta.error} style={{display: "flex", flexDirection:"column", alignItems:"center", justifyContent: "center", paddingBottom: "2rem"}}>
+          <Text>{"<"} 50 mb mp3</Text>
           <Input
             onChange={(e) => {
               if (e.target.files) {
@@ -67,12 +68,12 @@ const TrackForm: React.FC<Props> = ({ formField, formProps }): ReactElement => {
             <Text mt={1} color="red.200">{errors[audio.name]}</Text>
           ) : null}
         </FormControl>
-        <Box width="20rem">
+        <Flex justifyContent="center" width={["14rem","30rem"]} mt={2}>
           <Text overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis">
             {title}
           </Text>
-        </Box>
-      </Box>
+        </Flex>
+      </Flex>
     </Flex>
   );
 };

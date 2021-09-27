@@ -12,6 +12,8 @@ import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "utils/createUrqlClient";
 import { Layout } from "components/Layout";
+import { useIsAuth } from "utils/useIsAuth";
+import { withApollo } from "utils/withApollo";
 
 export const FormContext = createContext("");
 
@@ -44,8 +46,9 @@ interface FormValues {
 // }
 
 function UploadPost({}: Props): ReactElement {
-  const [, createPost] = useCreatePostMutation();
+  const [createPost] = useCreatePostMutation();
   const router = useRouter();
+  useIsAuth();
   const [activeStep, setActiveStep] = useState(0);
   const currentValidationSchema = validationSchema[activeStep];
   const isLastStep = activeStep === steps.length - 1;
@@ -97,30 +100,38 @@ function UploadPost({}: Props): ReactElement {
     });
   };
 
-  async function _submitForm(values: FormValues, actions: any) {
+  const _submitForm = async (
+    values: FormValues,
+    actions: any
+  ): Promise<void> => {
     const audioFileObj = await makeFileObject(values.audio);
     const audioCID = await uploadToIPFS(audioFileObj);
 
     const imageFileObj = await makeFileObject(values.image);
     const imageCID = await uploadToIPFS(imageFileObj);
 
-    const { error } = await createPost({
-      input: {
-        title: values.trackName,
-        text: values.trackDescription,
-        audioFileName: audioCID,
-        imageFileName: imageCID,
+    const inputValues = {
+      title: values.trackName,
+      text: values.trackDescription,
+      audioFileName: audioCID,
+      imageFileName: imageCID,
+    };
+
+    const { errors } = await createPost({
+      variables: { input: inputValues },
+      update: (cache) => {
+        cache.evict({ fieldName: "posts" });
       },
     });
-    if (error) {
-      console.log("error", error);
+    if (errors) {
+      console.log("error", errors);
     } else {
       popToast();
       actions.setSubmitting(false);
       setActiveStep(activeStep + 1);
       router.push("/");
     }
-  }
+  };
 
   function _handleSubmit(values: FormValues, actions: any) {
     if (isLastStep) {
@@ -145,8 +156,8 @@ function UploadPost({}: Props): ReactElement {
           onSubmit={_handleSubmit}
         >
           {(FormProps) => (
-            <Flex width="100%" justifyContent="center">
-              <Form id={formId}>
+            <Flex justifyContent="center" w={["90%", "50rem"]}>
+              <Form id={formId} style={{ display:"flex", justifyContent:"center", flexDirection:"column" }}>
                 {_renderStepContent(activeStep, FormProps)}
 
                 <Flex justifyContent="flex-end">
@@ -181,7 +192,7 @@ function UploadPost({}: Props): ReactElement {
                   )}
                 </Flex>
               </Form>
-            </Flex>
+              </Flex >
           )}
         </Formik>
       </Flex>
@@ -189,4 +200,4 @@ function UploadPost({}: Props): ReactElement {
   );
 }
 
-export default withUrqlClient(createUrqlClient)(UploadPost);
+export default withApollo({ ssr: false })(UploadPost);
