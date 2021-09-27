@@ -1,17 +1,9 @@
 import React, { useEffect } from "react";
-let { PlayButton, Timer, Progress } = require("react-soundplayer/components");
-let { withCustomAudio } = require("react-soundplayer/addons");
+import { PlayButton, Timer, Progress } from "react-soundplayer/components";
+import { withCustomAudio } from "react-soundplayer/addons";
 import { Flex, Text } from "@chakra-ui/react";
 
-interface Props {
-  streamUrl: string;
-  title: string;
-  artist: string;
-  isPlaying: boolean;
-  trackId: number;
-}
-
-const AudioPlayer = withCustomAudio((props: any) => {
+const AudioPlayer = withCustomAudio((props) => {
   const { streamUrl, trackTitle, artist, isPlaying, playing, soundCloudAudio, trackId} =
     props;
 
@@ -93,7 +85,7 @@ const AudioPlayer = withCustomAudio((props: any) => {
   );
 });
 
-class AudioFooter extends React.Component<Props> {
+class AudioFooter extends React.Component {
   
 
   render() {
