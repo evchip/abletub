@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { usePostQuery } from "../generated/graphql";
 
 export const useGetIntId = () => {
     const router = useRouter();
