@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/client";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -9,7 +10,6 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  useColorMode,
   Text
 } from "@chakra-ui/react";
 import NextLink from "next/link";
@@ -21,16 +21,16 @@ import { isServer } from "../utils/isServer";
 interface NavBarProps {}
 
 const NavBar: React.FC<NavBarProps> = ({}) => {
-  const { colorMode, toggleColorMode } = useColorMode();
   const router = useRouter();
-  const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
-  const [{ data, fetching }] = useMeQuery({
-    pause: isServer(),
+  const [logout, { loading: logoutFetching }] = useLogoutMutation();
+  const apolloClient = useApolloClient();
+  const { data, loading } = useMeQuery({
+    skip: isServer(),
   });
   let body = null;
 
   // data is loading
-  if (fetching) {
+  if (loading) {
     // user not logged in
   } else if (!data?.me) {
     body = (
@@ -83,7 +83,7 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
             <MenuItem
               onClick={async () => {
                 await logout();
-                router.reload();
+                await apolloClient.resetStore()
               }}
               isLoading={logoutFetching}
               variant="link"

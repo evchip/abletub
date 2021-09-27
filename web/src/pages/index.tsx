@@ -12,21 +12,22 @@ import NextLink from "next/link";
 import React, { useState } from "react";
 import { Layout } from "../components/Layout";
 import { UpvoteSection } from "../components/Posts/UpvoteSection";
-import { usePostsQuery } from "../generated/graphql";
+import { PostsQuery, usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { format } from "timeago.js";
 import IPFSImage from "components/Posts/IPFSImage";
+import { withApollo } from "utils/withApollo";
 
 const Index = () => {
-  const [variables, setVariables] = useState({
-    limit: 12,
-    cursor: null as null | string,
-  });
-  const [{ data, error, fetching }] = usePostsQuery({
-    variables,
+  const { data, error, loading, fetchMore, variables } = usePostsQuery({
+    variables: {
+      limit: 3,
+      cursor: null as null | string,
+    },
+    notifyOnNetworkStatusChange: true
   });
 
-  if (!fetching && !data) {
+  if (!loading && !data) {
     return (
       <div>
         <div>no more posts to show... or something went wrong</div>
@@ -38,7 +39,7 @@ const Index = () => {
   return (
     <>
       <Layout>
-        {!data && fetching ? (
+        {!data && loading ? (
           <Flex width="100%" m="auto" mt={10} justifyContent="center">
             <Heading>loading...</Heading>
           </Flex>
@@ -134,12 +135,14 @@ const Index = () => {
         {data && data.posts.hasMore ? (
           <Flex>
             <Button
-              isLoading={fetching}
+              isLoading={loading}
               onClick={() => {
-                setVariables({
-                  limit: variables.limit,
-                  cursor:
-                    data.posts.posts[data.posts.posts.length - 1].createdAt,
+                fetchMore({
+                  variables: {
+                    limit: variables!.limit,
+                    cursor:
+                      data.posts.posts[data.posts.posts.length - 1].createdAt,
+                  }
                 });
               }}
               colorScheme="pink"
@@ -155,4 +158,4 @@ const Index = () => {
     </>
   );
 };
-export default withUrqlClient(createUrqlClient, { ssr: true })(Index);
+export default withApollo({ssr: true})(Index);

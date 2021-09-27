@@ -10,20 +10,17 @@ import { useGetPostFromUrl } from "../../utils/useGetPostfromUrl";
 import { format } from "timeago.js";
 import { UpvoteSection } from "components/Posts/UpvoteSection";
 import IPFSImage from "components/Posts/IPFSImage";
+import { withApollo } from "utils/withApollo";
 
+const Post = () => {
+  const { data, error, loading } = useGetPostFromUrl();
 
-interface PostProps {
-
-}
-
-const Post = ({ }: PostProps) => {
-  const [{ data, error, fetching }] = useGetPostFromUrl();
-
-
-  if (fetching) {
+  if (loading) {
     return (
       <Layout>
-        <div>loading....</div>
+        <Box display="flex" justifyContent="center" mt={10} minHeight="20">
+          <Text color="white">loading</Text>
+        </Box>
       </Layout>
     );
   }
@@ -42,7 +39,6 @@ const Post = ({ }: PostProps) => {
   return (
     <Layout variant={"regular"}>
       <Flex direction="column" width="92%" justifyContent="center" mx="auto">
-      <Box display="flex" direction="row">
         <Flex
           p={5}
           mt="0"
@@ -57,13 +53,24 @@ const Post = ({ }: PostProps) => {
           borderTop="none"
           minH="xs"
         >
-          <Box display="flex" justifyContent="space-between">
-            <Box >
-              <Heading mb={4} color="white" fontSize={["medium", "large", "x-large"]}>
+          <Flex
+            direction={["column-reverse", "row"]}
+            justifyContent="space-between"
+          >
+            <Flex direction="column" mt={4} mr={[0, 8]}>
+              <Heading
+                mb={4}
+                color="white"
+                fontSize={["medium", "large", "x-large"]}
+              >
                 {data.post.title}
               </Heading>
               <Box ml=".15rem">
-                <Heading mb={4} color="white" fontSize={["small", "medium", "x-large"]}>
+                <Heading
+                  mb={4}
+                  color="white"
+                  fontSize={["small", "medium", "x-large"]}
+                >
                   {data.post.creator.username}
                 </Heading>
               </Box>
@@ -81,40 +88,46 @@ const Post = ({ }: PostProps) => {
                   </Text>
                 </Flex>
               </Flex>
-            </Box>
-            <Box display="flex" direction="row" alignItems="center">
-              {data.post.imageFileName !== null && data.post.imageFileName.startsWith("bafy") ? (
-                <IPFSImage
+              <Flex
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                width="100%"
+                mt={4}
+              >
+                <UpvoteSection
                   post={data.post}
+                  variant="30px"
+                  fontVariant="20px"
                 />
+                <Flex alignItems="center">
+                  <EditDeletePostBtns
+                    id={data.post.id}
+                    creatorId={data.post.creator.id}
+                  />
+                  <Text
+                    color="white"
+                    fontSize={["xx-small", "xs", "sm"]}
+                    mr={2}
+                  >
+                    {format(data.post.createdAt)}
+                  </Text>
+                </Flex>
+              </Flex>
+            </Flex>
+            <Flex direction="row" alignItems="center" justifyContent="center">
+              {data.post.imageFileName !== null &&
+              data.post.imageFileName.startsWith("bafy") ? (
+                <IPFSImage post={data.post} />
               ) : null}
-            </Box>
-          </Box>
-          <Flex
-            direction="row"
-            justifyContent="space-between"
-            alignItems="end"
-            width="100%"
-            mt={4}
-          >
-            <UpvoteSection post={data.post} variant="30px" fontVariant="20px"/>
-            <Flex alignItems="center">
-            <EditDeletePostBtns
-              id={data.post.id}
-              creatorId={data.post.creator.id}
-            />
-            <Text color="white" fontSize={["xx-small", "xs", "sm"]} mr={2}>
-              published {format(data.post.createdAt)}
-            </Text>
             </Flex>
           </Flex>
         </Flex>
-      </Box>
-      <CreateComment pageProps={data.post.id} postId={data.post.id} />
-      <Comments postId={data.post.id} />
+        <CreateComment pageProps={data.post.id} postId={data.post.id} />
+        <Comments postId={data.post.id} />
       </Flex>
     </Layout>
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Post);
+export default withApollo({ ssr: true })(Post);
