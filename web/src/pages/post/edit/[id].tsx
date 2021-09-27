@@ -14,7 +14,6 @@ import {
 import { createUrqlClient } from "../../../utils/createUrqlClient";
 import { useGetIntId } from "../../../utils/useGetIntId";
 import { useGetPostFromUrl } from "../../../utils/useGetPostfromUrl";
-import createPost from "../../create-post";
 
 const EditPost = ({}) => {
   const router = useRouter();
@@ -69,9 +68,16 @@ const EditPost = ({}) => {
           >
             {({ isSubmitting }) => (
               <Form>
-                <InputField name="title" placeholder="title" label="Title" />
+                <InputField
+                  size={""}
+                  textarea={false}
+                  name="title"
+                  placeholder="title"
+                  label="Title"
+                />
                 <Box mt={4}>
                   <InputField
+                    size={""}
                     textarea
                     name="text"
                     placeholder="text..."
