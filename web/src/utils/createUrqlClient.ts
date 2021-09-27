@@ -20,7 +20,6 @@ import {
   MeQuery,
   RegisterMutation,
   VoteMutationVariables,
-  SetAudioFileMutationVariables,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import gql from "graphql-tag";
@@ -128,7 +127,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
           Mutation: {
             deletePost: (_result, args, cache, info) => {
               cache.invalidate({
-                __typename: "_Post",
+                __typename: "Post",
                 id: (args as DeletePostMutationVariables).id,
               });
             },
@@ -136,7 +135,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
               const { postId, value } = args as VoteMutationVariables;
               const data = cache.readFragment(
                 gql`
-                  fragment __ on _Post {
+                  fragment __ on Post {
                     id
                     points
                     voteStatus
@@ -151,7 +150,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                 const newPointValue = (data.points as number) + value;
                 cache.writeFragment(
                   gql`
-                    fragment __ on _Post {
+                    fragment __ on Post {
                       points
                       voteStatus
                     }
@@ -160,44 +159,6 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                     id: postId,
                     points: newPointValue,
                     voteStatus: value,
-                  } as any
-                );
-              }
-            },
-            setAudioFile: (_result, args, cache, info) => {
-              const {
-                trackInput: { audioURL, audioFileName, artist, isPlaying },
-              } = args as SetAudioFileMutationVariables;
-              const data = cache.readFragment(
-                gql`
-                  fragment __ on TrackInput {
-                    audioURL
-                    audioFileName
-                    artist
-                    isPlaying
-                  }
-                `,
-                { id: audioURL } as any
-              );
-              if (data) {
-                if (data.audioURL === audioURL) {
-                  return;
-                }
-                const newTrack = { audioURL, audioFileName, artist, isPlaying };
-                cache.writeFragment(
-                  gql`
-                    fragment TrackInfo on TrackOutput {
-                      audioURL
-                      audioFileName
-                      artist
-                      isPlaying
-                    }
-                  `,
-                  {
-                    audioURL,
-                    audioFileName,
-                    artist,
-                    isPlaying,
                   } as any
                 );
               }
