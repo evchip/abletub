@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Box, FormControl} from "@chakra-ui/react";
+import { Flex, Box, FormControl } from "@chakra-ui/react";
 import { InputField as Field } from "../FormFields/InputField";
 import SelectField from "../FormFields/SelectField";
 import { FormikProps, FormikHelpers, useField } from "formik";
@@ -45,7 +45,7 @@ const genres = [
   {
     value: "9",
     label: "trap",
-  }
+  },
 ];
 
 const moods = [
@@ -68,7 +68,7 @@ const moods = [
   {
     value: "4",
     label: "upbeat",
-  }
+  },
 ];
 
 interface Props {
@@ -87,6 +87,8 @@ export const InfoForm: React.FC<Props> = ({ formField, formProps }) => {
       <FormControl isInvalid={meta.touched && !!meta.error}>
         <Box>
           <Field
+            size={""}
+            textarea={false}
             name={trackName.name}
             label={trackName.label}
             placeholder="track name"
@@ -102,6 +104,7 @@ export const InfoForm: React.FC<Props> = ({ formField, formProps }) => {
         </Flex>
         <Box>
           <Field
+            size={""}
             name={trackDescription.name}
             textarea
             placeholder="description"

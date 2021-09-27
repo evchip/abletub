@@ -18,7 +18,7 @@ export const FormContext = createContext("");
 const steps = ["track", "track details"];
 const { formId, formField } = postFormModel;
 
-function _renderStepContent(step: number, formProps) {
+function _renderStepContent(step: number, formProps: any) {
   switch (step) {
     case 0:
       return <TrackForm formField={formField} formProps={formProps} />;
@@ -30,6 +30,18 @@ function _renderStepContent(step: number, formProps) {
 }
 
 interface Props {}
+
+interface FormValues {
+  [x: string]: any;
+}
+// {
+//   trackName: string;
+//   trackDescription: string;
+//   genre: string;
+//   mood: string;
+//   audio: string;
+//   image: string;
+// }
 
 function UploadPost({}: Props): ReactElement {
   const [, createPost] = useCreatePostMutation();
@@ -85,13 +97,12 @@ function UploadPost({}: Props): ReactElement {
     });
   };
 
-  async function _submitForm(values, actions) {
+  async function _submitForm(values: FormValues, actions: any) {
     const audioFileObj = await makeFileObject(values.audio);
     const audioCID = await uploadToIPFS(audioFileObj);
 
-      const imageFileObj = await makeFileObject(values.image);
-      const imageCID = await uploadToIPFS(imageFileObj);
-
+    const imageFileObj = await makeFileObject(values.image);
+    const imageCID = await uploadToIPFS(imageFileObj);
 
     const { error } = await createPost({
       input: {
@@ -104,14 +115,14 @@ function UploadPost({}: Props): ReactElement {
     if (error) {
       console.log("error", error);
     } else {
-      popToast()
+      popToast();
       actions.setSubmitting(false);
       setActiveStep(activeStep + 1);
       router.push("/");
     }
   }
 
-  function _handleSubmit(values, actions) {
+  function _handleSubmit(values: FormValues, actions: any) {
     if (isLastStep) {
       _submitForm(values, actions);
     } else {
@@ -121,27 +132,29 @@ function UploadPost({}: Props): ReactElement {
     }
   }
 
-  function _handleBack() {
-    setActiveStep(activeStep - 1);
-  }
+  // function _handleBack() {
+  //   setActiveStep(activeStep - 1);
+  // }
 
   return (
     <Layout variant="regular">
       <Flex justifyContent="center">
-          <Formik
-            initialValues={formInitialValues}
-            validationSchema={currentValidationSchema}
-            onSubmit={_handleSubmit}
-          >
-            {(FormProps) => (
-              <Flex width="100%" justifyContent="center">
-                <Form id={formId}>
-                  {_renderStepContent(activeStep, FormProps)}
+        <Formik
+          initialValues={formInitialValues}
+          validationSchema={currentValidationSchema}
+          onSubmit={_handleSubmit}
+        >
+          {(FormProps) => (
+            <Flex width="100%" justifyContent="center">
+              <Form id={formId}>
+                {_renderStepContent(activeStep, FormProps)}
 
-                    <Flex justifyContent="flex-end">
-                    {isLastStep ? (
-                      <Button
-                      disabled={FormProps.isSubmitting || FormProps.values.image == "" }
+                <Flex justifyContent="flex-end">
+                  {isLastStep ? (
+                    <Button
+                      disabled={
+                        FormProps.isSubmitting || FormProps.values.image == ""
+                      }
                       isLoading={FormProps.isSubmitting}
                       type="submit"
                       colorScheme="pink"
@@ -151,26 +164,26 @@ function UploadPost({}: Props): ReactElement {
                     >
                       submit
                     </Button>
-                    ) : (
+                  ) : (
                     <Button
-                        disabled={FormProps.isSubmitting || FormProps.values.audio == ""}
-                        isLoading={FormProps.isSubmitting}
-                        type="submit"
-                        colorScheme="pink"
-                        variant="solid"
-                        m="auto"
-                        my={8}
-                      >
-                        next
-                      </Button>
-                    )}
-                      
-                    </Flex>
-                </Form>
-              </Flex>
-            )}
-          </Formik>
-
+                      disabled={
+                        FormProps.isSubmitting || FormProps.values.audio == ""
+                      }
+                      isLoading={FormProps.isSubmitting}
+                      type="submit"
+                      colorScheme="pink"
+                      variant="solid"
+                      m="auto"
+                      my={8}
+                    >
+                      next
+                    </Button>
+                  )}
+                </Flex>
+              </Form>
+            </Flex>
+          )}
+        </Formik>
       </Flex>
     </Layout>
   );

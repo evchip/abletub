@@ -40,6 +40,8 @@ const ChangePassword: NextPage = () => {
             {({ isSubmitting }) => (
                 <Form>
                     <InputField 
+                    size=""
+                    textarea={false}
                     name='newPassword' 
                     placeholder='new password' 
                     label='New Password'
