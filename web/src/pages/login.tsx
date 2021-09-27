@@ -19,73 +19,77 @@ const Login: React.FC<{}> = ({}) => {
   return (
     <Layout>
       <Flex w="100%" justifyContent="center">
-      <Box
-        width="20rem"
-        display="flex"
-        justifyContent="center"
-        p={10}
-        mt="0"
-        shadow="md"
-        borderWidth="1px"
-        flexDirection="row"
-        bgColor="blackAlpha.400"
-        borderBottomRadius="30px"
-        borderColor="pink.200"
-        borderTop="none"
-      >
-        <Formik
-          initialValues={{ usernameOrEmail: "", password: "" }}
-          onSubmit={async (values, { setErrors }) => {
-            const response = await login(values);
-
-            if (response.data?.login.errors) {
-              setErrors(toErrorMap(response.data.login.errors));
-            } else if (response.data?.login.user) {
-              if (typeof router.query.next === "string") {
-                // worked
-                router.push(router.query.next || "/");
-              } else {
-                router.push("/");
-              }
-            }
-          }}
+        <Box
+          width="20rem"
+          display="flex"
+          justifyContent="center"
+          p={10}
+          mt="0"
+          shadow="md"
+          borderWidth="1px"
+          flexDirection="row"
+          bgColor="blackAlpha.400"
+          borderBottomRadius="30px"
+          borderColor="pink.200"
+          borderTop="none"
         >
-          {({ isSubmitting }) => (
-            <Form>
-              <InputField
-                name="usernameOrEmail"
-                placeholder="rlgrime92"
-                label="username or email"
-              />
-              <Box mt={4}>
+          <Formik
+            initialValues={{ usernameOrEmail: "", password: "" }}
+            onSubmit={async (values, { setErrors }) => {
+              const response = await login(values);
+
+              if (response.data?.login.errors) {
+                setErrors(toErrorMap(response.data.login.errors));
+              } else if (response.data?.login.user) {
+                if (typeof router.query.next === "string") {
+                  // worked
+                  router.push(router.query.next || "/");
+                } else {
+                  router.push("/");
+                }
+              }
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form>
                 <InputField
-                  name="password"
-                  placeholder="vO!d^Mons00n"
-                  label="password"
-                  type="password"
+                  size={""}
+                  textarea={false}
+                  name="usernameOrEmail"
+                  placeholder="rlgrime92"
+                  label="username or email"
                 />
-              </Box>
-              {/* <Flex mt={2}>
+                <Box mt={4}>
+                  <InputField
+                    size={""}
+                    textarea={false}
+                    name="password"
+                    placeholder="vO!d^Mons00n"
+                    label="password"
+                    type="password"
+                  />
+                </Box>
+                {/* <Flex mt={2}>
                 <Box ml="auto">
                   <NextLink href="/forgot-password">
                     <Link><Text>forgot password?</Text></Link>
                   </NextLink>
                 </Box>
               </Flex> */}
-              <Flex mt={8} justifyContent="center">
-              <Button
-                mt={4}
-                type="submit"
-                isLoading={isSubmitting}
-                colorScheme="pink"
-              >
-                login
-              </Button>
-              </Flex>
-            </Form>
-          )}
-        </Formik>
-      </Box>
+                <Flex mt={8} justifyContent="center">
+                  <Button
+                    mt={4}
+                    type="submit"
+                    isLoading={isSubmitting}
+                    colorScheme="pink"
+                  >
+                    login
+                  </Button>
+                </Flex>
+              </Form>
+            )}
+          </Formik>
+        </Box>
       </Flex>
     </Layout>
   );
