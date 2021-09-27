@@ -26,11 +26,11 @@ export const Comments: React.FC<CommentsProps> = ({ postId}) => {
     setVariables({postId: variables.postId, limit: variables.limit, cursor: cursorProp})
   }
 
-  const [{ data, error, fetching }] = useCommentsQuery({
+  const { data, error, loading } = useCommentsQuery({
     variables,
   });
 
-  if ((!fetching && !data) || (!fetching && !data!.comments.comments[0])) {
+  if ((!loading && !data) || (!loading && !data!.comments.comments[0])) {
     return (
       <Box display="flex" justifyContent="center" mt={10} minHeight="20">
         <Text color="white">
@@ -43,7 +43,7 @@ export const Comments: React.FC<CommentsProps> = ({ postId}) => {
 
   return (
     <Box>
-      {!data && fetching ? (
+      {!data && loading ? (
         <Flex width="100%" m="auto" mt={10} justifyContent="center">
           <Heading>loading...........</Heading>
         </Flex>
@@ -68,7 +68,7 @@ export const Comments: React.FC<CommentsProps> = ({ postId}) => {
       {data && data.comments.hasMore ? (
         <Flex>
           <Button
-            isLoading={fetching}
+            isLoading={loading}
             onClick={() => {
               setVariables({
                 postId,
