@@ -14,30 +14,37 @@ export const EditDeletePostBtns: React.FC<EditDeletePostBtnsProps> = ({
     id,
     creatorId
 }) => {
-    const [, deletePost] = useDeletePostMutation()
-    const [{data: userData}] = useMeQuery()
+    const [deletePost] = useDeletePostMutation()
+    const {data: userData} = useMeQuery()
     if (userData?.me?.id !== creatorId) {
         return null;
     }
     return (
-        <Flex direction="row" mr={4}>
+        <Flex direction="row" mx={4}>
+            <Box mr={2}>
             <NextLink href="/post/edit/[id]" as={`/post/edit/${id}`}>
                 <IconButton
                 as={Link}
                 aria-label="edit post"
+                height={["8", "8", "12"]}
                 icon={<EditIcon/>}
                 />
             </NextLink>
-            
+            </Box>
+            <Box mr={2}>
             <IconButton
                 aria-label="delete post"
                 icon={<DeleteIcon/>}
+                height={["8", "8", "12"]}
                 onClick={async () => {
-                    deletePost({ id })
+                    deletePost({ variables: {id}, update:(cache) => {
+                        cache.evict({id: 'Post:' + id})
+                    } })
                     router.push('/');
                 }}
                 ml="auto"
             />
+            </Box>
         </Flex>
     )
 }

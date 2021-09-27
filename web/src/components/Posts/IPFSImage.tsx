@@ -43,13 +43,13 @@ function IPFSImage({ post }: Props): ReactElement {
         <Skeleton
           startColor="pink.500"
           endColor="purple.500"
-          height={["40", "72"]}
+          height={["60", "72"]}
           borderRadius="2em"
           fadeDuration={6}
           isLoaded={imageCID !== "" ? true : false}
         >
           <Image
-            boxSize={["40", "72"]}
+            boxSize={["60", "72"]}
             borderRadius="2rem"
             className="portfolio-img"
             src={imageCID}

@@ -1,7 +1,15 @@
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { Flex, IconButton, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { Post, useVoteMutation, User } from "../../generated/graphql";
+import {
+  Post,
+  useVoteMutation,
+  User,
+  PostSnippetFragmentDoc,
+  VoteMutation,
+} from "../../generated/graphql";
+import gql from "graphql-tag";
+import { ApolloCache } from "@apollo/client";
 
 interface UpvoteSectionProps {
   post: { __typename?: "Post" | undefined } & {
@@ -21,6 +29,47 @@ interface UpvoteSectionProps {
   fontVariant: string;
 }
 
+const updateAfterVote = (
+  value: number,
+  postId: number,
+  cache: ApolloCache<VoteMutation>
+) => {
+  const data = cache.readFragment<{
+    id: number;
+    points: number;
+    voteStatus: number | null;
+  }>({
+    id: "Post:" + postId,
+    fragment: gql`
+      fragment __ on Post {
+        id
+        points
+        voteStatus
+      }
+    `,
+  });
+  if (data) {
+    if (data.voteStatus === value) {
+      return;
+    }
+    const newPointValue = (data.points as number) + value;
+    cache.writeFragment({
+      id: "Post:" + postId,
+      fragment: gql`
+        fragment __ on Post {
+          points
+          voteStatus
+        }
+      `,
+      data: {
+        id: postId,
+        points: newPointValue,
+        voteStatus: value,
+      },
+    });
+  }
+};
+
 export const UpvoteSection: React.FC<UpvoteSectionProps> = ({
   post,
   variant,
@@ -29,7 +78,7 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({
   const [loadingState, setLoadingState] = useState<
     "upvote-loading" | "downvote-loading" | "not-loading"
   >("not-loading");
-  const [, vote] = useVoteMutation();
+  const [vote] = useVoteMutation();
   const [voteStatus, setVoteStatus] = useState(post.voteStatus);
 
   const handleVote = async () => {
@@ -39,15 +88,21 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({
     if (post.voteStatus === 1) {
       setLoadingState("downvote-loading");
       await vote({
-        postId: post.id,
-        value: -1,
+        variables: {
+          postId: post.id,
+          value: -1,
+        },
+        update: (cache) => updateAfterVote(-1, post.id, cache),
       });
       setVoteStatus(-1);
     } else {
       setLoadingState("upvote-loading");
       await vote({
-        postId: post.id,
-        value: 1,
+        variables: {
+          postId: post.id,
+          value: 1,
+        },
+        update: (cache) => updateAfterVote(1, post.id, cache),
       });
       setVoteStatus(1);
     }
@@ -80,7 +135,7 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({
         colorScheme={post.voteStatus === 1 ? "black" : undefined}
         isLoading={loadingState === "upvote-loading"}
       />
-      <Text fontSize={fontVariant}>{post.points}</Text>
+      <Text fontSize={["sm", "md", "lg"]}>{post.points}</Text>
     </Flex>
   );
 };
