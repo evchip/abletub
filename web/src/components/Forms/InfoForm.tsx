@@ -83,7 +83,7 @@ export const InfoForm: React.FC<Props> = ({ formField, formProps }) => {
   const [field, meta] = useField(formProps);
 
   return (
-    <Flex width="100%" direction="column" mx={0} justifyContent="center">
+    <Flex width="100%" direction="column" mx={0} justifyContent="space-between">
       <FormControl isInvalid={meta.touched && !!meta.error}>
         <Box>
           <Field

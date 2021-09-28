@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { FormikHelpers, useField, FormikProps } from "formik";
 import React, { ReactElement, useState, useContext } from "react";
+import { fileSelected } from "utils/IPFSUploads/upload";
 import * as Yup from "yup";
 import { formTypes } from "../../utils/FormModel/postFormModel";
 import { InfoForm } from "./InfoForm";
@@ -61,14 +62,15 @@ const ImageForm: React.FC<Props> = ({ formField, formProps }): ReactElement => {
                 />
               </Box>
             ) : (
-              <Box>
+              <Box display="flex" justifyContent="center">
                 <Input
                   boxSize={["40", "78"]}
                   className="image-file"
                   bgColor="whiteAlpha.400"
                   onChange={(e) => {
                     if (e.target.files) {
-                      setFieldValue("image", e.target.files);
+                      setFieldValue("image", e);
+                      // fileSelected(e)
                       const image = URL.createObjectURL(e.target.files[0]);
                       setPicture(image);
                     }

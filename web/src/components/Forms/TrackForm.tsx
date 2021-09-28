@@ -53,7 +53,7 @@ const TrackForm: React.FC<Props> = ({ formField, formProps }): ReactElement => {
           <Input
             onChange={(e) => {
               if (e.target.files) {
-                setFieldValue("audio", e.target.files);
+                setFieldValue("audio", e);
                 setTitle(e.target.files[0].name);
               }
             }}
