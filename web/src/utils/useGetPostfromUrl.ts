@@ -7,7 +7,7 @@ export const useGetPostFromUrl = () => {
     const pause = intId === -1;
 
     return usePostQuery({
-        pause: pause,
+        skip: pause,
         variables: {
             id: intId
         }
