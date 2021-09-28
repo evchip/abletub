@@ -47,7 +47,7 @@ const AudioPlayer = withCustomAudio((props) => {
     >
       <Flex alignItems="center" >
         <PlayButton
-          style={{ width: "20px", height: "20px", marginLeft: "1rem" }}
+          style={{ width: "20px", height: "20px", marginLeft: "1rem", marginRight: "1rem" }}
           {...props}
           onTogglePlay={() => handleChange()}
         />
@@ -63,7 +63,7 @@ const AudioPlayer = withCustomAudio((props) => {
         </Text>
         <Text
           ml={4}
-          width="10rem"
+          width="8rem"
           overflow="hidden"
           whiteSpace="nowrap"
           textOverflow="ellipsis"
@@ -80,7 +80,7 @@ const AudioPlayer = withCustomAudio((props) => {
           {...props}
         />
       </Flex>
-      <Timer style={{ marginRight: "2rem", marginLeft: "2rem" }} {...props} />
+      <Timer style={{ paddingRight: "1rem", paddingLeft: "1rem" }} {...props} />
     </Flex>
   );
 });
