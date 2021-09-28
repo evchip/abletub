@@ -1,5 +1,5 @@
 import React, { ReactElement, useContext, useEffect, useState } from "react";
-import { IPFSRequestHandler } from "utils/fetchIPFSData";
+import { IPFSRequestHandler } from "utils/IPFSUploads/fetchIPFSData";
 import TrackContext from "utils/trackContext";
 import AudioFooter from "./AudioFooter";
 
