@@ -1,17 +1,17 @@
-# React/TypeScript Forum Starter Kit
+# abletub - a music distribution platform built on IPFS
 
-A full stack web app forum with user-generated posts. Complete with CRUD functionality, user registration and login, post voting.
+**abletub** is a music sharing platform that stores files on the Inter-Planetary File Storage Network (IPFS): a decentralized network protocol for storing and sharing data in a distributed file system. IPFS uses content-addressing to uniquely identify each file in a global namespace connecting all computing devices.
 
-![Sample Image](https://i.imgur.com/BiWpJ84.png)
+![Sample Image](https://imgur.com/kApR6z3)
 
 ## Front End Stack
-React, Chakra UI, NextJS, Vercel, URQL, GraphQL
+React, GraphQL, Chakra UI, NextJS, Apollo-Client, React-Soundplayer
+Deployed on Vercel
 
 ## Back End Stack
-PostgresQL, Redis, TypeORM, Apollo Server, Express
+PostgresQL, Redis, TypeORM, Express, Apollo Server, Express
+Deployed with a Dokku container
 
-## Deployment
-Docker, Dokku
 
 ## Get Started
 Install dependencies for server and web directories
