@@ -2,7 +2,7 @@
 
 **abletub** is a music sharing platform that stores files on the Inter-Planetary File Storage Network (IPFS): a decentralized network protocol for storing and sharing data in a distributed file system. IPFS uses content-addressing to uniquely identify each file in a global namespace connecting all computing devices.
 
-![Sample Image](https://imgur.com/kApR6z3)
+![Sample Image](https://i.imgur.com/kApR6z3)
 
 ## Front End Stack
 React, GraphQL, Chakra UI, NextJS, Apollo-Client, React-Soundplayer
