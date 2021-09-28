@@ -11,10 +11,11 @@ import { format } from "timeago.js";
 import { UpvoteSection } from "components/Posts/UpvoteSection";
 import IPFSImage from "components/Posts/IPFSImage";
 import { withApollo } from "utils/withApollo";
+import { retrieveStatus } from "utils/IPFSUploads/fetchIPFSStatus";
 
 const Post = () => {
   const { data, error, loading } = useGetPostFromUrl();
-
+  
   if (loading) {
     return (
       <Layout>
@@ -35,6 +36,10 @@ const Post = () => {
         <Box>We couldn't find that post...</Box>
       </Layout>
     );
+  }
+
+  if (data.post) {
+    const cidStatus = retrieveStatus(data!.post!.imageFileName)
   }
   return (
     <Layout variant={"regular"}>
@@ -116,14 +121,13 @@ const Post = () => {
               </Flex>
             </Flex>
             <Flex direction="row" alignItems="center" justifyContent="center">
-              {data.post.imageFileName !== null &&
-              data.post.imageFileName.startsWith("bafy") ? (
+              {data.post.imageFileName ? (
                 <IPFSImage post={data.post} />
               ) : null}
             </Flex>
           </Flex>
         </Flex>
-        <CreateComment pageProps={data.post.id} postId={data.post.id} />
+        <CreateComment postId={data.post.id} />
         <Comments postId={data.post.id} />
       </Flex>
     </Layout>
