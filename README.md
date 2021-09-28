@@ -30,6 +30,8 @@
 - Deployed with [Dokku](https://dokku.com/) VPS & [Docker](https://www.docker.com/)
 - Hosted on [Digital Ocean](https://www.digitalocean.com/)
 
+## Schema
+![Schema](https://i.imgur.com/qCgNu6K.png)
 
 ## Get Started
 Install dependencies for server and web directories
