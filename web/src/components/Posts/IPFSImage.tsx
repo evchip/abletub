@@ -2,7 +2,7 @@ import { Maybe, User, Post } from "generated/graphql";
 import React, { ReactElement, useEffect, useState } from "react";
 import { Box, Image, Skeleton } from "@chakra-ui/react";
 import PlayPauseAudioFC from "./PlayPauseAudioFC";
-import { IPFSRequestHandler } from "../../utils/fetchIPFSData";
+import { IPFSRequestHandler } from "../../utils/IPFSUploads/fetchIPFSData";
 
 interface Props {
   post:
@@ -37,6 +37,23 @@ function IPFSImage({ post }: Props): ReactElement {
     })();
   }, [imageCID]);
 
+  const imageOnErrorHandler = (
+    event: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
+    event.currentTarget.src = "https://image.freepik.com/free-vector/something-went-wrong-neon-text_118419-43.jpg";
+    event.currentTarget.className = "image-error";
+    return (
+      <Image
+            boxSize={["60", "72"]}
+            borderRadius="2rem"
+            className="portfolio-img"
+            src={event.currentTarget.src}
+            alt=""
+            objectFit="cover"
+          />
+    )
+  };
+
   return (
     <Box>
       <div className="port-cont-hov tile scale-anm">
@@ -55,13 +72,14 @@ function IPFSImage({ post }: Props): ReactElement {
             src={imageCID}
             alt=""
             objectFit="cover"
+            onError={imageOnErrorHandler}
           />
           <Box className="port-img-overlay" borderRadius="2rem">
-            <div className="port-text">
+            <Box className="port-text">
               {post && post?.audioFileName !== "" ? (
                 <PlayPauseAudioFC post={post} />
               ) : null}
-            </div>
+            </Box>
           </Box>
         </Skeleton>
       </div>
