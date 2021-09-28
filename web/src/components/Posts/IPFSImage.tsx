@@ -40,7 +40,7 @@ function IPFSImage({ post }: Props): ReactElement {
   const imageOnErrorHandler = (
     event: React.SyntheticEvent<HTMLImageElement, Event>
   ) => {
-    event.currentTarget.src = "https://image.freepik.com/free-vector/something-went-wrong-neon-text_118419-43.jpg";
+    event.currentTarget.src = "https://www.thoughtco.com/thmb/jOJFZeZ6jr4jE336MlwjKml2hEM=/4910x3472/filters:fill(auto,1)/question_mark-166836001-56af9f3c3df78cf772c6c639.jpg";
     event.currentTarget.className = "image-error";
     return (
       <Image
