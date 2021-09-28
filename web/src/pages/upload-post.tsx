@@ -7,13 +7,13 @@ import postFormModel from "../utils/FormModel/postFormModel";
 import formInitialValues from "../utils/FormModel/formInitialValues";
 import ImageForm from "components/Forms/ImageForm";
 import TrackForm from "components/Forms/TrackForm";
-import { Web3Storage } from "web3.storage";
 import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "utils/createUrqlClient";
 import { Layout } from "components/Layout";
 import { useIsAuth } from "utils/useIsAuth";
 import { withApollo } from "utils/withApollo";
+import { fileSelected } from "utils/IPFSUploads/upload";
 
 export const FormContext = createContext("");
 
@@ -36,14 +36,6 @@ interface Props {}
 interface FormValues {
   [x: string]: any;
 }
-// {
-//   trackName: string;
-//   trackDescription: string;
-//   genre: string;
-//   mood: string;
-//   audio: string;
-//   image: string;
-// }
 
 function UploadPost({}: Props): ReactElement {
   const [createPost] = useCreatePostMutation();
@@ -65,56 +57,19 @@ function UploadPost({}: Props): ReactElement {
     });
   };
 
-  const uploadToIPFS = async (files: File[]) => {
-    const getAccessToken = () => {
-      return process.env.NEXT_PUBLIC_WEB3_API_TOKEN;
-    };
-
-    const makeStorageClient = () => {
-      const client = new Web3Storage({ token: getAccessToken() });
-      return client;
-    };
-
-    const storeFiles = async (files: File[]) => {
-      const client = makeStorageClient();
-      const cid = await client.put(files);
-      console.log("stored files with cid:", cid);
-      return cid;
-    };
-
-    const result = await storeFiles(files);
-    return result;
-  };
-
-  const makeFileObject = async (upload: FileList | null) => {
-    return await upload![0].arrayBuffer().then((res) => {
-      const blob = new Blob([new Uint8Array(res)], { type: "file" });
-      const files = [
-        // new File(
-        //   [`contents of ${upload![0].name}: ${upload![0]}`],
-        //   "plain-utf8.txt"
-        // ),
-        new File([blob], upload![0].name),
-      ];
-      return files;
-    });
-  };
-
   const _submitForm = async (
     values: FormValues,
     actions: any
   ): Promise<void> => {
-    const audioFileObj = await makeFileObject(values.audio);
-    const audioCID = await uploadToIPFS(audioFileObj);
 
-    const imageFileObj = await makeFileObject(values.image);
-    const imageCID = await uploadToIPFS(imageFileObj);
+    const audio = await fileSelected(values.audio, values.trackName)
+    const image = await fileSelected(values.image, values.trackName)
 
     const inputValues = {
       title: values.trackName,
       text: values.trackDescription,
-      audioFileName: audioCID,
-      imageFileName: imageCID,
+      audioFileName: audio!.fileGatewayURL,
+      imageFileName: image!.fileGatewayURL,
     };
 
     const { errors } = await createPost({
