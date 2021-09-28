@@ -66,7 +66,7 @@ const EditPost = ({}) => {
             }}
           >
             {({ isSubmitting }) => (
-              <Form>
+              <Form style={{width:"90%"}}>
                 <InputField
                   size={""}
                   textarea={false}
