@@ -74,7 +74,7 @@ const Post = () => {
                 <Heading
                   mb={4}
                   color="white"
-                  fontSize={["small", "medium", "x-large"]}
+                  fontSize={["small", "medium", "large"]}
                 >
                   {data.post.creator.username}
                 </Heading>
