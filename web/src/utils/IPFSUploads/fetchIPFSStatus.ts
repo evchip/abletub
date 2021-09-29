@@ -12,7 +12,6 @@ import { Web3Storage } from "web3.storage";
   export const retrieveStatus = async (cid: string) => {
     const client = makeStorageClient();
     const res = await client.status(cid)
-    console.log("info res", res)
     // if (!res!.ok) {
     //   //   throw new Error(`failed to get ${cid}`)
     //   return defaultURL;
