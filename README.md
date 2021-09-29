@@ -7,6 +7,7 @@
 ![Front Page](https://i.imgur.com/kApR6z3.png[/img])
 
 ---
+## About
 [**abletub.live**](https://abletub.live/) is a music sharing platform that stores files on the Inter-Planetary File Storage Network ([IPFS](https://ipfs.io/ "IPFS")): a decentralized network protocol for storing and sharing data in a distributed file system. **a b l e t u b** allows users to create an immutable content address that can be stored by any node on the IPFS network, including themselves, you, and me! This method of networking and storage provides several critical benefits:
  - facilitates a theoretically eternal method of data persistence, provided that nodes on the IPFS network continue to pin the data.
  - creates an immutable record of when an artist uploaded a track, providing evidence for copyright disputes.
