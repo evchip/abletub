@@ -1,11 +1,16 @@
 # **[a b l e t u b](https://abletub.live/)** - a music distribution platform built on IPFS
 
+![MITLicense](https://img.shields.io/github/license/AntwuanDixon/abletub?style=for-the-badge)
+![front-end-dependencies](https://img.shields.io/david/AntwuanDixon/abletub?color=blue&label=front-end&path=web&style=for-the-badge)
+![back-end-dependencies](https://img.shields.io/david/AntwuanDixon/abletub?color=purple&label=back-end&path=server&style=for-the-badge)
+---
+![Front Page](https://i.imgur.com/kApR6z3.png[/img])
+
+---
 [**abletub.live**](https://abletub.live/) is a music sharing platform that stores files on the Inter-Planetary File Storage Network ([IPFS](https://ipfs.io/ "IPFS")): a decentralized network protocol for storing and sharing data in a distributed file system. **a b l e t u b** allows users to create an immutable content address that can be stored by any node on the IPFS network, including themselves, you, and me! This method of networking and storage provides several critical benefits:
  - facilitates a theoretically eternal method of data persistence, provided that nodes on the IPFS network continue to pin the data.
  - creates an immutable record of when an artist uploaded a track, providing evidence for copyright disputes.
  - helps fortify and decentralize the web by increasing the number of nodes serving content. With IPFS, we can all be servers.
-
-![Front Page](https://i.imgur.com/kApR6z3.png[/img])
 
 ## File Storage
 **a b l e t u b** uses [web3.storage](https://web3.storage/), an IPFS [pinning service](https://docs.ipfs.io/how-to/work-with-pinning-services/) provided by Protocol Labs. When users upload their files, 
