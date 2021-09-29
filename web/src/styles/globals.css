@@ -125,6 +125,18 @@ input.image-file {
   display: inline-block;
 }
 
+.sb-soundplayer-icon {
+  width: 1em;
+  height: 1em;
+  position: relative;
+  vertical-align: middle;
+}
+
+.timer {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
 .rounded-left { 
   background-color: #D53F8C;
   width:100%;
@@ -169,6 +181,10 @@ input.image-file {
   input.audio-file {
     padding: 4rem 0 0 0 ;
     width: 12rem;
+  }
+
+  .timer {
+    display: none;
   }
   
  }
