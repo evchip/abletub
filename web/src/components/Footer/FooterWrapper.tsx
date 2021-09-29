@@ -37,7 +37,7 @@ function FooterWrapper({}: Props): ReactElement {
           title={track.title}
           artist={track.artist}
           isPlaying={track.isPlaying}
-          trackId={4}
+          trackId={track.trackId}
         />
       ) : null}
     </>
