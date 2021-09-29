@@ -1,22 +1,32 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { PlayButton, Timer, Progress } from "react-soundplayer/components";
 import { withCustomAudio } from "react-soundplayer/addons";
 import { Flex, Text } from "@chakra-ui/react";
 
 const AudioPlayer = withCustomAudio((props) => {
-  const { streamUrl, trackTitle, artist, isPlaying, playing, soundCloudAudio, trackId} =
-    props;
+  const {
+    streamUrl,
+    trackTitle,
+    artist,
+    isPlaying,
+    playing,
+    soundCloudAudio,
+    trackId,
+  } = props;
 
-    const songInfo = {
-      title: trackTitle,
-      artist,
-      streamUrl,
-      trackId,
-      isPlaying
-    };
+  const songInfo = {
+    title: trackTitle,
+    artist,
+    streamUrl,
+    trackId,
+    isPlaying,
+  };
+
+  const seekingIcon = (
+    <img src="./assets/preloader.svg" className="sb-soundplayer-icon" />
+  );
 
   useEffect(() => {
-
     if (isPlaying) {
       soundCloudAudio.play();
     } else {
@@ -43,33 +53,40 @@ const AudioPlayer = withCustomAudio((props) => {
       bg="black"
       p={4}
       alignContent="center"
-      justifyContent="space-between"
+      justifyContent="space-evenly"
     >
-      <Flex alignItems="center" >
+      <Flex alignItems="center">
         <PlayButton
-          style={{ width: "20px", height: "20px", marginLeft: "1rem", marginRight: "1rem" }}
+          style={{
+            width: "20px",
+            height: "20px",
+            marginLeft: "1rem",
+            marginRight: "1rem",
+          }}
           {...props}
           onTogglePlay={() => handleChange()}
+          // seek={(e) => console.log(e)}
+          seekingIcon={seekingIcon}
         />
-        <Flex direction={[ "column", "row"]}>
-        <Text
-          ml={4}
-          width="10rem"
-          overflow="hidden"
-          whiteSpace="nowrap"
-          textOverflow="ellipsis"
-        >
-          {trackTitle}
-        </Text>
-        <Text
-          ml={4}
-          width="8rem"
-          overflow="hidden"
-          whiteSpace="nowrap"
-          textOverflow="ellipsis"
-        >
-          {artist}
-        </Text>
+        <Flex direction={["column", "row"]}>
+          <Text
+            ml={4}
+            width="10rem"
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+          >
+            {trackTitle}
+          </Text>
+          <Text
+            ml={4}
+            width="8rem"
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+          >
+            {artist}
+          </Text>
         </Flex>
       </Flex>
       <Flex alignItems="center" width={["20%", "30%", "60%"]}>
@@ -80,14 +97,12 @@ const AudioPlayer = withCustomAudio((props) => {
           {...props}
         />
       </Flex>
-      <Timer style={{ paddingRight: "1rem", paddingLeft: "1rem" }} {...props} />
+      <Timer className="timer" {...props} />
     </Flex>
   );
 });
 
 class AudioFooter extends React.Component {
-  
-
   render() {
     return (
       <AudioPlayer
@@ -96,6 +111,7 @@ class AudioFooter extends React.Component {
         artist={this.props.artist}
         isPlaying={this.props.isPlaying}
         trackId={this.props.trackId}
+        preloadType="auto"
       />
     );
   }
