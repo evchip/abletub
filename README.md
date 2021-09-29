@@ -1,6 +1,6 @@
 # **[a b l e t u b](https://abletub.live/)** - a music distribution platform built on IPFS
 
-![MITLicense](https://img.shields.io/github/license/AntwuanDixon/abletub?style=for-the-badge)
+![MITLicense](https://img.shields.io/github/license/AntwuanDixon/abletub?color=dark%20green&style=for-the-badge)
 ![front-end-dependencies](https://img.shields.io/david/AntwuanDixon/abletub?color=blue&label=front-end&path=web&style=for-the-badge)
 ![back-end-dependencies](https://img.shields.io/david/AntwuanDixon/abletub?color=purple&label=back-end&path=server&style=for-the-badge)
 ---
