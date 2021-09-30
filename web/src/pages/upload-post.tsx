@@ -75,7 +75,7 @@ function UploadPost({}: Props): ReactElement {
     const { errors } = await createPost({
       variables: { input: inputValues },
       update: (cache) => {
-        cache.evict({ fieldName: "posts" });
+        cache.evict({ fieldName: "posts:{}" });
         cache.gc();
       },
     });
