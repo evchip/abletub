@@ -13,6 +13,10 @@ html, .chakra-ui-dark, #__next {
   max-width: 250px;
 }
 
+.port-img-overlay:hover > .play-pause-icon {
+  transform: scale(1.5);
+}
+
 .post-card {
   transition: .5s ease;
 }
@@ -30,7 +34,11 @@ html, .chakra-ui-dark, #__next {
     height: 100%;
     width: 100%;
     opacity: .8;
-    transition: .5s ease;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -ms-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    transition: all .5s ease;
     background-color: rgba(231, 231, 231, 0);
   }
 
@@ -44,11 +52,7 @@ html, .chakra-ui-dark, #__next {
     transition: .5s ease;
     background-color: rgba(231, 231, 231, 0);
   }
-  
-  .port-cont-hov:hover .port-img-overlay {
-    opacity: 1;
-    background-color: rgba(255, 71, 230, 0.418);
-  }
+
   
   .port-text {
     color: white;
@@ -67,6 +71,11 @@ html, .chakra-ui-dark, #__next {
     top: 70%;
   }
 
+  .port-cont-hov:hover > .port-img-overlay {
+    opacity: 1;
+    top: 48%;
+  }
+
 .tile { 
     -webkit-transform: scale(0);
     transform: scale(0);
@@ -82,7 +91,7 @@ html, .chakra-ui-dark, #__next {
   transition: all 250ms ease;
 }
 
-.play-pause-icon:hover {
+.port-img-overlay:hover .play-pause-icon {
   transform: scale(1.25);
 }
 
