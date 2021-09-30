@@ -76,6 +76,7 @@ function UploadPost({}: Props): ReactElement {
       variables: { input: inputValues },
       update: (cache) => {
         cache.evict({ fieldName: "posts" });
+        cache.gc();
       },
     });
     if (errors) {
