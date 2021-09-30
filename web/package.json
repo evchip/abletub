@@ -5,7 +5,8 @@
     "dev": "next dev",
     "build": "next build && next export",
     "start": "next start",
-    "gen": "graphql-codegen --config codegen.yml"
+    "gen": "graphql-codegen --config codegen.yml",
+    "test": "jest"
   },
   "dependencies": {
     "@apollo/client": "^3.4.14",
@@ -19,6 +20,7 @@
     "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
     "graphql": "^15.6.0",
+    "graphql-request": "^3.5.0",
     "graphql-tag": "^2.12.5",
     "howler": "^2.2.3",
     "isomorphic-unfetch": "^3.1.0",
@@ -48,6 +50,7 @@
     "@graphql-codegen/typescript-urql": "^2.0.10",
     "@types/axios": "^0.14.0",
     "@types/howler": "^2.2.3",
+    "@types/jest": "^27.0.2",
     "@types/node": "^16.0.1",
     "@types/react-dom": "^17.0.9",
     "@types/react-howler": "^3.7.3",
@@ -56,6 +59,7 @@
     "enzyme-adapter-react-16": "^1.15.6",
     "jest": "^27.1.1",
     "react-test-renderer": "^17.0.2",
+    "ts-jest": "^27.0.5",
     "typescript": "^4.3.5"
   }
 }
