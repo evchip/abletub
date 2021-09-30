@@ -55,7 +55,7 @@ function PlayPauseAudioFC({ post }: PlayPauseButtonProps) {
   }
 
   return (
-    <Box>
+    <>
       {playPause ? (
         <IconButton
           borderRadius="15px"
@@ -81,7 +81,7 @@ function PlayPauseAudioFC({ post }: PlayPauseButtonProps) {
           className="play-pause-icon"
         />
       )}
-    </Box>
+    </>
   );
 }
 
