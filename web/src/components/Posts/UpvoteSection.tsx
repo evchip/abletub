@@ -7,9 +7,12 @@ import {
   User,
   PostSnippetFragmentDoc,
   VoteMutation,
+  useMeQuery,
 } from "../../generated/graphql";
 import gql from "graphql-tag";
 import { ApolloCache } from "@apollo/client";
+import { useRouter } from "next/router";
+import { isServer } from "utils/isServer";
 
 interface UpvoteSectionProps {
   post: { __typename?: "Post" | undefined } & {
@@ -80,8 +83,16 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({
   >("not-loading");
   const [vote] = useVoteMutation();
   const [voteStatus, setVoteStatus] = useState(post.voteStatus);
+  const { data, loading } = useMeQuery({
+    skip: isServer(),
+  });
+  const router = useRouter();
 
   const handleVote = async () => {
+    if (!data?.me) {
+      router.push("/login")
+      return
+    }
     if (post.voteStatus !== voteStatus) {
       return;
     }
