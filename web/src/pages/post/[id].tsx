@@ -95,7 +95,7 @@ const Post = () => {
               </Flex>
               <Flex
                 direction="row"
-                justifyContent="space-between"
+                justifyContent="flex-start"
                 alignItems="center"
                 width="100%"
                 mt={4}
@@ -105,7 +105,7 @@ const Post = () => {
                   variant="30px"
                   fontVariant="20px"
                 />
-                <Flex alignItems="center">
+                <Flex alignItems="center" mx={12}>
                   <EditDeletePostBtns
                     id={data.post.id}
                     creatorId={data.post.creator.id}
