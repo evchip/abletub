@@ -15,7 +15,7 @@ import { retrieveStatus } from "utils/IPFSUploads/fetchIPFSStatus";
 
 const Post = () => {
   const { data, error, loading } = useGetPostFromUrl();
-  
+
   if (loading) {
     return (
       <Layout>
@@ -33,13 +33,15 @@ const Post = () => {
   if (!data?.post) {
     return (
       <Layout>
-        <Box>We couldn't find that post...</Box>
+        <Flex width="100%" m="auto" mt={10} justifyContent="center">
+          <Heading>hmm... we couldn't find that post</Heading>
+        </Flex>
       </Layout>
     );
   }
 
   if (data.post) {
-    const cidStatus = retrieveStatus(data!.post!.imageFileName)
+    const cidStatus = retrieveStatus(data!.post!.imageFileName);
   }
   return (
     <Layout variant={"regular"}>
@@ -121,9 +123,7 @@ const Post = () => {
               </Flex>
             </Flex>
             <Flex direction="row" alignItems="center" justifyContent="center">
-              {data.post.imageFileName ? (
-                <IPFSImage post={data.post} />
-              ) : null}
+              {data.post.imageFileName ? <IPFSImage post={data.post} /> : null}
             </Flex>
           </Flex>
         </Flex>
