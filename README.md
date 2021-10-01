@@ -28,7 +28,7 @@
 - Hosted on [Vercel](https://vercel.com/) 23
 
 ## Back End
-- [PostgresQL](https://www.postgresql.org/) 13.4
+- [PostgreSQL](https://www.postgresql.org/) 13.4
 - [Redis](https://redis.io/) 6.2.5
 - [Type-GraqhQL](https://typegraphql.com/) 1.1.1
 - [TypeORM](https://typeorm.io/#/) 0.2.34
