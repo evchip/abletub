@@ -7,14 +7,15 @@
 ![Front Page](https://i.imgur.com/kApR6z3.png[/img])
 
 ## About
-[**abletub.live**](https://abletub.live/) is a music sharing platform that stores files on the Inter-Planetary File Storage Network ([IPFS](https://ipfs.io/ "IPFS")): a decentralized network protocol for storing and sharing data in a distributed file system. **a b l e t u b** allows users to create an immutable content address that can be stored by any node on the IPFS network, including themselves, you, and me! This method of networking and storage provides several critical benefits:
+[**a b l e t u b . l i v e**](https://abletub.live/) is a music sharing platform that stores files on the Inter-Planetary File Storage Network ([IPFS](https://ipfs.io/ "IPFS")): a decentralized network protocol for storing and sharing data in a distributed file system. 
+
+**a b l e t u b** allows users to create an immutable content address that can be stored by any node on the IPFS network, including themselves, you, and me! This method of networking and storage provides several critical benefits:
  - facilitates a theoretically eternal method of data persistence, provided that nodes on the IPFS network continue to pin the data.
  - creates an immutable record of when an artist uploaded a track, providing evidence for copyright disputes.
  - helps fortify and decentralize the web by increasing the number of nodes serving content. With IPFS, we can all be servers.
 
 ## File Storage on IPFS
-**a b l e t u b** uses [web3.storage](https://web3.storage/), an IPFS [pinning service](https://docs.ipfs.io/how-to/work-with-pinning-services/) provided by Protocol Labs. When users upload their files, 
-**a b l e t u b** sends an upload request to web3.storage, then receieves back a content identifier (CID): a unique address that points to an immutable piece of data. The user's files are sent to nodes on the IPFS network, who store the files and index them under that CID. When the user requests this data, abletub uses that unique CID to send a request to all nodes on the network. When the node storing that data receives the request, it delivers the packets via the CDN provided by web3.storage.
+**a b l e t u b** uses [web3.storage](https://web3.storage/), an IPFS [pinning service](https://docs.ipfs.io/how-to/work-with-pinning-services/) provided by Protocol Labs. When users upload their files, **a b l e t u b** sends an upload request to web3.storage, then receieves back a content identifier (CID): a unique address that points to an immutable piece of data. The user's files are sent to nodes on the IPFS network, who store the files and index them under that CID. When the user requests this data, abletub uses that unique CID to send a request to all nodes on the network. When the node storing that data receives the request, it delivers the packets via the CDN provided by web3.storage.
 
 ## Front End
 - [TypeScript](https://www.typescriptlang.org/) 4.4.2
