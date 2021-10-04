@@ -102,7 +102,7 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
     <Flex zIndex={50} position="sticky" top={0} bg="black" p={2}>
       <Flex flex={1} m="auto" maxWidth={1400} align="center">
         <Box
-          ml={4}>
+          ml={3}>
         <NextLink href="/">
           <Link>
             <Heading
@@ -110,12 +110,12 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
               letterSpacing=".8rem"
               color="pink.50"
               fontSize={{ sm:"12px", md: "18px", lg: "40px" }}
-              pb={0}
+              py={["2", "2", "2", "0"]}
+              pl={3}
               fontWeight="normal"
-              _hover={{ color: "pink.200" }}
               _focus={{ boxShadow: "outline" }}
               style={{textDecoration: "none"}}
-              className="glowing-text"
+              className="btn-shadow-blue"
             >
               abletub
             </Heading>
