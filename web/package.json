@@ -34,6 +34,7 @@
     "react-icons": "^4.2.0",
     "react-is": "^17.0.2",
     "react-soundplayer": "^1.0.5",
+    "react-text-loop": "^2.3.0",
     "timeago.js": "^4.0.2",
     "urql": "^2.0.4",
     "web3.storage": "^3.3.2",
