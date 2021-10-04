@@ -110,6 +110,27 @@ input#file {
   background-size: 50px 50px;
 }
 
+.text-loop {
+  width: 100%;
+}
+
+.btn-shadow-blue {
+  background-color:#5fd1ca00;
+
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  display: inline-block;
+  border: 1px solid #00acca00;
+}
+
+.btn-shadow-blue:hover {
+  border: 1px solid #f087bd;
+  border-radius: 4px;
+  box-shadow: 1px 1px #f087bd, 2px 2px #f087bd, 3px 3px #f087bd;
+  transform: translateX(-3px);
+
+  }
+
 input.audio-file {
   background: url('https://cdn2.iconfinder.com/data/icons/frosted-glass/512/Volume.png') center center no-repeat #000000;
   height: 50px;
@@ -123,15 +144,6 @@ input.image-file {
   padding: 238px 0 0 0;
   width: 14rem;
   margin-top: 0px;
-}
-
-.glowing-text {
-  transition: all 350ms ease;
-}
-
-.glowing-text:hover {
-  text-shadow: 0 0 40px rgba(255, 255, 255, 0.521), 0 0 10px rgba(255, 255, 255, 0.541), 0 0 30px #ffc3f593, 0 0 40px #ffc3f5c7, 0 0 30px #fbb6ce, 0 0 30px #ffc3f5c7, 0 0 30px #fbb6cea8;
-  display: inline-block;
 }
 
 .sb-soundplayer-icon {
