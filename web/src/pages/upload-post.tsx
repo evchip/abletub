@@ -8,8 +8,6 @@ import formInitialValues from "../utils/FormModel/formInitialValues";
 import ImageForm from "components/Forms/ImageForm";
 import TrackForm from "components/Forms/TrackForm";
 import { useRouter } from "next/router";
-import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "utils/createUrqlClient";
 import { Layout } from "components/Layout";
 import { useIsAuth } from "utils/useIsAuth";
 import { withApollo } from "utils/withApollo";

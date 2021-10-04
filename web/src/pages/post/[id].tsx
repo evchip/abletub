@@ -1,11 +1,9 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { Comments } from "components/Comments/Comments";
 import CreateComment from "components/Comments/CreateComment";
-import { withUrqlClient } from "next-urql";
 import React from "react";
 import { EditDeletePostBtns } from "../../components/Posts/EditDeletePostBtns";
 import { Layout } from "../../components/Layout";
-import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useGetPostFromUrl } from "../../utils/useGetPostfromUrl";
 import { format } from "timeago.js";
 import { UpvoteSection } from "components/Posts/UpvoteSection";
