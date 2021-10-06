@@ -42,6 +42,7 @@ const Index = () => {
             <Heading>loading...</Heading>
           </Flex>
         ) : (
+          <>
           <HStack align="center" justify="center" flexWrap="wrap" width="100%">
             {data!.posts.posts.map((p, i) =>
               !p ? null : (
@@ -129,6 +130,7 @@ const Index = () => {
               )
             )}
           </HStack>
+          </>
         )}
         {data && data.posts.hasMore ? (
           <Flex>

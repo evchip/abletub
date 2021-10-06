@@ -8,8 +8,6 @@ import { useRouter } from "next/dist/client/router";
 import { Layout } from "components/Layout";
 import withApollo from "utils/withApollo";
 
-interface loginProps {}
-
 const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [login] = useLoginMutation();
