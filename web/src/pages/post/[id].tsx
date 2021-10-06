@@ -1,17 +1,14 @@
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Link, Text } from "@chakra-ui/react";
 import { Comments } from "components/Comments/Comments";
 import CreateComment from "components/Comments/CreateComment";
-import { withUrqlClient } from "next-urql";
 import React from "react";
 import { EditDeletePostBtns } from "../../components/Posts/EditDeletePostBtns";
 import { Layout } from "../../components/Layout";
-import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useGetPostFromUrl } from "../../utils/useGetPostfromUrl";
 import { format } from "timeago.js";
 import { UpvoteSection } from "components/Posts/UpvoteSection";
 import IPFSImage from "components/Posts/IPFSImage";
-import { withApollo } from "utils/withApollo";
-import { retrieveStatus } from "utils/IPFSUploads/fetchIPFSStatus";
+import withApollo from "utils/withApollo";
 
 const Post = () => {
   const { data, error, loading } = useGetPostFromUrl();
@@ -40,9 +37,6 @@ const Post = () => {
     );
   }
 
-  if (data.post) {
-    const cidStatus = retrieveStatus(data!.post!.imageFileName);
-  }
   return (
     <Layout variant={"regular"}>
       <Flex direction="column" width="92%" justifyContent="center" mx="auto">
@@ -94,6 +88,18 @@ const Post = () => {
                     {data.post.text}
                   </Text>
                 </Flex>
+                <Flex align="left" width="100%">
+                  <Link href={data.post.audioFileName}>
+                    <Text color="lightskyblue" mr={4} fontSize={["xs", "sm", "md"]}>
+                      audio CID
+                    </Text>
+                  </Link>
+                  <Link href={data.post.imageFileName}>
+                    <Text color="lightskyblue" mr={4} fontSize={["xs", "sm", "md"]}>
+                      image CID
+                    </Text>
+                  </Link>
+                </Flex>
               </Flex>
               <Flex
                 direction="row"
@@ -134,4 +140,4 @@ const Post = () => {
   );
 };
 
-export default withApollo({ ssr: true })(Post);
+export default withApollo(Post);
