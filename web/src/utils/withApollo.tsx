@@ -1,7 +1,6 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { PaginatedPosts } from "generated/graphql";
 import { NextPageContext } from "next";
-import { createWithApollo } from "./createWithApollo";
 import withApollo from "next-with-apollo";
 import { ApolloProvider } from '@apollo/react-hooks';
 
