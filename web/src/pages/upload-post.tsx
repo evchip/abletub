@@ -8,11 +8,9 @@ import formInitialValues from "../utils/FormModel/formInitialValues";
 import ImageForm from "components/Forms/ImageForm";
 import TrackForm from "components/Forms/TrackForm";
 import { useRouter } from "next/router";
-import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "utils/createUrqlClient";
 import { Layout } from "components/Layout";
 import { useIsAuth } from "utils/useIsAuth";
-import { withApollo } from "utils/withApollo";
+import withApollo from "utils/withApollo";
 import { fileSelected } from "utils/IPFSUploads/upload";
 
 export const FormContext = createContext("");
@@ -156,4 +154,4 @@ function UploadPost({}: Props): ReactElement {
   );
 }
 
-export default withApollo({ ssr: false })(UploadPost);
+export default withApollo(UploadPost);

@@ -5,10 +5,8 @@ import { InputField } from "../components/FormFields/InputField";
 import { MeDocument, MeQuery, useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/dist/client/router";
-import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../utils/createUrqlClient";
 import { Layout } from "components/Layout";
-import { withApollo } from "utils/withApollo";
+import withApollo from "utils/withApollo";
 
 interface registerProps {}
 
@@ -101,4 +99,4 @@ const Register: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default withApollo({ ssr: false })(Register);
+export default withApollo(Register);

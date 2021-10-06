@@ -1,17 +1,15 @@
-import { Box, FormLabel, Textarea, Button, Flex } from "@chakra-ui/react";
+import { Box, Button, Flex } from "@chakra-ui/react";
 import { Wrapper } from "components/Wrapper";
 import { Formik, Form } from "formik";
-import { withUrqlClient } from "next-urql";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import React from "react";
-import { withApollo } from "utils/withApollo";
+import withApollo from "utils/withApollo";
 import { InputField } from "../../../components/FormFields/InputField";
 import { Layout } from "../../../components/Layout";
 import {
   usePostQuery,
   useUpdatePostMutation,
 } from "../../../generated/graphql";
-import { createUrqlClient } from "../../../utils/createUrqlClient";
 import { useGetIntId } from "../../../utils/useGetIntId";
 
 const EditPost = ({}) => {
@@ -102,4 +100,4 @@ const EditPost = ({}) => {
   );
 };
 
-export default withApollo({ssr: false})(EditPost);
+export default withApollo(EditPost);

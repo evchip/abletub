@@ -7,16 +7,14 @@ import {
   Link,
   Text,
 } from "@chakra-ui/react";
-import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { Layout } from "../components/Layout";
 import { UpvoteSection } from "../components/Posts/UpvoteSection";
-import { PostsQuery, usePostsQuery } from "../generated/graphql";
-import { createUrqlClient } from "../utils/createUrqlClient";
+import { usePostsQuery } from "../generated/graphql";
 import { format } from "timeago.js";
 import IPFSImage from "components/Posts/IPFSImage";
-import { withApollo } from "utils/withApollo";
+import withApollo from "utils/withApollo";
 
 const Index = () => {
   const { data, error, loading, fetchMore, variables } = usePostsQuery({
@@ -158,4 +156,4 @@ const Index = () => {
     </>
   );
 };
-export default withApollo({ssr: true})(Index);
+export default withApollo(Index);

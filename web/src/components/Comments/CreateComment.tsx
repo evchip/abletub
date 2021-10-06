@@ -1,12 +1,8 @@
 import { Box, Button, Flex } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useCreateCommentMutation } from "generated/graphql";
-import { withUrqlClient } from "next-urql";
 import router from "next/router";
 import React, { ReactElement } from "react";
-import { createUrqlClient } from "utils/createUrqlClient";
-import { useGetPostFromUrl } from "utils/useGetPostfromUrl";
-import { withApollo } from "utils/withApollo";
 import { InputField } from "../FormFields/InputField";
 
 interface Props {
